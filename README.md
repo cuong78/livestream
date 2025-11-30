@@ -74,112 +74,6 @@ Nền tảng live streaming cho phép admin phát trực tiếp từ điện tho
 └──────────────┘        └──────────────┘
 ```
 
-### Database Schema
-
-```sql
--- Users table (Admin accounts)
-users
-  - id (PK)
-  - username (unique)
-  - password (hashed)
-  - email
-  - stream_key (unique)
-  - role (ADMIN/USER)
-  - is_active
-  - created_at
-  - updated_at
-
--- Streams table (Live stream sessions)
-streams
-  - id (PK)
-  - user_id (FK → users)
-  - title
-  - description
-  - status (IDLE/LIVE/ENDED)
-  - viewer_count
-  - started_at
-  - ended_at
-  - hls_url
-  - created_at
-  - updated_at
-
--- Comments table (Chat messages)
-comments
-  - id (PK)
-  - stream_id (FK → streams)
-  - display_name
-  - content
-  - ip_address
-  - is_deleted
-  - created_at
-```
-
----
-
-## 📂 Cấu trúc dự án
-
-```
-liveStream/
-├── livestream-backend/          # Spring Boot Backend
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/com/livestream/
-│   │   │   │   ├── LiveStreamApplication.java
-│   │   │   │   ├── config/
-│   │   │   │   │   ├── SecurityConfig.java
-│   │   │   │   │   └── WebSocketConfig.java
-│   │   │   │   ├── controller/
-│   │   │   │   │   ├── ChatController.java
-│   │   │   │   │   └── StreamController.java
-│   │   │   │   ├── entity/
-│   │   │   │   │   ├── User.java
-│   │   │   │   │   ├── Stream.java
-│   │   │   │   │   └── Comment.java
-│   │   │   │   ├── repository/
-│   │   │   │   │   ├── UserRepository.java
-│   │   │   │   │   ├── StreamRepository.java
-│   │   │   │   │   └── CommentRepository.java
-│   │   │   │   └── dto/
-│   │   │   │       ├── CommentDto.java
-│   │   │   │       └── StreamDto.java
-│   │   │   └── resources/
-│   │   │       └── application.yml
-│   │   └── test/
-│   ├── pom.xml
-│   ├── Dockerfile
-│   └── .gitignore
-│
-├── livestream-frontend/         # React TypeScript Frontend
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── VideoPlayer.tsx
-│   │   │   └── ChatBox.tsx
-│   │   ├── pages/
-│   │   │   ├── ViewerPage.tsx
-│   │   │   ├── AdminLoginPage.tsx
-│   │   │   └── AdminDashboardPage.tsx
-│   │   ├── services/
-│   │   │   ├── api.ts
-│   │   │   └── websocket.ts
-│   │   ├── types/
-│   │   │   └── index.ts
-│   │   ├── App.tsx
-│   │   ├── main.tsx
-│   │   └── index.css
-│   ├── package.json
-│   ├── tsconfig.json
-│   ├── vite.config.ts
-│   ├── Dockerfile
-│   ├── nginx.conf
-│   └── .gitignore
-│
-├── docker-compose.yml           # Docker orchestration
-├── srs.conf                     # SRS server config
-└── README.md                    # Documentation (this file)
-```
-
----
-
 ## 🚀 Hướng dẫn cài đặt
 
 ### Yêu cầu hệ thống
@@ -197,7 +91,7 @@ liveStream/
 1. **Clone repository**
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/cuong78/livestream.git
 cd liveStream
 ```
 
@@ -211,8 +105,10 @@ Services sẽ chạy tại:
 
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8080/api
-- RTMP Server: rtmp://localhost:1935
-- HLS Stream: http://localhost:8080/live/
+- Swagger UI: http://localhost:8080/api/swagger-ui.html
+- RTMP Server: rtmp://localhost:1935/live
+- HLS Stream: http://localhost:8081/live/{streamKey}.m3u8
+- SRS HTTP API: http://localhost:1985/api/v1
 - PostgreSQL: localhost:5432
 - Redis: localhost:6379
 
@@ -273,7 +169,7 @@ GRANT ALL PRIVILEGES ON DATABASE livestream_db TO livestream_user;
 
 1. **Cài đặt RTMP Publisher app** trên điện thoại
 
-   - iOS: "RTMP Live Streaming Publisher" (như trong hình đính kèm)
+   - iOS: "RTMP Live Streaming Publisher"
    - Android: "Larix Broadcaster" hoặc "CameraFi Live"
 
 2. **Cấu hình streaming**
@@ -327,49 +223,55 @@ GRANT ALL PRIVILEGES ON DATABASE livestream_db TO livestream_user;
 - [x] WebSocket client (STOMP.js)
 - [x] Routing (React Router)
 
-### Phase 3: RTMP & Streaming Infrastructure (Tiếp theo)
+### Phase 3: RTMP & Streaming Infrastructure ✅ (Đã hoàn thành)
 
-- [ ] Setup SRS server container
-- [ ] Cấu hình RTMP input (port 1935)
-- [ ] Cấu hình HLS output (transcoding)
-- [ ] Multi-bitrate streaming (SD/HD/FHD)
-- [ ] Stream key validation endpoint
-- [ ] HTTP callbacks (on_publish, on_unpublish)
-- [ ] HLS file serving through Nginx
+- [x] Setup SRS server container (Docker)
+- [x] Cấu hình RTMP input (port 1935)
+- [x] Cấu hình HLS output (low-latency: 1s segments)
+- [x] Stream key validation endpoint
+- [x] HTTP callbacks (on_publish, on_unpublish)
+- [x] HLS file serving (port 8081)
+- [x] CORS enabled cho streaming
+- [x] Tối ưu low-latency (~5-8s delay)
 
-### Phase 4: Authentication & Admin Features
+### Phase 4: Authentication & Admin Features ✅ (Đã hoàn thành)
 
-- [ ] JWT token generation/validation service
-- [ ] Login API endpoint
-- [ ] Admin dashboard UI
-  - [ ] Login form
-  - [ ] Stream control panel (start/stop)
-  - [ ] Stream key display
-  - [ ] Real-time viewer count
-  - [ ] Chat monitor
-- [ ] Protected routes (frontend)
-- [ ] Stream key generation for admin users
+- [x] JWT token generation/validation service (JwtService)
+- [x] Login API endpoint (POST /auth/login)
+- [x] Register API endpoint (POST /auth/register)
+- [x] JWT Authentication Filter
+- [x] Stream settings API (GET /user/stream-settings)
+- [x] Regenerate stream key API
+- [x] Protected routes với Spring Security
+- [x] Stream key tự động generate cho user
+- [x] Swagger UI với JWT authentication
 
-### Phase 5: Real-time Chat Enhancement
+### Phase 5: Real-time Chat Enhancement ⏳ (Đang phát triển)
 
+- [x] WebSocket STOMP configuration
+- [x] ChatBox component (React)
+- [x] Real-time comment display
 - [ ] Comment validation (length, profanity filter)
 - [ ] Rate limiting (Redis-based)
 - [ ] IP tracking
 - [ ] Comment moderation APIs
   - [ ] Delete comment
-  - [ ] Ban user by IP
-- [ ] Load comment history on page load
-- [ ] Pagination for old comments
 
-### Phase 6: Stream Management
+### Phase 6: Stream Management ⏳ (Đang phát triển)
 
-- [ ] Create stream API
+- [x] Create stream API (tự động qua SRS callback)
+- [x] End stream API (tự động qua SRS callback)
+- [x] Get current stream API (GET /stream/current)
+- [x] Stream status monitoring (LIVE/ENDED)
+- [x] SRS callbacks integration (on_publish, on_unpublish)
+- [x] Auto stream creation khi user bắt đầu RTMP
 - [ ] Update stream info (title, description)
-- [ ] End stream API
-- [ ] Stream status monitoring
 - [ ] Viewer count tracking (Redis)
 - [ ] Stream analytics
   - [ ] Total viewers
+  - [ ] Peak viewers
+  - [ ] Average watch time
+  - [ ] Comment count
   - [ ] Peak viewers
   - [ ] Average watch time
   - [ ] Comment count
@@ -482,82 +384,111 @@ server {
         add_header Access-Control-Allow-Origin *;
     }
 }
+
+
+
+### 2. Đăng ký user qua Swagger UI
+
+1. Mở trình duyệt: http://localhost:8080/api/swagger-ui.html
+2. Tìm endpoint `POST /auth/register`
+3. Click "Try it out" và điền:
 ```
+
+username: cuong
+password: cuong123
+email: cuong@test.com
+
+````
+4. Click "Execute"
+5. Copy `streamKey` từ response
+
+### 3. Login và lấy JWT token
+
+1. Tìm endpoint `POST /auth/login`
+2. Điền username và password
+3. Copy `token` từ response
+4. Click nút **"Authorize"** ở đầu trang Swagger
+5. Nhập: `Bearer {token}` (thay {token} bằng token vừa copy)
+6. Click "Authorize"
+
+### 4. Test streaming từ điện thoại
+
+1. Cài app **Larix Broadcaster** (Android) hoặc **RTMP Camera** (iOS)
+2. Vào Settings:
+- **Server URL**: `rtmp://IP4:1935/live` ( điện thoại và laptop phải dùng chung 1 mạng , để lấy IP4 lan adress , cmd ->  ipconfig)
+- **Stream Key**: paste stream key từ bước 2
+3. Nhấn "Start Streaming"
+
+### 5. Xem live stream
+
+**Cách 1: Trên máy tính (trình duyệt)**
+
+- Mở: http://localhost:3000
+
+**Cách 2: Xem trực tiếp HLS**
+
+- URL: `http://domain(IP4localhost):8081/live/{streamKey}.m3u8`
+- Dùng VLC Player: Media → Open Network Stream → paste URL
+
+### 6. Kiểm tra logs
+
+```bash
+# Backend logs
+docker logs livestream-backend -f
+
+# SRS logs (xem RTMP connections)
+docker logs livestream-srs -f
+
+# All services
+docker-compose logs -f
+````
+
+## 🎯 Tình trạng dự án hiện tại
+
+### ✅ Đã hoàn thành (70% core features)
+
+1. **Backend Infrastructure**
+
+   - Spring Boot 3.2.0 với PostgreSQL + Redis
+   - JWT Authentication hoàn chỉnh
+   - RESTful APIs với Swagger documentation
+   - Service layer architecture
+
+2. **Frontend Application**
+
+   - React 18 + TypeScript + Vite
+   - Video.js player với HLS support
+   - Low-latency optimization (~5-8s delay)
+   - Responsive design
+
+3. **Streaming Infrastructure**
+
+   - SRS Server với RTMP → HLS conversion
+   - Auto stream creation qua callbacks
+   - Stream key validation
+   - CORS enabled
+
+4. **Docker Setup**
+   - Docker Compose orchestration
+   - 5 containers: PostgreSQL, Redis, SRS, Backend, Frontend
+   - Production-ready configuration
+
+### ⏳ Đang phát triển
+
+1. **Real-time Chat** (WebSocket STOMP configured, cần UI integration)
+2. **Viewer Count Tracking** (Backend ready, cần Redis integration)
+3. **Admin Dashboard** (API sẵn sàng, cần frontend UI)
+
+### 📋 Các bước tiếp theo
+
+1. **Phase 5**: Hoàn thiện real-time chat với moderation
+2. **Phase 7**: Mobile optimization (PWA, offline mode)
+3. **Phase 8**: Testing & QA
+4. **Phase 9**: Production deployment với SSL
 
 ---
 
-## 📊 API Documentation
-
-### REST Endpoints
-
-#### Stream APIs
-
-```
-GET  /api/stream/current          # Get current live stream
-POST /api/stream/start            # Start stream (Admin only)
-POST /api/stream/stop             # Stop stream (Admin only)
-GET  /api/stream/status           # Get stream status
-```
-
-#### Auth APIs
-
-```
-POST /api/auth/login              # Admin login
-POST /api/auth/logout             # Admin logout
-GET  /api/auth/me                 # Get current user info
-```
-
-#### Admin APIs
-
-```
-GET  /api/admin/streams           # Get all streams history
-GET  /api/admin/comments/:id      # Get comments for stream
-DELETE /api/admin/comments/:id    # Delete comment
-POST /api/admin/ban               # Ban user by IP
-```
-
-### WebSocket Endpoints
-
-```
-CONNECT: /ws/chat                 # Connect to WebSocket
-SUBSCRIBE: /topic/live-comments   # Subscribe to comments
-SEND: /app/comment                # Send new comment
-```
-
-**Message Format:**
-
-```json
-{
-  "displayName": "Nguyen Van A",
-  "content": "Hello world!"
-}
-```
-
----
-
-## 🧪 Testing
-
-### Backend Tests
-
-```bash
-cd livestream-backend
-mvn test
-```
-
-### Frontend Tests
-
-```bash
-cd livestream-frontend
-npm run test
-```
-
-### E2E Tests
-
-```bash
-npm run test:e2e
-```
-
----
+**Dự án đã sẵn sàng để streaming! 🎊**
 
 ## 🤝 Contributing
 
@@ -621,10 +552,3 @@ For issues and questions:
 ---
 
 **Dự án đã sẵn sàng để phát triển! 🚀**
-
-Các bước tiếp theo:
-
-1. Chạy `docker-compose up -d` để test infrastructure
-2. Implement authentication (Phase 4)
-3. Setup SRS server và test RTMP streaming (Phase 3)
-4. Deploy lên server production (Phase 9)
