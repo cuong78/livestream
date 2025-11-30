@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: livestream-backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/livestream_db
+    username: livestream_user
+    password: livestream_pass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# JWT Configuration
+jwt:
+  secret: your-secret-key-change-this-in-production-minimum-256-bits
+  expiration: 86400000 # 24 hours in milliseconds
+
+# CORS Configuration
+cors:
+  allowed-origins: http://localhost:5173,http://localhost:3000
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-headers: "*"
+  allow-credentials: true
+
+# Stream Configuration
+stream:
+  rtmp:
+    url: rtmp://localhost:1935/live
+  hls:
+    base-url: http://localhost:8080/hls
+    segment-duration: 2
+  max-viewers: 10000
+
+# Logging
+logging:
+  level:
+    com.livestream: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: INFO

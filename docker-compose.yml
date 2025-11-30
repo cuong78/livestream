@@ -1,0 +1,97 @@
+version: "3.8"
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: livestream-postgres
+    environment:
+      POSTGRES_DB: livestream_db
+      POSTGRES_USER: livestream_user
+      POSTGRES_PASSWORD: livestream_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - livestream-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U livestream_user -d livestream_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: livestream-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - livestream-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # RTMP Server (SRS - Simple Realtime Server)
+  srs:
+    image: ossrs/srs:5
+    container_name: livestream-srs
+    ports:
+      - "1935:1935" # RTMP
+      - "1985:1985" # HTTP API
+      - "8080:8080" # HTTP Server for HLS
+    volumes:
+      - ./srs.conf:/usr/local/srs/conf/srs.conf
+      - srs_data:/usr/local/srs/objs/nginx/html
+    networks:
+      - livestream-network
+    command: ./objs/srs -c conf/srs.conf
+
+  # Spring Boot Backend
+  backend:
+    build:
+      context: ./livestream-backend
+      dockerfile: Dockerfile
+    container_name: livestream-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/livestream_db
+      SPRING_DATASOURCE_USERNAME: livestream_user
+      SPRING_DATASOURCE_PASSWORD: livestream_pass
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - livestream-network
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./livestream-frontend
+      dockerfile: Dockerfile
+    container_name: livestream-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - livestream-network
+
+volumes:
+  postgres_data:
+  redis_data:
+  srs_data:
+
+networks:
+  livestream-network:
+    driver: bridge
