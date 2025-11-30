@@ -582,7 +582,7 @@ This project is licensed under the MIT License.
 For issues and questions:
 
 - Create an issue in GitHub repository
-  👤 **Email:** [cuongcaoleanh](cuongcaoleanh@gmail.com)
+  👤 **Email:** cuongcaoleanh@gmail.com
 - 👤 **Facebook:** [Anh Cương](https://www.facebook.com/ang.cuong.77)
 
 ---

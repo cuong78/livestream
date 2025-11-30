@@ -35,12 +35,12 @@ server:
 
 # JWT Configuration
 jwt:
-  secret: your-secret-key-change-this-in-production-minimum-256-bits
+  secret: a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90
   expiration: 86400000 # 24 hours in milliseconds
 
 # CORS Configuration
 cors:
-  allowed-origins: http://localhost:5173,http://localhost:3000
+  allowed-origins: http://localhost:5173,http://localhost:3000,http://192.168.1.9:3000,http://192.168.1.9:5173
   allowed-methods: GET,POST,PUT,DELETE,OPTIONS
   allowed-headers: "*"
   allow-credentials: true
@@ -48,9 +48,9 @@ cors:
 # Stream Configuration
 stream:
   rtmp:
-    url: rtmp://localhost:1935/live
+    url: rtmp://192.168.1.9:1935/live
   hls:
-    base-url: http://localhost:8080/hls
+    base-url: http://192.168.1.9:8081
     segment-duration: 2
   max-viewers: 10000
 

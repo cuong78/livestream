@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
 import type Player from "video.js/dist/types/player";
@@ -10,7 +10,6 @@ interface VideoPlayerProps {
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
   const videoRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<Player | null>(null);
-  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     if (!videoRef.current || !hlsUrl) return;
@@ -25,6 +24,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
       preload: "auto",
       fluid: true,
       liveui: true,
+      liveTracker: {
+        trackingThreshold: 0,
+        liveTolerance: 3,
+      },
+      html5: {
+        vhs: {
+          overrideNative: true,
+          enableLowInitialPlaylist: true,
+          smoothQualityChange: true,
+          fastQualityChange: true,
+        },
+        nativeAudioTracks: false,
+        nativeVideoTracks: false,
+      },
       sources: [
         {
           src: hlsUrl,
@@ -34,7 +47,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
     });
 
     playerRef.current = player;
-    setIsReady(true);
 
     return () => {
       if (playerRef.current) {

@@ -44,7 +44,7 @@ services:
     ports:
       - "1935:1935" # RTMP
       - "1985:1985" # HTTP API
-      - "8080:8080" # HTTP Server for HLS
+      - "8081:8080" # HTTP Server for HLS
     volumes:
       - ./srs.conf:/usr/local/srs/conf/srs.conf
       - srs_data:/usr/local/srs/objs/nginx/html
