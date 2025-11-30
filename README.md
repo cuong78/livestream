@@ -1,6 +1,13 @@
-# 🎥 Live Streaming Platform
+# 🎥 CLB Gà Chọi Cao Đổi - Live Streaming Platform
 
-Nền tảng live streaming cho phép admin phát trực tiếp từ điện thoại (RTMP) và khách hàng xem + bình luận real-time không cần đăng nhập.
+Nền tảng live streaming chuyên nghiệp , phát trực tiếp từ điện thoại (RTMP) với chat real-time.
+
+## 🎨 Thiết kế mới
+
+- 🎨 Giao diện chuyên nghiệp với màu đỏ/vàng/đen truyền thống
+- 📱 Responsive hoàn toàn cho mobile và desktop
+- ✨ Hiệu ứng gradient, animation mượt mà
+- 🎯 Tích hợp đầy đủ thông tin CLB, liên hệ, quy định
 
 ## 📋 Tổng quan dự án
 
@@ -27,15 +34,16 @@ Nền tảng live streaming cho phép admin phát trực tiếp từ điện tho
 - **Framework**: React 18 + TypeScript
 - **Build Tool**: Vite
 - **Router**: React Router v6
-- **Video Player**: Video.js (HLS support)
+- **Video Player**: Video.js (HLS support) - **Custom Theme**
 - **WebSocket**: STOMP.js + SockJS
 - **HTTP Client**: Axios
+- **Styling**: Custom CSS with responsive design
 
 #### Streaming Infrastructure
 
 - **RTMP Server**: SRS (Simple Realtime Server) v5
 - **Protocol**: RTMP input → HLS output
-- **Quality**: Multi-bitrate (SD/HD/FHD)
+- **Latency**: ~5-8 seconds (optimized)
 
 #### DevOps
 

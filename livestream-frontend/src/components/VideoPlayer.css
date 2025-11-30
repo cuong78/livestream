@@ -1,0 +1,266 @@
+/* VideoPlayer Component Styles */
+
+.video-player-wrapper {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background-color: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Custom Video.js Theme for CLB Gà Chọi Cao Đổi */
+.vjs-theme-custom {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Big play button styling */
+.vjs-theme-custom .vjs-big-play-button {
+  background: linear-gradient(135deg, #dc143c 0%, #ff4444 100%);
+  border: 3px solid #ffd700;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  font-size: 48px;
+  line-height: 80px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(220, 20, 60, 0.6);
+}
+
+.vjs-theme-custom .vjs-big-play-button:hover {
+  background: linear-gradient(135deg, #ff4444 0%, #ff6666 100%);
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0 6px 28px rgba(220, 20, 60, 0.8);
+}
+
+.vjs-theme-custom .vjs-big-play-button .vjs-icon-placeholder:before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Control bar styling */
+.vjs-theme-custom .vjs-control-bar {
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.9) 100%);
+  height: 50px;
+}
+
+/* Progress bar styling */
+.vjs-theme-custom .vjs-progress-control {
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 8px;
+}
+
+.vjs-theme-custom .vjs-progress-holder {
+  background: rgba(255, 255, 255, 0.2);
+  height: 8px;
+  border-radius: 4px;
+}
+
+.vjs-theme-custom .vjs-play-progress {
+  background: linear-gradient(90deg, #dc143c 0%, #ffd700 100%);
+  border-radius: 4px;
+}
+
+.vjs-theme-custom .vjs-play-progress:before {
+  color: #ffd700;
+  font-size: 14px;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+}
+
+.vjs-theme-custom .vjs-load-progress {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+/* Button styling */
+.vjs-theme-custom .vjs-button > .vjs-icon-placeholder:before {
+  line-height: 50px;
+  font-size: 20px;
+}
+
+.vjs-theme-custom .vjs-control:hover {
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
+
+/* Volume panel */
+.vjs-theme-custom .vjs-volume-panel {
+  transition: all 0.3s ease;
+}
+
+.vjs-theme-custom .vjs-volume-bar {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.vjs-theme-custom .vjs-volume-level {
+  background: linear-gradient(90deg, #dc143c 0%, #ffd700 100%);
+  border-radius: 2px;
+}
+
+/* Time display */
+.vjs-theme-custom .vjs-current-time,
+.vjs-theme-custom .vjs-time-divider,
+.vjs-theme-custom .vjs-duration {
+  display: block;
+  padding: 0 5px;
+  font-weight: bold;
+  color: #ffd700;
+}
+
+/* Live badge */
+.vjs-theme-custom .vjs-live-control {
+  background: #dc143c;
+  color: white;
+  font-weight: bold;
+  padding: 0 10px;
+  border-radius: 4px;
+  margin: 0 8px;
+  animation: live-pulse 2s infinite;
+}
+
+@keyframes live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Fullscreen button */
+.vjs-theme-custom .vjs-fullscreen-control {
+  margin-right: 8px;
+}
+
+/* Loading spinner */
+.vjs-theme-custom .vjs-loading-spinner {
+  border-color: rgba(220, 20, 60, 0.3);
+  border-top-color: #dc143c;
+}
+
+.vjs-theme-custom .vjs-loading-spinner:before,
+.vjs-theme-custom .vjs-loading-spinner:after {
+  border-color: rgba(220, 20, 60, 0.3);
+  border-top-color: #dc143c;
+}
+
+/* Poster image */
+.vjs-theme-custom .vjs-poster {
+  background-size: cover;
+  background-position: center;
+}
+
+/* Error display */
+.vjs-theme-custom .vjs-error-display {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.vjs-theme-custom .vjs-error-display:before {
+  content: "⚠️";
+  font-size: 48px;
+  display: block;
+  margin-bottom: 15px;
+}
+
+.vjs-theme-custom .vjs-error-display .vjs-modal-dialog-content {
+  color: #ff4444;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Menu styling */
+.vjs-theme-custom .vjs-menu {
+  background: rgba(0, 0, 0, 0.95);
+  border: 2px solid #3a3a3a;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+.vjs-theme-custom .vjs-menu-content {
+  background: transparent;
+}
+
+.vjs-theme-custom .vjs-menu li {
+  padding: 10px 15px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.vjs-theme-custom .vjs-menu li:hover {
+  background: rgba(220, 20, 60, 0.3);
+  color: #ffd700;
+}
+
+.vjs-theme-custom .vjs-menu li.vjs-selected {
+  background: rgba(220, 20, 60, 0.5);
+  color: #ffd700;
+}
+
+/* Text track display (subtitles) */
+.vjs-theme-custom .vjs-text-track-display {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .vjs-theme-custom .vjs-big-play-button {
+    width: 60px;
+    height: 60px;
+    font-size: 36px;
+    line-height: 60px;
+  }
+
+  .vjs-theme-custom .vjs-control-bar {
+    height: 40px;
+  }
+
+  .vjs-theme-custom .vjs-button > .vjs-icon-placeholder:before {
+    line-height: 40px;
+    font-size: 18px;
+  }
+
+  .vjs-theme-custom .vjs-progress-control {
+    top: -6px;
+    height: 6px;
+  }
+
+  .vjs-theme-custom .vjs-progress-holder {
+    height: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .vjs-theme-custom .vjs-big-play-button {
+    width: 50px;
+    height: 50px;
+    font-size: 30px;
+    line-height: 50px;
+  }
+
+  .vjs-theme-custom .vjs-control-bar {
+    height: 36px;
+  }
+
+  .vjs-theme-custom .vjs-button > .vjs-icon-placeholder:before {
+    line-height: 36px;
+    font-size: 16px;
+  }
+
+  .vjs-theme-custom .vjs-current-time,
+  .vjs-theme-custom .vjs-time-divider,
+  .vjs-theme-custom .vjs-duration {
+    font-size: 12px;
+    padding: 0 3px;
+  }
+}
