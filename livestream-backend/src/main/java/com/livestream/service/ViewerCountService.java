@@ -20,6 +20,13 @@ public class ViewerCountService {
     private final AtomicInteger viewerCount = new AtomicInteger(0);
     
     /**
+     * Get current viewer count
+     */
+    public int getCurrentCount() {
+        return viewerCount.get();
+    }
+    
+    /**
      * Event listener for WebSocket connections
      */
     @EventListener
@@ -27,6 +34,19 @@ public class ViewerCountService {
         int count = viewerCount.incrementAndGet();
         log.info("New WebSocket connection. Current viewer count: {}", count);
         broadcastViewerCount(count);
+    }
+    
+    /**
+     * Send current viewer count to a specific user
+     */
+    public void sendCountToUser(String sessionId) {
+        try {
+            int count = viewerCount.get();
+            messagingTemplate.convertAndSendToUser(sessionId, "/queue/viewer-count", Map.of("count", count));
+            log.debug("Sent viewer count {} to session {}", count, sessionId);
+        } catch (Exception e) {
+            log.error("Failed to send viewer count to user", e);
+        }
     }
     
     /**

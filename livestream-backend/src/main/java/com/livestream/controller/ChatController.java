@@ -1,6 +1,7 @@
 package com.livestream.controller;
 
 import com.livestream.dto.CommentDto;
+import com.livestream.service.ViewerCountService;
 import com.livestream.util.ProfanityFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Controller
@@ -24,6 +26,7 @@ public class ChatController {
     
     private final RedisTemplate<String, String> redisTemplate;
     private final SimpMessagingTemplate messagingTemplate;
+    private final ViewerCountService viewerCountService;
     
     private static final int MAX_DISPLAY_NAME_LENGTH = 50;
     private static final int MAX_CONTENT_LENGTH = 500;
@@ -178,6 +181,26 @@ public class ChatController {
             log.info("Comment delete event broadcasted");
         } catch (Exception e) {
             log.error("Failed to delete comment", e);
+        }
+    }
+    
+    /**
+     * Request current viewer count
+     */
+    @MessageMapping("/viewer-count/request")
+    public void requestViewerCount(SimpMessageHeaderAccessor headerAccessor) {
+        try {
+            int count = viewerCountService.getCurrentCount();
+            String sessionId = headerAccessor.getSessionId();
+            
+            log.info("Viewer count request from session: {}, sending count: {}", sessionId, count);
+            
+            // Send current count back to requesting client via broadcast
+            // (All clients will receive but it's the most reliable way)
+            messagingTemplate.convertAndSend("/topic/viewer-count", Map.of("count", count));
+            
+        } catch (Exception e) {
+            log.error("Failed to send viewer count", e);
         }
     }
 }
