@@ -105,6 +105,10 @@ export class WebSocketService {
     }
   }
 
+  getStompClient(): Client | null {
+    return this.client;
+  }
+
   disconnect(): void {
     if (this.client) {
       this.client.deactivate();

@@ -1,6 +1,7 @@
 package com.livestream.controller;
 
 import com.livestream.dto.CommentDto;
+import com.livestream.dto.MatchInfoDto;
 import com.livestream.service.ViewerCountService;
 import com.livestream.util.ProfanityFilter;
 import lombok.RequiredArgsConstructor;
@@ -201,6 +202,88 @@ public class ChatController {
             
         } catch (Exception e) {
             log.error("Failed to send viewer count", e);
+        }
+    }
+    
+    /**
+     * Update match info (Admin only)
+     * Broadcast current match information to all viewers
+     */
+    @MessageMapping("/match-info/update")
+    public void updateMatchInfo(MatchInfoDto matchInfoDto) {
+        try {
+            matchInfoDto.setCreatedAt(LocalDateTime.now());
+            matchInfoDto.setStatus("active");
+            matchInfoDto.setAction("update");
+            
+            log.info("Match info update: Match #{}, Red: {}kg, Blue: {}kg", 
+                matchInfoDto.getMatchNumber(), 
+                matchInfoDto.getRedWeight(), 
+                matchInfoDto.getBlueWeight());
+            
+            // Save to Redis for persistence
+            String matchKey = "match:current";
+            String matchJson = String.format(
+                "{\"matchNumber\":%d,\"redWeight\":%.2f,\"blueWeight\":%.2f,\"status\":\"%s\",\"createdAt\":\"%s\"}",
+                matchInfoDto.getMatchNumber(),
+                matchInfoDto.getRedWeight(),
+                matchInfoDto.getBlueWeight(),
+                matchInfoDto.getStatus(),
+                matchInfoDto.getCreatedAt()
+            );
+            
+            redisTemplate.opsForValue().set(matchKey, matchJson, 2, TimeUnit.HOURS);
+            
+            // Broadcast to all clients
+            messagingTemplate.convertAndSend("/topic/match-info", matchInfoDto);
+            
+            log.info("Match info broadcasted successfully");
+        } catch (Exception e) {
+            log.error("Failed to update match info", e);
+        }
+    }
+    
+    /**
+     * Clear match info (Admin only)
+     * Remove match information from screen
+     */
+    @MessageMapping("/match-info/clear")
+    public void clearMatchInfo() {
+        try {
+            log.info("Clearing match info");
+            
+            // Remove from Redis
+            redisTemplate.delete("match:current");
+            
+            // Broadcast clear action
+            MatchInfoDto clearDto = MatchInfoDto.builder()
+                .action("clear")
+                .build();
+            
+            messagingTemplate.convertAndSend("/topic/match-info", clearDto);
+            
+            log.info("Match info cleared successfully");
+        } catch (Exception e) {
+            log.error("Failed to clear match info", e);
+        }
+    }
+    
+    /**
+     * Get current match info for new clients
+     */
+    @MessageMapping("/match-info/request")
+    public void requestMatchInfo() {
+        try {
+            String matchKey = "match:current";
+            String matchJson = redisTemplate.opsForValue().get(matchKey);
+            
+            if (matchJson != null && !matchJson.isEmpty()) {
+                log.info("Sending current match info: {}", matchJson);
+                // Parse and send (simplified - in production use proper JSON parsing)
+                messagingTemplate.convertAndSend("/topic/match-info", matchJson);
+            }
+        } catch (Exception e) {
+            log.warn("No active match info or error: {}", e.getMessage());
         }
     }
 }

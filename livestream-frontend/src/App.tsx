@@ -10,6 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<ViewerPage />} />
         <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route path="/admin" element={<AdminDashboardPage />} />
         <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
         <Route path="/admin/stream-settings" element={<StreamSettingsPage />} />
       </Routes>

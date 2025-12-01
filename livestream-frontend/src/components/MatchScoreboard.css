@@ -1,0 +1,161 @@
+.match-scoreboard {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 100;
+  background: transparent;
+  animation: slideInLeft 0.4s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.match-scoreboard.hiding {
+  animation: slideOutLeft 0.4s ease-in forwards;
+}
+
+@keyframes slideOutLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+}
+
+.scoreboard-header {
+  display: none;
+}
+
+.match-header {
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.match-label {
+  color: #ffd700;
+  font-size: 14px;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.scoreboard-content {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.fighter-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.fighter-label {
+  font-size: 13px;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  text-transform: uppercase;
+}
+
+.fighter-red .fighter-label {
+  color: #ff4757;
+}
+
+.fighter-blue .fighter-label {
+  color: #5f27cd;
+}
+
+.fighter-weight {
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  line-height: 1;
+}
+
+.fighter-red .fighter-weight {
+  color: #ff4757;
+}
+
+.fighter-blue .fighter-weight {
+  color: #5f27cd;
+}
+
+.versus-divider {
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+}
+
+.vs-text {
+  display: none;
+}
+
+.vs-icon {
+  font-size: 28px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .match-scoreboard {
+    top: 8px;
+    left: 8px;
+    min-width: 180px;
+    padding: 6px 10px;
+  }
+
+  .fighter-weight {
+    font-size: 14px;
+  }
+
+  .vs-text {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .match-scoreboard {
+    min-width: 160px;
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+
+  .fighter-weight {
+    font-size: 13px;
+  }
+
+  .fighter-label {
+    font-size: 9px;
+  }
+
+  .match-number-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+}

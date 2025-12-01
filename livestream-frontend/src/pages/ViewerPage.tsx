@@ -3,6 +3,8 @@ import VideoPlayer from "@/components/VideoPlayer";
 import ChatBox from "@/components/ChatBox";
 import LoginModal from "@/components/LoginModal";
 import BlockedIpsModal from "@/components/BlockedIpsModal";
+import MatchScoreboard from "@/components/MatchScoreboard";
+import MatchInfoPanel from "@/components/MatchInfoPanel";
 import { streamApi } from "@/services/api";
 import { websocketService } from "@/services/websocket";
 import type { Stream, Comment } from "@/types";
@@ -259,6 +261,13 @@ const ViewerPage = () => {
         <div className="main-content">
           {/* Video Player Section */}
           <div className="video-section">
+            {/* Match Scoreboard Overlay */}
+            {websocketService.getStompClient() && (
+              <MatchScoreboard
+                stompClient={websocketService.getStompClient()}
+              />
+            )}
+
             {stream && stream.status === "LIVE" ? (
               <VideoPlayer hlsUrl={stream.hlsUrl} />
             ) : (
@@ -308,6 +317,13 @@ const ViewerPage = () => {
             />
           </div>
         </div>
+
+        {/* Match Info Panel - Only visible for Admin */}
+        {isAdmin && websocketService.getStompClient() && (
+          <div className="match-info-section">
+            <MatchInfoPanel stompClient={websocketService.getStompClient()} />
+          </div>
+        )}
 
         {/* Contact Section */}
         <section className="contact-section">

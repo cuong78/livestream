@@ -285,6 +285,7 @@ body {
 
 /* Video Section */
 .video-section {
+  position: relative; /* Để scoreboard absolute nằm bên trong */
   background: var(--card-bg);
   border-radius: 12px;
   overflow: hidden;
@@ -1183,5 +1184,23 @@ body {
 
   .fab-icon {
     font-size: 20px;
+  }
+}
+
+/* Match Info Section - Admin Only */
+.match-info-section {
+  margin-top: 30px;
+  padding: 20px 0;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
