@@ -288,7 +288,7 @@ GRANT ALL PRIVILEGES ON DATABASE livestream_db TO livestream_user;
 - [x] Frontend circular buffer: chỉ giữ 50 comments mới nhất
 - [x] Error handling và UI feedback real-time
 - [x] No database storage (chỉ broadcast qua WebSocket)
-- [ ] Delete comment (không cần thiết - comments không lưu DB)
+- [x] Delete comment
 
 ### Phase 6: Stream Management ⏳ (Đang phát triển)
 
@@ -298,17 +298,54 @@ GRANT ALL PRIVILEGES ON DATABASE livestream_db TO livestream_user;
 - [x] Stream status monitoring (LIVE/ENDED)
 - [x] SRS callbacks integration (on_publish, on_unpublish)
 - [x] Auto stream creation khi user bắt đầu RTMP
-- [ ] Viewer count
+- [x] Viewer count
 
-### Phase 8: Testing & Quality Assurance
+### Phase 7: IP Blocking & Admin Features ✅ (Hoàn thành)
 
-- [ ] Backend unit tests
-- [ ] Integration tests (API)
-- [ ] WebSocket connection tests
-- [ ] Frontend component tests
-- [ ] E2E tests (Playwright/Cypress)
-- [ ] Load testing (stream + chat)
-- [ ] Security audit
+- [x] IP tracking trong WebSocket handshake
+- [x] BlockedIp entity, repository, service
+- [x] Admin block/unblock IP endpoints
+- [x] BlockedIpsModal UI component
+- [x] Admin context menu (delete comment, view IP, block IP)
+- [x] Viewer count display and synchronization
+- [x] Comment history với Redis (50 comments, 24h TTL)
+
+### Phase 8: Testing & Quality Assurance ✅ (Hoàn thành)
+
+**Load Testing (k6):**
+
+- [x] Chat load test (100+ concurrent users, WebSocket)
+- [x] Viewer load test (500-1000 concurrent viewers, HLS streaming)
+- [x] API stress test (authentication, stream endpoints)
+- [x] Performance benchmarks và thresholds
+- [x] Custom metrics tracking (success rate, response time, errors)
+
+**Security Audit:**
+
+- [x] SQL injection testing (authentication, streams, admin)
+- [x] XSS testing (comments, display names, stored XSS)
+- [x] CSRF protection verification
+- [x] Authentication & authorization tests (JWT, role-based)
+- [x] Rate limiting verification
+- [x] Input validation tests
+- [x] WebSocket security (IP blocking, message validation)
+- [x] Information disclosure checks
+- [x] Security checklist documentation
+- [x] Automated security test script (Python)
+- [x] OWASP dependency check setup
+
+**Documentation:**
+
+- [x] Load testing guide (`tests/README.md`)
+- [x] Security checklist (`tests/security/SECURITY_CHECKLIST.md`)
+- [x] Test execution instructions
+- [x] Performance benchmarks
+- [x] Troubleshooting guide
+
+**Location:** `tests/` directory
+
+- `tests/load/` - k6 load testing scripts
+- `tests/security/` - Security audit tools and checklist
 
 ### Phase 9: Production Deployment
 
@@ -458,49 +495,6 @@ docker-compose logs -f
 ````
 
 ## 🎯 Tình trạng dự án hiện tại
-
-### ✅ Đã hoàn thành (70% core features)
-
-1. **Backend Infrastructure**
-
-   - Spring Boot 3.2.0 với PostgreSQL + Redis
-   - JWT Authentication hoàn chỉnh
-   - RESTful APIs với Swagger documentation
-   - Service layer architecture
-
-2. **Frontend Application**
-
-   - React 18 + TypeScript + Vite
-   - Video.js player với HLS support
-   - Low-latency optimization (~5-8s delay)
-   - Responsive design
-
-3. **Streaming Infrastructure**
-
-   - SRS Server với RTMP → HLS conversion
-   - Auto stream creation qua callbacks
-   - Stream key validation
-   - CORS enabled
-
-4. **Docker Setup**
-   - Docker Compose orchestration
-   - 5 containers: PostgreSQL, Redis, SRS, Backend, Frontend
-   - Production-ready configuration
-
-### ⏳ Đang phát triển
-
-1. **Real-time Chat** (WebSocket STOMP configured, cần UI integration)
-2. **Viewer Count Tracking** (Backend ready, cần Redis integration)
-3. **Admin Dashboard** (API sẵn sàng, cần frontend UI)
-
-### 📋 Các bước tiếp theo
-
-1. **Phase 5**: Hoàn thiện real-time chat với moderation
-2. **Phase 7**: Mobile optimization (PWA, offline mode)
-3. **Phase 8**: Testing & QA
-4. **Phase 9**: Production deployment với SSL
-
----
 
 **Dự án đã sẵn sàng để streaming! 🎊**
 

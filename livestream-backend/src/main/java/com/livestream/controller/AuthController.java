@@ -33,9 +33,24 @@ public class AuthController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Login successful",
                 content = @Content(schema = @Schema(implementation = LoginResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input"),
         @ApiResponse(responseCode = "401", description = "Invalid credentials")
     })
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        // Input validation with proper HTTP status codes
+        if (request.getUsername() == null || request.getUsername().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Username is required"));
+        }
+        
+        if (request.getPassword() == null || request.getPassword().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Password is required"));
+        }
+        
+        // Check oversized input (max 255 characters)
+        if (request.getUsername().length() > 255 || request.getPassword().length() > 255) {
+            return ResponseEntity.status(413).body(Map.of("error", "Input too large"));
+        }
+        
         return authService.authenticateUser(request.getUsername(), request.getPassword())
             .map(user -> {
                 // Generate JWT token
@@ -61,5 +76,52 @@ public class AuthController {
                 return ResponseEntity.ok((Object) response);
             })
             .orElse(ResponseEntity.status(401).body(Map.of("error", "Invalid credentials")));
+    }
+    
+    @PostMapping("/register")
+    @Operation(summary = "Register", description = "Register new user account")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Registration successful"),
+        @ApiResponse(responseCode = "400", description = "Invalid input or user already exists"),
+        @ApiResponse(responseCode = "413", description = "Input too large")
+    })
+    public ResponseEntity<?> register(@RequestBody Map<String, String> request) {
+        String username = request.get("username");
+        String password = request.get("password");
+        String email = request.get("email");
+        
+        // Input validation with proper HTTP status codes
+        if (username == null || username.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Username is required"));
+        }
+        
+        if (password == null || password.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Password is required"));
+        }
+        
+        if (email == null || email.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Email is required"));
+        }
+        
+        // Check oversized input (max 255 characters)
+        if (username.length() > 255 || password.length() > 255 || email.length() > 255) {
+            return ResponseEntity.status(413).body(Map.of("error", "Input too large"));
+        }
+        
+        try {
+            User user = authService.registerUser(username, password, email);
+            
+            UserDto userDto = UserDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .streamKey(user.getStreamKey())
+                .role(user.getRole().name())
+                .build();
+            
+            return ResponseEntity.ok(Map.of("message", "User registered successfully", "user", userDto));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 }

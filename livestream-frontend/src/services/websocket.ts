@@ -45,7 +45,7 @@ export class WebSocketService {
           const data = JSON.parse(message.body) as { count: number };
           this.onViewerCountCallback?.(data.count);
         });
-        
+
         // Request current viewer count immediately after subscribing
         this.client?.publish({
           destination: "/app/viewer-count/request",

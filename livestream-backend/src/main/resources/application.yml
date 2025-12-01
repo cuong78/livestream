@@ -60,3 +60,31 @@ logging:
     com.livestream: DEBUG
     org.springframework.web: INFO
     org.springframework.security: INFO
+
+# Swagger/OpenAPI Configuration
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+
+---
+# Production Profile
+spring:
+  config:
+    activate:
+      on-profile: production
+
+# Disable Swagger in production
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+logging:
+  level:
+    com.livestream: INFO
+    org.springframework.web: WARN
+    org.springframework.security: WARN
