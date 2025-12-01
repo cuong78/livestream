@@ -82,6 +82,27 @@ Nền tảng live streaming chuyên nghiệp , phát trực tiếp từ điện 
 └──────────────┘        └──────────────┘
 ```
 
+🚀 Kiến trúc của Chat System
+
+┌─────────────┐ WebSocket STOMP ┌─────────────┐
+│ Client A │ ─────────────────────────────▶ │ Backend │
+│ (Browser) │ │ ChatController │
+└─────────────┘ └──────┬──────┘
+│
+│ Validate
+┌─────────────┐ │ + Rate Limit
+│ Client B │ ◀────────── Broadcast ───────────────── │ (Redis)
+│ (Browser) │ /topic/live-comments │
+└─────────────┘ ▼
+│ ┌─────────────┐
+│ Circular Buffer │ Redis │
+│ (50 comments) │ rate_limit: │
+▼ │ comment:IP │
+┌─────────────┐ └─────────────┘
+│ localStorage│
+│ displayName │
+└─────────────┘
+
 ## 🚀 Hướng dẫn cài đặt
 
 ### Yêu cầu hệ thống
@@ -254,16 +275,20 @@ GRANT ALL PRIVILEGES ON DATABASE livestream_db TO livestream_user;
 - [x] Stream key tự động generate cho user
 - [x] Swagger UI với JWT authentication
 
-### Phase 5: Real-time Chat Enhancement ⏳ (Đang phát triển)
+### Phase 5: Real-time Chat Enhancement ✅ (Hoàn thành)
 
 - [x] WebSocket STOMP configuration
 - [x] ChatBox component (React)
 - [x] Real-time comment display
-- [ ] Comment validation (length, profanity filter)
-- [ ] Rate limiting (Redis-based)
-- [ ] IP tracking
-- [ ] Comment moderation APIs
-  - [ ] Delete comment
+- [x] Comment validation (length 1-500 chars, profanity filter)
+- [x] Rate limiting (3 giây/comment per IP với Redis)
+- [x] IP tracking qua WebSocket handshake interceptor
+- [x] Profanity filter tiếng Việt + English
+- [x] Block số điện thoại, URLs, từ ngữ cấm (cá độ, chửi thề)
+- [x] Frontend circular buffer: chỉ giữ 50 comments mới nhất
+- [x] Error handling và UI feedback real-time
+- [x] No database storage (chỉ broadcast qua WebSocket)
+- [ ] Delete comment (không cần thiết - comments không lưu DB)
 
 ### Phase 6: Stream Management ⏳ (Đang phát triển)
 
@@ -273,26 +298,7 @@ GRANT ALL PRIVILEGES ON DATABASE livestream_db TO livestream_user;
 - [x] Stream status monitoring (LIVE/ENDED)
 - [x] SRS callbacks integration (on_publish, on_unpublish)
 - [x] Auto stream creation khi user bắt đầu RTMP
-- [ ] Update stream info (title, description)
-- [ ] Viewer count tracking (Redis)
-- [ ] Stream analytics
-  - [ ] Total viewers
-  - [ ] Peak viewers
-  - [ ] Average watch time
-  - [ ] Comment count
-  - [ ] Peak viewers
-  - [ ] Average watch time
-  - [ ] Comment count
-
-### Phase 7: Mobile Optimization
-
-- [ ] Responsive CSS improvements
-- [ ] Touch-friendly UI
-- [ ] Mobile video controls
-- [ ] Network quality detection
-- [ ] Auto quality switching
-- [ ] Offline notification
-- [ ] PWA setup (optional)
+- [ ] Viewer count
 
 ### Phase 8: Testing & Quality Assurance
 

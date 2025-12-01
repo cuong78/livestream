@@ -1,10 +1,18 @@
 package com.livestream.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.server.ServerHttpRequest;
+import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.server.HandshakeInterceptor;
+
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @Configuration
 @EnableWebSocketMessageBroker
@@ -24,6 +32,59 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // WebSocket endpoint that clients will connect to
         registry.addEndpoint("/ws/chat")
                 .setAllowedOriginPatterns("*")
+                .addInterceptors(new IpHandshakeInterceptor())
                 .withSockJS();
+    }
+    
+    /**
+     * Interceptor to capture client IP address during WebSocket handshake
+     */
+    private static class IpHandshakeInterceptor implements HandshakeInterceptor {
+        
+        @Override
+        public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
+                                     WebSocketHandler wsHandler, Map<String, Object> attributes) {
+            
+            if (request instanceof ServletServerHttpRequest) {
+                HttpServletRequest servletRequest = ((ServletServerHttpRequest) request).getServletRequest();
+                String ipAddress = getClientIpAddress(servletRequest);
+                attributes.put("ip", ipAddress);
+            }
+            
+            return true;
+        }
+        
+        @Override
+        public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response,
+                                 WebSocketHandler wsHandler, Exception exception) {
+            // No action needed after handshake
+        }
+        
+        /**
+         * Get real client IP address (handles proxy headers)
+         */
+        private String getClientIpAddress(HttpServletRequest request) {
+            String ipAddress = request.getHeader("X-Forwarded-For");
+            
+            if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getHeader("X-Real-IP");
+            }
+            if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getHeader("Proxy-Client-IP");
+            }
+            if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getHeader("WL-Proxy-Client-IP");
+            }
+            if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getRemoteAddr();
+            }
+            
+            // Handle multiple IPs (take first one)
+            if (ipAddress != null && ipAddress.contains(",")) {
+                ipAddress = ipAddress.split(",")[0].trim();
+            }
+            
+            return ipAddress;
+        }
     }
 }

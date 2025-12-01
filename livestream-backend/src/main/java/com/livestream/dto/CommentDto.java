@@ -16,4 +16,6 @@ public class CommentDto {
     private String displayName;
     private String content;
     private LocalDateTime createdAt;
+    private String parentId; // ID of parent comment if this is a reply
+    private String replyTo; // Display name of person being replied to
 }

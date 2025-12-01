@@ -1,8 +1,6 @@
 package com.livestream.controller;
 
-import com.livestream.dto.CommentDto;
 import com.livestream.dto.StreamDto;
-import com.livestream.service.CommentService;
 import com.livestream.service.StreamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -17,12 +15,11 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
-@Tag(name = "Admin", description = "Admin APIs for managing streams and comments (requires ADMIN role)")
+@Tag(name = "Admin", description = "Admin APIs for managing streams (requires ADMIN role)")
 @SecurityRequirement(name = "api")
 public class AdminController {
     
     private final StreamService streamService;
-    private final CommentService commentService;
 
     // Stream Management
     @PostMapping("/stream/start")
@@ -68,27 +65,9 @@ public class AdminController {
         return ResponseEntity.ok(streams);
     }
 
-    // Comment Management
-    @GetMapping("/stream/{streamId}/comments")
-    public ResponseEntity<List<CommentDto>> getStreamComments(
-            @PathVariable Long streamId,
-            @RequestParam(defaultValue = "100") int limit) {
-        
-        List<CommentDto> comments = commentService.getRecentComments(streamId, limit);
-        return ResponseEntity.ok(comments);
-    }
-
-    @DeleteMapping("/comment/{id}")
-    public ResponseEntity<Map<String, Object>> deleteComment(@PathVariable Long id) {
-        boolean deleted = commentService.deleteComment(id);
-        if (!deleted) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(Map.of("success", true, "message", "Comment deleted"));
-    }
-
     // Viewer Count Management
     @PutMapping("/stream/{id}/viewer-count")
+    @Operation(summary = "Update viewer count", description = "Update the viewer count for a stream")
     public ResponseEntity<Map<String, Object>> updateViewerCount(
             @PathVariable Long id,
             @RequestParam int count) {
@@ -96,4 +75,8 @@ public class AdminController {
         streamService.updateViewerCount(id, count);
         return ResponseEntity.ok(Map.of("success", true, "viewerCount", count));
     }
+    
+    // Note: Comments are now handled in real-time via WebSocket only
+    // They are not stored in database, only kept in memory (frontend handles last 50)
 }
+

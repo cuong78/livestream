@@ -13,6 +13,8 @@ export interface Comment {
   displayName: string;
   content: string;
   createdAt?: string;
+  parentId?: string;
+  replyTo?: string;
 }
 
 export interface User {

@@ -31,9 +31,17 @@ const ViewerPage = () => {
     fetchStream();
 
     // Connect WebSocket for real-time comments
-    websocketService.connect((comment) => {
-      setComments((prev) => [...prev, comment]);
-    });
+    websocketService.connect(
+      // onMessage: Nhận comment mới
+      (comment) => {
+        setComments((prev) => [...prev, comment]);
+      },
+      // onHistory: Nhận lịch sử comments khi mới kết nối
+      (historyComments) => {
+        console.log("Received comments history:", historyComments.length);
+        setComments(historyComments);
+      }
+    );
 
     return () => {
       websocketService.disconnect();
@@ -153,27 +161,34 @@ const ViewerPage = () => {
         <div className="main-content">
           {/* Video Player Section */}
           <div className="video-section">
-            {!stream || stream.status !== "LIVE" ? (
+            {stream && stream.status === "LIVE" ? (
+              <VideoPlayer hlsUrl={stream.hlsUrl} />
+            ) : (
               <div className="video-placeholder">
                 <img
                   src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764521034/anhbia_wmfcto.png"
                   alt="CLB Gà Chọi Cao Đổi"
                   className="cover-image"
                 />
-                <div className="offline-overlay">
-                  <div className="offline-icon">📡</div>
-                  <h3>STREAM ĐANG OFFLINE</h3>
-                  <p>Vần xổ gà trực tiếp 18h hàng ngày</p>
-                  <button className="btn-reload" onClick={handleReload}>
-                    🔄 LOAD LẠI TRANG
-                  </button>
-                  <div className="phone-contact">
-                    📱 <a href="tel:0387683857">0387683857</a>
+                <div className="play-button-overlay">
+                  <div className="play-button-circle">
+                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                      <circle
+                        cx="40"
+                        cy="40"
+                        r="38"
+                        fill="rgba(220, 20, 60, 0.9)"
+                        stroke="#FFD700"
+                        strokeWidth="4"
+                      />
+                      <path d="M32 25L55 40L32 55V25Z" fill="white" />
+                    </svg>
                   </div>
+                  <p className="play-button-text">
+                    Stream offline - Vần xổ gà 18h hàng ngày
+                  </p>
                 </div>
               </div>
-            ) : (
-              <VideoPlayer hlsUrl={stream.hlsUrl} />
             )}
 
             {/* Warning Banner */}
