@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
+import "./VideoPlayer.css";
 import type Player from "video.js/dist/types/player";
 
 interface VideoPlayerProps {
@@ -15,7 +16,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
     if (!videoRef.current || !hlsUrl) return;
 
     const videoElement = document.createElement("video");
-    videoElement.className = "video-js vjs-big-play-centered";
+    videoElement.className = "video-js vjs-big-play-centered vjs-theme-custom";
     videoRef.current.appendChild(videoElement);
 
     const player = videojs(videoElement, {
@@ -57,9 +58,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
   }, [hlsUrl]);
 
   return (
-    <div
-      style={{ width: "100%", aspectRatio: "16/9", backgroundColor: "#000" }}
-    >
+    <div className="video-player-wrapper">
       <div ref={videoRef} />
     </div>
   );

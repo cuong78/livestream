@@ -13,6 +13,9 @@ export interface Comment {
   displayName: string;
   content: string;
   createdAt?: string;
+  parentId?: string;
+  replyTo?: string;
+  ipAddress?: string; // IP address (only visible to admin)
 }
 
 export interface User {

@@ -33,9 +33,24 @@ public class AuthController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Login successful",
                 content = @Content(schema = @Schema(implementation = LoginResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input"),
         @ApiResponse(responseCode = "401", description = "Invalid credentials")
     })
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        // Input validation with proper HTTP status codes
+        if (request.getUsername() == null || request.getUsername().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Username is required"));
+        }
+        
+        if (request.getPassword() == null || request.getPassword().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Password is required"));
+        }
+        
+        // Check oversized input (max 255 characters)
+        if (request.getUsername().length() > 255 || request.getPassword().length() > 255) {
+            return ResponseEntity.status(413).body(Map.of("error", "Input too large"));
+        }
+        
         return authService.authenticateUser(request.getUsername(), request.getPassword())
             .map(user -> {
                 // Generate JWT token
@@ -62,24 +77,36 @@ public class AuthController {
             })
             .orElse(ResponseEntity.status(401).body(Map.of("error", "Invalid credentials")));
     }
-
+    
     @PostMapping("/register")
-    @Operation(
-        summary = "Register new user", 
-        description = "Create a new admin account with auto-generated stream key"
-    )
+    @Operation(summary = "Register", description = "Register new user account")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Registration successful",
-                content = @Content(schema = @Schema(implementation = UserDto.class))),
-        @ApiResponse(responseCode = "400", description = "Username or email already exists")
+        @ApiResponse(responseCode = "200", description = "Registration successful"),
+        @ApiResponse(responseCode = "400", description = "Invalid input or user already exists"),
+        @ApiResponse(responseCode = "413", description = "Input too large")
     })
-    public ResponseEntity<?> register(
-            @Parameter(description = "Username (unique)", required = true)
-            @RequestParam String username,
-            @Parameter(description = "Password", required = true)
-            @RequestParam String password,
-            @Parameter(description = "Email address (unique)", required = true)
-            @RequestParam String email) {
+    public ResponseEntity<?> register(@RequestBody Map<String, String> request) {
+        String username = request.get("username");
+        String password = request.get("password");
+        String email = request.get("email");
+        
+        // Input validation with proper HTTP status codes
+        if (username == null || username.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Username is required"));
+        }
+        
+        if (password == null || password.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Password is required"));
+        }
+        
+        if (email == null || email.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Email is required"));
+        }
+        
+        // Check oversized input (max 255 characters)
+        if (username.length() > 255 || password.length() > 255 || email.length() > 255) {
+            return ResponseEntity.status(413).body(Map.of("error", "Input too large"));
+        }
         
         try {
             User user = authService.registerUser(username, password, email);
@@ -92,42 +119,7 @@ public class AuthController {
                 .role(user.getRole().name())
                 .build();
             
-            return ResponseEntity.ok(userDto);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-        }
-    }
-
-    @PostMapping("/change-password")
-    @Operation(
-        summary = "Change password", 
-        description = "Change user password (requires authentication)",
-        security = @io.swagger.v3.oas.annotations.security.SecurityRequirement(name = "api")
-    )
-    public ResponseEntity<?> changePassword(
-            @Parameter(description = "User ID") @RequestParam Long userId,
-            @Parameter(description = "Current password") @RequestParam String oldPassword,
-            @Parameter(description = "New password") @RequestParam String newPassword) {
-        
-        try {
-            authService.changePassword(userId, oldPassword, newPassword);
-            return ResponseEntity.ok(Map.of("success", true, "message", "Password changed successfully"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-        }
-    }
-
-    @PostMapping("/regenerate-stream-key")
-    @Operation(
-        summary = "Regenerate stream key", 
-        description = "Generate a new stream key (old key will be invalid)",
-        security = @io.swagger.v3.oas.annotations.security.SecurityRequirement(name = "api")
-    )
-    public ResponseEntity<?> regenerateStreamKey(
-            @Parameter(description = "User ID") @RequestParam Long userId) {
-        try {
-            String newStreamKey = authService.regenerateStreamKey(userId);
-            return ResponseEntity.ok(Map.of("success", true, "streamKey", newStreamKey));
+            return ResponseEntity.ok(Map.of("message", "User registered successfully", "user", userDto));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }

@@ -3,9 +3,9 @@ spring:
     name: livestream-backend
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/livestream_db
-    username: livestream_user
-    password: livestream_pass
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/livestream_db}
+    username: ${SPRING_DATASOURCE_USERNAME:livestream_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:livestream_pass}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -19,8 +19,8 @@ spring:
 
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${SPRING_REDIS_HOST:localhost}
+      port: ${SPRING_REDIS_PORT:6379}
       password:
       lettuce:
         pool:
@@ -60,3 +60,31 @@ logging:
     com.livestream: DEBUG
     org.springframework.web: INFO
     org.springframework.security: INFO
+
+# Swagger/OpenAPI Configuration
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+
+---
+# Production Profile
+spring:
+  config:
+    activate:
+      on-profile: production
+
+# Disable Swagger in production
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+logging:
+  level:
+    com.livestream: INFO
+    org.springframework.web: WARN
+    org.springframework.security: WARN

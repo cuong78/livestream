@@ -1,6 +1,13 @@
-# 🎥 Live Streaming Platform
+# 🎥 CLB Gà Chọi Cao Đổi - Live Streaming Platform
 
-Nền tảng live streaming cho phép admin phát trực tiếp từ điện thoại (RTMP) và khách hàng xem + bình luận real-time không cần đăng nhập.
+Nền tảng live streaming chuyên nghiệp , phát trực tiếp từ điện thoại (RTMP) với chat real-time.
+
+## 🎨 Thiết kế mới
+
+- 🎨 Giao diện chuyên nghiệp với màu đỏ/vàng/đen truyền thống
+- 📱 Responsive hoàn toàn cho mobile và desktop
+- ✨ Hiệu ứng gradient, animation mượt mà
+- 🎯 Tích hợp đầy đủ thông tin CLB, liên hệ, quy định
 
 ## 📋 Tổng quan dự án
 
@@ -27,15 +34,16 @@ Nền tảng live streaming cho phép admin phát trực tiếp từ điện tho
 - **Framework**: React 18 + TypeScript
 - **Build Tool**: Vite
 - **Router**: React Router v6
-- **Video Player**: Video.js (HLS support)
+- **Video Player**: Video.js (HLS support) - **Custom Theme**
 - **WebSocket**: STOMP.js + SockJS
 - **HTTP Client**: Axios
+- **Styling**: Custom CSS with responsive design
 
 #### Streaming Infrastructure
 
 - **RTMP Server**: SRS (Simple Realtime Server) v5
 - **Protocol**: RTMP input → HLS output
-- **Quality**: Multi-bitrate (SD/HD/FHD)
+- **Latency**: ~5-8 seconds (optimized)
 
 #### DevOps
 
@@ -73,6 +81,27 @@ Nền tảng live streaming cho phép admin phát trực tiếp từ điện tho
 │  (Data)      │        │  (Cache)     │
 └──────────────┘        └──────────────┘
 ```
+
+🚀 Kiến trúc của Chat System
+
+┌─────────────┐ WebSocket STOMP ┌─────────────┐
+│ Client A │ ─────────────────────────────▶ │ Backend │
+│ (Browser) │ │ ChatController │
+└─────────────┘ └──────┬──────┘
+│
+│ Validate
+┌─────────────┐ │ + Rate Limit
+│ Client B │ ◀────────── Broadcast ───────────────── │ (Redis)
+│ (Browser) │ /topic/live-comments │
+└─────────────┘ ▼
+│ ┌─────────────┐
+│ Circular Buffer │ Redis │
+│ (50 comments) │ rate_limit: │
+▼ │ comment:IP │
+┌─────────────┐ └─────────────┘
+│ localStorage│
+│ displayName │
+└─────────────┘
 
 ## 🚀 Hướng dẫn cài đặt
 
@@ -246,16 +275,20 @@ GRANT ALL PRIVILEGES ON DATABASE livestream_db TO livestream_user;
 - [x] Stream key tự động generate cho user
 - [x] Swagger UI với JWT authentication
 
-### Phase 5: Real-time Chat Enhancement ⏳ (Đang phát triển)
+### Phase 5: Real-time Chat Enhancement ✅ (Hoàn thành)
 
 - [x] WebSocket STOMP configuration
 - [x] ChatBox component (React)
 - [x] Real-time comment display
-- [ ] Comment validation (length, profanity filter)
-- [ ] Rate limiting (Redis-based)
-- [ ] IP tracking
-- [ ] Comment moderation APIs
-  - [ ] Delete comment
+- [x] Comment validation (length 1-500 chars, profanity filter)
+- [x] Rate limiting (3 giây/comment per IP với Redis)
+- [x] IP tracking qua WebSocket handshake interceptor
+- [x] Profanity filter tiếng Việt + English
+- [x] Block số điện thoại, URLs, từ ngữ cấm (cá độ, chửi thề)
+- [x] Frontend circular buffer: chỉ giữ 50 comments mới nhất
+- [x] Error handling và UI feedback real-time
+- [x] No database storage (chỉ broadcast qua WebSocket)
+- [x] Delete comment
 
 ### Phase 6: Stream Management ⏳ (Đang phát triển)
 
@@ -265,36 +298,54 @@ GRANT ALL PRIVILEGES ON DATABASE livestream_db TO livestream_user;
 - [x] Stream status monitoring (LIVE/ENDED)
 - [x] SRS callbacks integration (on_publish, on_unpublish)
 - [x] Auto stream creation khi user bắt đầu RTMP
-- [ ] Update stream info (title, description)
-- [ ] Viewer count tracking (Redis)
-- [ ] Stream analytics
-  - [ ] Total viewers
-  - [ ] Peak viewers
-  - [ ] Average watch time
-  - [ ] Comment count
-  - [ ] Peak viewers
-  - [ ] Average watch time
-  - [ ] Comment count
+- [x] Viewer count
 
-### Phase 7: Mobile Optimization
+### Phase 7: IP Blocking & Admin Features ✅ (Hoàn thành)
 
-- [ ] Responsive CSS improvements
-- [ ] Touch-friendly UI
-- [ ] Mobile video controls
-- [ ] Network quality detection
-- [ ] Auto quality switching
-- [ ] Offline notification
-- [ ] PWA setup (optional)
+- [x] IP tracking trong WebSocket handshake
+- [x] BlockedIp entity, repository, service
+- [x] Admin block/unblock IP endpoints
+- [x] BlockedIpsModal UI component
+- [x] Admin context menu (delete comment, view IP, block IP)
+- [x] Viewer count display and synchronization
+- [x] Comment history với Redis (50 comments, 24h TTL)
 
-### Phase 8: Testing & Quality Assurance
+### Phase 8: Testing & Quality Assurance ✅ (Hoàn thành)
 
-- [ ] Backend unit tests
-- [ ] Integration tests (API)
-- [ ] WebSocket connection tests
-- [ ] Frontend component tests
-- [ ] E2E tests (Playwright/Cypress)
-- [ ] Load testing (stream + chat)
-- [ ] Security audit
+**Load Testing (k6):**
+
+- [x] Chat load test (100+ concurrent users, WebSocket)
+- [x] Viewer load test (500-1000 concurrent viewers, HLS streaming)
+- [x] API stress test (authentication, stream endpoints)
+- [x] Performance benchmarks và thresholds
+- [x] Custom metrics tracking (success rate, response time, errors)
+
+**Security Audit:**
+
+- [x] SQL injection testing (authentication, streams, admin)
+- [x] XSS testing (comments, display names, stored XSS)
+- [x] CSRF protection verification
+- [x] Authentication & authorization tests (JWT, role-based)
+- [x] Rate limiting verification
+- [x] Input validation tests
+- [x] WebSocket security (IP blocking, message validation)
+- [x] Information disclosure checks
+- [x] Security checklist documentation
+- [x] Automated security test script (Python)
+- [x] OWASP dependency check setup
+
+**Documentation:**
+
+- [x] Load testing guide (`tests/README.md`)
+- [x] Security checklist (`tests/security/SECURITY_CHECKLIST.md`)
+- [x] Test execution instructions
+- [x] Performance benchmarks
+- [x] Troubleshooting guide
+
+**Location:** `tests/` directory
+
+- `tests/load/` - k6 load testing scripts
+- `tests/security/` - Security audit tools and checklist
 
 ### Phase 9: Production Deployment
 
@@ -444,49 +495,6 @@ docker-compose logs -f
 ````
 
 ## 🎯 Tình trạng dự án hiện tại
-
-### ✅ Đã hoàn thành (70% core features)
-
-1. **Backend Infrastructure**
-
-   - Spring Boot 3.2.0 với PostgreSQL + Redis
-   - JWT Authentication hoàn chỉnh
-   - RESTful APIs với Swagger documentation
-   - Service layer architecture
-
-2. **Frontend Application**
-
-   - React 18 + TypeScript + Vite
-   - Video.js player với HLS support
-   - Low-latency optimization (~5-8s delay)
-   - Responsive design
-
-3. **Streaming Infrastructure**
-
-   - SRS Server với RTMP → HLS conversion
-   - Auto stream creation qua callbacks
-   - Stream key validation
-   - CORS enabled
-
-4. **Docker Setup**
-   - Docker Compose orchestration
-   - 5 containers: PostgreSQL, Redis, SRS, Backend, Frontend
-   - Production-ready configuration
-
-### ⏳ Đang phát triển
-
-1. **Real-time Chat** (WebSocket STOMP configured, cần UI integration)
-2. **Viewer Count Tracking** (Backend ready, cần Redis integration)
-3. **Admin Dashboard** (API sẵn sàng, cần frontend UI)
-
-### 📋 Các bước tiếp theo
-
-1. **Phase 5**: Hoàn thiện real-time chat với moderation
-2. **Phase 7**: Mobile optimization (PWA, offline mode)
-3. **Phase 8**: Testing & QA
-4. **Phase 9**: Production deployment với SSL
-
----
 
 **Dự án đã sẵn sàng để streaming! 🎊**
 
