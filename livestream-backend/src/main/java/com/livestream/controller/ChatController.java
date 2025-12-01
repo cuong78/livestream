@@ -97,6 +97,9 @@ public class ChatController {
             // Set timestamp for the comment
             commentDto.setCreatedAt(LocalDateTime.now());
             
+            // Set IP address (will be sent to admin only)
+            commentDto.setIpAddress(ipAddress);
+            
             // Save to Redis history (last 50 comments)
             saveCommentToHistory(commentDto);
             
@@ -114,12 +117,13 @@ public class ChatController {
      */
     private void saveCommentToHistory(CommentDto commentDto) {
         try {
-            // Convert comment to JSON
+            // Convert comment to JSON (include IP address)
             String commentJson = String.format(
-                "{\"displayName\":\"%s\",\"content\":\"%s\",\"createdAt\":\"%s\"}",
+                "{\"displayName\":\"%s\",\"content\":\"%s\",\"createdAt\":\"%s\",\"ipAddress\":\"%s\"}",
                 commentDto.getDisplayName(),
                 commentDto.getContent().replace("\"", "\\\""),
-                commentDto.getCreatedAt()
+                commentDto.getCreatedAt(),
+                commentDto.getIpAddress() != null ? commentDto.getIpAddress() : ""
             );
             
             // Add to Redis list (LPUSH for newest first)
@@ -157,5 +161,23 @@ public class ChatController {
             log.error("Failed to fetch comments history", e);
         }
         return new ArrayList<>();
+    }
+    
+    /**
+     * Delete a comment (Admin only)
+     */
+    @MessageMapping("/comment/delete")
+    public void deleteComment(CommentDto commentDto) {
+        try {
+            log.info("Delete comment request: displayName={}, createdAt={}", 
+                commentDto.getDisplayName(), commentDto.getCreatedAt());
+            
+            // Broadcast delete event to all clients
+            messagingTemplate.convertAndSend("/topic/comment-deleted", commentDto);
+            
+            log.info("Comment delete event broadcasted");
+        } catch (Exception e) {
+            log.error("Failed to delete comment", e);
+        }
     }
 }

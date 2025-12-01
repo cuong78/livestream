@@ -1,5 +1,8 @@
 package com.livestream.config;
 
+import com.livestream.service.IpBlockService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -16,7 +19,11 @@ import java.util.Map;
 
 @Configuration
 @EnableWebSocketMessageBroker
+@RequiredArgsConstructor
+@Slf4j
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    private final IpBlockService ipBlockService;
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
@@ -32,7 +39,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // WebSocket endpoint that clients will connect to
         registry.addEndpoint("/ws/chat")
                 .setAllowedOriginPatterns("*")
-                .addInterceptors(new IpHandshakeInterceptor())
+                .addInterceptors(new IpHandshakeInterceptor(ipBlockService))
                 .withSockJS();
     }
     
@@ -41,6 +48,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
      */
     private static class IpHandshakeInterceptor implements HandshakeInterceptor {
         
+        private final IpBlockService ipBlockService;
+        
+        public IpHandshakeInterceptor(IpBlockService ipBlockService) {
+            this.ipBlockService = ipBlockService;
+        }
+        
         @Override
         public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                      WebSocketHandler wsHandler, Map<String, Object> attributes) {
@@ -48,6 +61,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             if (request instanceof ServletServerHttpRequest) {
                 HttpServletRequest servletRequest = ((ServletServerHttpRequest) request).getServletRequest();
                 String ipAddress = getClientIpAddress(servletRequest);
+                
+                // Check if IP is blocked
+                if (ipBlockService.isBlocked(ipAddress)) {
+                    log.warn("Blocked IP {} attempted to connect", ipAddress);
+                    return false; // Reject connection
+                }
+                
                 attributes.put("ip", ipAddress);
             }
             

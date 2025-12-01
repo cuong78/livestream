@@ -145,6 +145,28 @@ body {
   transform: translateY(-2px);
 }
 
+.btn-blocked-ips {
+  background: linear-gradient(135deg, #6a0dad 0%, #8b00ff 100%);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: bold;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(138, 0, 255, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-blocked-ips:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(138, 0, 255, 0.5);
+  background: linear-gradient(135deg, #8b00ff 0%, #6a0dad 100%);
+}
+
 .menu-toggle {
   display: none;
   background: var(--primary-red);

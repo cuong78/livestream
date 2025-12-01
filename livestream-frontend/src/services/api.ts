@@ -10,6 +10,22 @@ const api = axios.create({
   },
 });
 
+// Add auth token to requests
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("admin_token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export const authApi = {
+  login: async (username: string, password: string) => {
+    const response = await api.post("/auth/login", { username, password });
+    return response.data;
+  },
+};
+
 export const streamApi = {
   getCurrentStream: async (): Promise<Stream | null> => {
     const response = await axios.get(`${API_BASE_URL}/stream/current`);

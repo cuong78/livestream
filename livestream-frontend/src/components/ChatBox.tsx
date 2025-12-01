@@ -5,6 +5,10 @@ import "./ChatBox.css";
 interface ChatBoxProps {
   comments: Comment[];
   onSendComment: (comment: Comment) => void;
+  viewerCount?: number;
+  isAdmin?: boolean;
+  onDeleteComment?: (comment: Comment) => void;
+  onBlockIp?: (ipAddress: string) => void;
 }
 
 const DISPLAY_NAME_KEY = "livestream_display_name";
@@ -12,12 +16,24 @@ const MAX_COMMENTS = 50; // Giới hạn tối đa 50 comments
 const MAX_DISPLAY_NAME_LENGTH = 50;
 const MAX_CONTENT_LENGTH = 500;
 
-const ChatBox: React.FC<ChatBoxProps> = ({ comments, onSendComment }) => {
+const ChatBox: React.FC<ChatBoxProps> = ({
+  comments,
+  onSendComment,
+  viewerCount = 0,
+  isAdmin = false,
+  onDeleteComment,
+  onBlockIp,
+}) => {
   const [displayName, setDisplayName] = useState("");
   const [content, setContent] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [replyingTo, setReplyingTo] = useState<Comment | null>(null);
+  const [contextMenu, setContextMenu] = useState<{
+    comment: Comment;
+    x: number;
+    y: number;
+  } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const shouldScrollRef = useRef(true);
@@ -63,6 +79,48 @@ const ChatBox: React.FC<ChatBoxProps> = ({ comments, onSendComment }) => {
       return () => clearTimeout(timer);
     }
   }, [errorMessage]);
+
+  useEffect(() => {
+    // Close context menu when clicking outside
+    const handleClickOutside = () => setContextMenu(null);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
+  const handleCommentClick = (comment: Comment, e: React.MouseEvent) => {
+    if (isAdmin) {
+      e.preventDefault();
+      e.stopPropagation();
+      setContextMenu({ comment, x: e.clientX, y: e.clientY });
+    } else {
+      handleReplyClick(comment);
+    }
+  };
+
+  const handleDeleteComment = () => {
+    if (contextMenu && onDeleteComment) {
+      onDeleteComment(contextMenu.comment);
+      setContextMenu(null);
+    }
+  };
+
+  const handleViewIp = () => {
+    if (contextMenu?.comment.ipAddress) {
+      alert(`IP Address: ${contextMenu.comment.ipAddress}`);
+    }
+    setContextMenu(null);
+  };
+
+  const handleBlockIp = () => {
+    if (contextMenu?.comment.ipAddress && onBlockIp) {
+      if (
+        confirm(`Bạn có chắc muốn chặn IP: ${contextMenu.comment.ipAddress}?`)
+      ) {
+        onBlockIp(contextMenu.comment.ipAddress);
+      }
+    }
+    setContextMenu(null);
+  };
 
   const handleReplyClick = (comment: Comment) => {
     setReplyingTo(comment);
@@ -169,9 +227,12 @@ const ChatBox: React.FC<ChatBoxProps> = ({ comments, onSendComment }) => {
 
   return (
     <div className="chatbox-container">
-      {/* Header với nút Load lại trang */}
+      {/* Header với nút Load lại trang và viewer count */}
       <div className="chatbox-header">
-        <h3>💬 Chat trực tiếp</h3>
+        <div className="header-left">
+          <h3>💬 Chat trực tiếp</h3>
+          <span className="viewer-count">👁️ {viewerCount} đang xem</span>
+        </div>
         <button
           className="reload-btn"
           onClick={handleReloadPage}
@@ -263,7 +324,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ comments, onSendComment }) => {
             <div
               key={comment.id || `${comment.displayName}-${index}`}
               className={`chat-message ${comment.parentId ? "is-reply" : ""}`}
-              onClick={() => handleReplyClick(comment)}
+              onClick={(e) => handleCommentClick(comment, e)}
               style={{ cursor: "pointer" }}
             >
               <div className="message-avatar">
@@ -272,6 +333,11 @@ const ChatBox: React.FC<ChatBoxProps> = ({ comments, onSendComment }) => {
               <div className="message-content-wrapper">
                 <div className="message-header">
                   <div className="message-name">{comment.displayName}</div>
+                  {isAdmin && comment.ipAddress && (
+                    <span className="admin-ip-badge" title="IP Address">
+                      🌐 {comment.ipAddress}
+                    </span>
+                  )}
                 </div>
                 {comment.replyTo && comment.parentId && (
                   <div className="reply-quote-container">
@@ -289,6 +355,35 @@ const ChatBox: React.FC<ChatBoxProps> = ({ comments, onSendComment }) => {
         )}
         <div ref={messagesEndRef} />
       </div>
+
+      {/* Admin Context Menu */}
+      {contextMenu && isAdmin && (
+        <div
+          className="admin-context-menu"
+          style={{ top: contextMenu.y, left: contextMenu.x }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            className="context-menu-item delete"
+            onClick={handleDeleteComment}
+          >
+            🗑️ Xóa bình luận
+          </button>
+          {contextMenu.comment.ipAddress && (
+            <>
+              <button className="context-menu-item" onClick={handleViewIp}>
+                🔍 Xem IP
+              </button>
+              <button
+                className="context-menu-item block"
+                onClick={handleBlockIp}
+              >
+                🚫 Chặn IP
+              </button>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 };

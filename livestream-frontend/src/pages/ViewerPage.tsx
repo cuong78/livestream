@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import VideoPlayer from "@/components/VideoPlayer";
 import ChatBox from "@/components/ChatBox";
+import LoginModal from "@/components/LoginModal";
+import BlockedIpsModal from "@/components/BlockedIpsModal";
 import { streamApi } from "@/services/api";
 import { websocketService } from "@/services/websocket";
 import type { Stream, Comment } from "@/types";
@@ -14,8 +16,21 @@ const ViewerPage = () => {
   const [activeServer, setActiveServer] = useState("HD1");
   const [showIntro, setShowIntro] = useState(false);
   const [showRules, setShowRules] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [adminUser, setAdminUser] = useState<any>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showBlockedIpsModal, setShowBlockedIpsModal] = useState(false);
+  const [viewerCount, setViewerCount] = useState(0);
 
   useEffect(() => {
+    // Check if admin already logged in
+    const token = localStorage.getItem("admin_token");
+    const user = localStorage.getItem("admin_user");
+    if (token && user) {
+      setIsAdmin(true);
+      setAdminUser(JSON.parse(user));
+    }
+
     // Fetch current stream
     const fetchStream = async () => {
       try {
@@ -40,6 +55,20 @@ const ViewerPage = () => {
       (historyComments) => {
         console.log("Received comments history:", historyComments.length);
         setComments(historyComments);
+      },
+      // onViewerCount: Nhận số lượng người đang xem
+      (count) => {
+        setViewerCount(count);
+      },
+      // onCommentDeleted: Nhận event xóa comment
+      (deletedComment) => {
+        setComments((prev) =>
+          prev.filter(
+            (c) =>
+              c.displayName !== deletedComment.displayName ||
+              c.createdAt !== deletedComment.createdAt
+          )
+        );
       }
     );
 
@@ -52,6 +81,36 @@ const ViewerPage = () => {
     websocketService.sendComment(comment);
   };
 
+  const handleDeleteComment = (comment: Comment) => {
+    websocketService.deleteComment(comment);
+  };
+
+  const handleBlockIp = async (ipAddress: string) => {
+    if (!adminUser) return;
+
+    try {
+      const response = await fetch(
+        `/api/admin/blocked-ips/block?ipAddress=${ipAddress}&reason=Admin blocked&adminUsername=${adminUser.username}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("admin_token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        alert(`IP ${ipAddress} đã được chặn thành công!`);
+      } else {
+        const error = await response.json();
+        alert(`Lỗi: ${error.error || "Không thể chặn IP"}`);
+      }
+    } catch (err) {
+      alert("Không thể kết nối đến server");
+    }
+  };
+
   const handleReload = () => {
     window.location.reload();
   };
@@ -59,6 +118,21 @@ const ViewerPage = () => {
   const copyBankAccount = () => {
     navigator.clipboard.writeText("0966689355");
     alert("Đã sao chép số tài khoản!");
+  };
+
+  const handleLoginSuccess = (token: string, user: any) => {
+    localStorage.setItem("admin_token", token);
+    localStorage.setItem("admin_user", JSON.stringify(user));
+    setIsAdmin(true);
+    setAdminUser(user);
+    setShowLoginModal(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("admin_token");
+    localStorage.removeItem("admin_user");
+    setIsAdmin(false);
+    setAdminUser(null);
   };
 
   if (loading) {
@@ -108,12 +182,36 @@ const ViewerPage = () => {
                 <p className="subtitle">Tinh Hoa Việt</p>
               </div>
             </div>
-            <button
-              className="menu-toggle"
-              onClick={() => setShowIntro(!showIntro)}
-            >
-              ☰
-            </button>
+            <div className="header-actions">
+              {isAdmin ? (
+                <div className="admin-info">
+                  <button
+                    className="btn-blocked-ips"
+                    onClick={() => setShowBlockedIpsModal(true)}
+                    title="Quản lý IP đã chặn"
+                  >
+                    🚫 IP đã chặn
+                  </button>
+                  <span className="admin-badge">👑 {adminUser?.username}</span>
+                  <button className="btn-logout" onClick={handleLogout}>
+                    Đăng xuất
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="btn-login"
+                  onClick={() => setShowLoginModal(true)}
+                >
+                  🔐 Đăng nhập
+                </button>
+              )}
+              <button
+                className="menu-toggle"
+                onClick={() => setShowIntro(!showIntro)}
+              >
+                ☰
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -200,7 +298,14 @@ const ViewerPage = () => {
 
           {/* Chat Section */}
           <div className="chat-section">
-            <ChatBox comments={comments} onSendComment={handleSendComment} />
+            <ChatBox
+              comments={comments}
+              onSendComment={handleSendComment}
+              viewerCount={viewerCount}
+              isAdmin={isAdmin}
+              onDeleteComment={handleDeleteComment}
+              onBlockIp={handleBlockIp}
+            />
           </div>
         </div>
 
@@ -490,6 +595,19 @@ const ViewerPage = () => {
           </div>
         </div>
       </footer>
+
+      {/* Login Modal */}
+      {showLoginModal && (
+        <LoginModal
+          onClose={() => setShowLoginModal(false)}
+          onLoginSuccess={handleLoginSuccess}
+        />
+      )}
+
+      {/* Blocked IPs Modal */}
+      {showBlockedIpsModal && (
+        <BlockedIpsModal onClose={() => setShowBlockedIpsModal(false)} />
+      )}
 
       {/* Floating Action Buttons */}
       <div className="floating-buttons">

@@ -18,4 +18,5 @@ public class CommentDto {
     private LocalDateTime createdAt;
     private String parentId; // ID of parent comment if this is a reply
     private String replyTo; // Display name of person being replied to
+    private String ipAddress; // IP address of the commenter (for admin only)
 }

@@ -62,6 +62,4 @@ public class AuthController {
             })
             .orElse(ResponseEntity.status(401).body(Map.of("error", "Invalid credentials")));
     }
-
-   
 }

@@ -35,16 +35,6 @@ public class StreamController {
         return ResponseEntity.ok(stream);
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Get stream by ID", description = "Get stream details by ID (public)")
-    public ResponseEntity<StreamDto> getStreamById(@PathVariable Long id) {
-        StreamDto stream = streamService.getStreamById(id);
-        if (stream == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(stream);
-    }
-
     // SRS Callbacks
     @PostMapping("/callback/publish")
     @Operation(summary = "SRS publish callback", description = "Called by SRS when stream starts")

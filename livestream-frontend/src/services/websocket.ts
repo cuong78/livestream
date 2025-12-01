@@ -6,13 +6,19 @@ export class WebSocketService {
   private client: Client | null = null;
   private onMessageCallback: ((comment: Comment) => void) | null = null;
   private onHistoryCallback: ((comments: Comment[]) => void) | null = null;
+  private onViewerCountCallback: ((count: number) => void) | null = null;
+  private onCommentDeletedCallback: ((comment: Comment) => void) | null = null;
 
   connect(
     onMessage: (comment: Comment) => void,
-    onHistory?: (comments: Comment[]) => void
+    onHistory?: (comments: Comment[]) => void,
+    onViewerCount?: (count: number) => void,
+    onCommentDeleted?: (comment: Comment) => void
   ): void {
     this.onMessageCallback = onMessage;
     this.onHistoryCallback = onHistory || null;
+    this.onViewerCountCallback = onViewerCount || null;
+    this.onCommentDeletedCallback = onCommentDeleted || null;
 
     this.client = new Client({
       webSocketFactory: () => new SockJS("/api/ws/chat"),
@@ -32,6 +38,22 @@ export class WebSocketService {
         const comment = JSON.parse(message.body) as Comment;
         this.onMessageCallback?.(comment);
       });
+
+      // Subscribe to viewer count
+      if (this.onViewerCountCallback) {
+        this.client?.subscribe("/topic/viewer-count", (message) => {
+          const data = JSON.parse(message.body) as { count: number };
+          this.onViewerCountCallback?.(data.count);
+        });
+      }
+
+      // Subscribe to comment deleted events
+      if (this.onCommentDeletedCallback) {
+        this.client?.subscribe("/topic/comment-deleted", (message) => {
+          const comment = JSON.parse(message.body) as Comment;
+          this.onCommentDeletedCallback?.(comment);
+        });
+      }
 
       // Subscribe to comments history
       if (this.onHistoryCallback) {
@@ -63,6 +85,15 @@ export class WebSocketService {
     if (this.client?.connected) {
       this.client.publish({
         destination: "/app/comment",
+        body: JSON.stringify(comment),
+      });
+    }
+  }
+
+  deleteComment(comment: Comment): void {
+    if (this.client?.connected) {
+      this.client.publish({
+        destination: "/app/comment/delete",
         body: JSON.stringify(comment),
       });
     }
