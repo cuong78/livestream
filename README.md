@@ -352,7 +352,7 @@ GRANT ALL PRIVILEGES ON DATABASE livestream_db TO livestream_user;
 - [ ] Environment configuration (.env)
 - [ ] Nginx SSL/TLS setup (Let's Encrypt)
 - [ ] Domain configuration
-- [ ] CDN integration (optional: CloudFlare)
+- [ ] CDN integration (CloudFlare)
 - [ ] Backup strategy (database)
 - [ ] Monitoring setup
   - [ ] Prometheus + Grafana
@@ -362,14 +362,9 @@ GRANT ALL PRIVILEGES ON DATABASE livestream_db TO livestream_user;
 
 ### Phase 10: Advanced Features (Optional)
 
-- [ ] Multiple concurrent streams
 - [ ] Stream recording (save to storage)
 - [ ] VOD (Video on Demand) - replay past streams
 - [ ] Emoji reactions
-- [ ] Viewer authentication (optional)
-- [ ] Donation/tip integration
-- [ ] Stream scheduling
-- [ ] Multi-language support
 
 ---
 
