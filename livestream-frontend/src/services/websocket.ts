@@ -15,7 +15,7 @@ export class WebSocketService {
     this.onHistoryCallback = onHistory || null;
 
     this.client = new Client({
-      webSocketFactory: () => new SockJS("http://localhost:8080/api/ws/chat"),
+      webSocketFactory: () => new SockJS("/api/ws/chat"),
       debug: (str) => {
         console.log("STOMP: " + str);
       },
