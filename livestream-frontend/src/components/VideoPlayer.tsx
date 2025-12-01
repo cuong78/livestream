@@ -21,7 +21,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
 
     const player = videojs(videoElement, {
       controls: true,
-      autoplay: true,
+      autoplay: "muted", // Start muted to allow autoplay
+      muted: true, // Start muted
       preload: "auto",
       fluid: true,
       liveui: true,
@@ -48,6 +49,17 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
     });
 
     playerRef.current = player;
+
+    // Handle autoplay failures and try to play
+    player.ready(() => {
+      const playPromise = player.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay was prevented, show play button
+          console.log("Autoplay was prevented, waiting for user interaction");
+        });
+      }
+    });
 
     return () => {
       if (playerRef.current) {

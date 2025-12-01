@@ -22,6 +22,12 @@ const ViewerPage = () => {
         const currentStream = await streamApi.getCurrentStream();
         setStream(currentStream);
         setLoading(false);
+
+        // Fetch existing comments after stream is loaded
+        const existingComments = await streamApi.getCurrentStreamComments();
+        if (existingComments.length > 0) {
+          setComments(existingComments);
+        }
       } catch (err) {
         setError("Không thể tải stream. Vui lòng thử lại sau.");
         setLoading(false);

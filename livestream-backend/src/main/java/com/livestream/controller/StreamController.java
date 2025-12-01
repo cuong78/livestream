@@ -1,8 +1,10 @@
 package com.livestream.controller;
 
+import com.livestream.dto.CommentDto;
 import com.livestream.dto.StreamDto;
 import com.livestream.entity.User;
 import com.livestream.repository.UserRepository;
+import com.livestream.service.CommentService;
 import com.livestream.service.StreamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,6 +28,7 @@ public class StreamController {
     
     private final StreamService streamService;
     private final UserRepository userRepository;
+    private final CommentService commentService;
     
     @Value("${stream.hls.base-url}")
     private String hlsBaseUrl;
@@ -33,6 +38,18 @@ public class StreamController {
     public ResponseEntity<StreamDto> getCurrentStream() {
         StreamDto stream = streamService.getCurrentLiveStream();
         return ResponseEntity.ok(stream);
+    }
+
+    @GetMapping("/current/comments")
+    @Operation(summary = "Get comments for current stream", description = "Get recent comments for the current live stream (public)")
+    public ResponseEntity<List<CommentDto>> getCurrentStreamComments(
+            @RequestParam(defaultValue = "100") int limit) {
+        StreamDto currentStream = streamService.getCurrentLiveStream();
+        if (currentStream == null || currentStream.getId() == null) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+        List<CommentDto> comments = commentService.getRecentComments(currentStream.getId(), limit);
+        return ResponseEntity.ok(comments);
     }
 
     @GetMapping("/{id}")
