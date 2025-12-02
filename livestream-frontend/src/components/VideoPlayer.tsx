@@ -18,7 +18,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
 
     // Clear previous content and error
     if (videoRef.current.firstChild) {
-      videoRef.current.innerHTML = '';
+      videoRef.current.innerHTML = "";
     }
     setError(null);
 
@@ -63,35 +63,37 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
     });
 
     // Add error handling
-    player.on('error', function() {
-      console.error('Video player error:', player.error());
-      setError(`Lỗi phát video: ${player.error()?.message || 'Không xác định'}`);
+    player.on("error", function () {
+      console.error("Video player error:", player.error());
+      setError(
+        `Lỗi phát video: ${player.error()?.message || "Không xác định"}`
+      );
     });
 
     // Log when metadata is loaded
-    player.on('loadedmetadata', function() {
-      console.log('Video metadata loaded successfully');
+    player.on("loadedmetadata", function () {
+      console.log("Video metadata loaded successfully");
       try {
         // Use non-null assertion to tell TypeScript that play() is not null
-        player.play()!.catch(error => console.error('Play error:', error));
+        player.play()!.catch((error) => console.error("Play error:", error));
       } catch (error) {
-        console.error('Error playing video:', error);
+        console.error("Error playing video:", error);
       }
     });
 
     // Log when the player is ready
-    player.ready(function() {
-      console.log('Video player is ready');
+    player.ready(function () {
+      console.log("Video player is ready");
 
       // Try to manually load the source
       try {
         const tech = player.tech({ IWillNotUseThisInPlugins: true });
         // Use type assertion to avoid TypeScript error
         if (tech && (tech as any).vhs) {
-          console.log('VHS tech is available');
+          console.log("VHS tech is available");
         }
       } catch (e) {
-        console.error('Error accessing tech:', e);
+        console.error("Error accessing tech:", e);
       }
     });
 
