@@ -43,7 +43,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
         });
       });
 
-      hls.on(Hls.Events.ERROR, (event, data) => {
+      hls.on(Hls.Events.ERROR, (_, data) => {
         console.error("HLS error:", data);
         if (data.fatal) {
           switch (data.type) {
