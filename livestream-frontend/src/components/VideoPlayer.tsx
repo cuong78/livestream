@@ -61,7 +61,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
     });
 
     // Add error handling
-    player.on('error', function(e) {
+    player.on('error', function() {
       console.error('Video player error:', player.error());
       setError(`Lỗi phát video: ${player.error()?.message || 'Không xác định'}`);
     });
@@ -69,7 +69,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
     // Log when metadata is loaded
     player.on('loadedmetadata', function() {
       console.log('Video metadata loaded successfully');
-      player.play().catch(e => console.error('Play error:', e));
+      try {
+        // Use non-null assertion to tell TypeScript that play() is not null
+        player.play()!.catch(error => console.error('Play error:', error));
+      } catch (error) {
+        console.error('Error playing video:', error);
+      }
     });
 
     // Log when the player is ready
@@ -79,7 +84,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
       // Try to manually load the source
       try {
         const tech = player.tech({ IWillNotUseThisInPlugins: true });
-        if (tech && tech.vhs) {
+        // Use type assertion to avoid TypeScript error
+        if (tech && (tech as any).vhs) {
           console.log('VHS tech is available');
         }
       } catch (e) {
