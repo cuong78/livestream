@@ -1,6 +1,6 @@
 FROM node:18-alpine AS build
 
-WORKSPACE /app
+WORKDIR /app
 
 # Accept build arguments
 ARG VITE_API_URL
