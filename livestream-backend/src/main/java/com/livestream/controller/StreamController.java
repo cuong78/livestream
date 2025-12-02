@@ -51,7 +51,7 @@ public class StreamController {
                 
                 if (userOpt.isPresent()) {
                     User user = userOpt.get();
-                    String hlsUrl = String.format("%s/%s/%s.m3u8", hlsBaseUrl, app, stream);
+                    String hlsUrl = String.format("%s/%s/%s/index.m3u8", hlsBaseUrl, app, stream);
                     
                     // Start stream in database
                     StreamDto streamDto = streamService.startStream(
