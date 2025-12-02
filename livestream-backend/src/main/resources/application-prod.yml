@@ -71,9 +71,9 @@ cors:
 # Stream Configuration
 stream:
   rtmp:
-    url: ${STREAM_RTMP_URL:rtmp://localhost:1935/live}
+    url: ${STREAM_RTMP_URL:rtmp://srs:1935/live}
   hls:
-    base-url: ${STREAM_HLS_BASE_URL:http://localhost:8081}
+    base-url: ${STREAM_HLS_BASE_URL:https://anhcuong.space/hls}
     segment-duration: 2
   max-viewers: 10000
 

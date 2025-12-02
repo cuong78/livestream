@@ -1,6 +1,32 @@
 # 🎥 CLB Gà Chọi Cao Đổi - Live Streaming Platform
 
-Nền tảng live streaming chuyên nghiệp , phát trực tiếp từ điện thoại (RTMP) với chat real-time.
+Nền tảng live streaming chuyên nghiệp, phát trực tiếp từ điện thoại (RTMP) với chat real-time.
+
+---
+
+## 🚨 **STREAMING FIX - DECEMBER 2024**
+
+**⚠️ NẾU GẶP VẤN ĐỀ VỀ LIVESTREAM KHÔNG HOẠT ĐỘNG:**
+
+📚 **ĐỌC CÁC FILE HƯỚNG DẪN:**
+1. **[STREAMING_FIX_GUIDE.md](./STREAMING_FIX_GUIDE.md)** ⭐ - Hướng dẫn fix chi tiết
+2. **[QUICK_REFERENCE.md](./QUICK_REFERENCE.md)** - Commands và troubleshooting
+3. **[BEFORE_AFTER_COMPARISON.md](./BEFORE_AFTER_COMPARISON.md)** - So sánh config
+4. **[CHANGELOG.md](./CHANGELOG.md)** - Lịch sử thay đổi
+
+🔧 **Các lỗi đã fix:**
+- ✅ Frontend build args (VITE_*) không được inject
+- ✅ CORS headers thiếu cho HLS streaming  
+- ✅ Backend trả HLS URL với `localhost` thay vì domain
+- ✅ Environment variables thiếu `STREAM_HLS_BASE_URL`
+
+📦 **Files mới:**
+- `reset-server.sh` - Script khôi phục server
+- `STREAMING_FIX_GUIDE.md` - Hướng dẫn deployment
+- `QUICK_REFERENCE.md` - Quick commands
+- `BEFORE_AFTER_COMPARISON.md` - So sánh config
+
+---
 
 ## 🎨 Thiết kế mới
 
