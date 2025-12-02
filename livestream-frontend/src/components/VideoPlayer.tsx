@@ -48,6 +48,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
           handlePartialData: true, // Added to handle partial data
           smoothQualityChange: true,
           fastQualityChange: true,
+          handleManifestRedirects: true, // Handle variant playlist redirects
+          useBandwidthFromLocalStorage: false,
         },
         nativeAudioTracks: false,
         nativeVideoTracks: false,
