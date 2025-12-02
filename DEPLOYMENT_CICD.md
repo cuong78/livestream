@@ -116,45 +116,12 @@ GitHub Container Registry (GHCR) được enable mặc định, không cần set
 
 ### BƯỚC 2: Tạo SSH Key cho VPS
 
-Trên **máy local** của bạn:
+khi mua hoặc thuê vps sẽ có bước này
 
-```bash
-# Tạo SSH key mới (hoặc dùng key có sẵn)
-ssh-keygen -t ed25519 -C "github-actions@anhcuong.space" -f ~/.ssh/github_actions
+.pub ( copy vào vps )
+.private (copy vào github ) ở bước 3 sẽ hiểu
 
-# Xem private key
-cat ~/.ssh/github_actions
-# Copy toàn bộ nội dung (bao gồm -----BEGIN... và -----END...)
-
-# Xem public key
-cat ~/.ssh/github_actions.pub
-```
-
-### BƯỚC 3: Add Public Key vào VPS
-
-SSH vào VPS:
-
-```bash
-ssh root@72.62.65.86
-```
-
-Thêm public key vào authorized_keys:
-
-```bash
-# Tạo file nếu chưa có
-mkdir -p ~/.ssh
-chmod 700 ~/.ssh
-
-# Thêm public key
-nano ~/.ssh/authorized_keys
-# Paste public key vào (nội dung từ github_actions.pub)
-# Lưu: Ctrl+O, Enter, Ctrl+X
-
-# Set permissions
-chmod 600 ~/.ssh/authorized_keys
-```
-
-### BƯỚC 4: Cấu hình GitHub Secrets
+### BƯỚC 3: Cấu hình GitHub Secrets
 
 Vào GitHub repository → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
 
@@ -189,28 +156,28 @@ root
 #### 5. `DOMAIN`
 
 ```
-anhcuong.space
+domainCuaban
 ```
 
 #### 6. `VITE_API_URL`
 
 ```
-https://anhcuong.space/api
+https://domainCuaban/api
 ```
 
 #### 7. `VITE_WS_URL`
 
 ```
-wss://anhcuong.space/api/ws
+wss://domainCuaban/api/ws
 ```
 
 #### 8. `VITE_HLS_BASE_URL`
 
 ```
-https://anhcuong.space/hls
+https://domainCuaban/hls
 ```
 
-### BƯỚC 5: Kiểm tra Secrets
+### BƯỚC 4: Kiểm tra Secrets
 
 Sau khi tạo, bạn sẽ thấy danh sách:
 
@@ -258,31 +225,31 @@ Paste nội dung sau (thay thế các giá trị):
 # Database Configuration
 DB_NAME=livestream_db
 DB_USERNAME=livestream_user
-DB_PASSWORD=Y+Zx9c6Z8M/9zpxPUtmM5nTk8SxlRkO/frL54WCoaNQ=
+DB_PASSWORD=**Generate secure secrets:**
 DB_URL=jdbc:postgresql://postgres:5432/livestream_db
 
 # Redis Configuration
 REDIS_HOST=redis
 REDIS_PORT=6379
-REDIS_PASSWORD=idONDzHkzhEOhzdBbYFzqXKyFx+QgtnxaTp5AmRL5RY=
+REDIS_PASSWORD=**Generate secure secrets:**
 
 # JWT Configuration
-JWT_SECRET=3xjh/9dyFHpZwOOYK4s7FHcAVxXebT5owIIU2WYONE/fy/7jjACrD7Det8ZNPAh3od6BlSUS91jcCmAR50rbag==
+JWT_SECRET=**Generate secure secrets:**
 JWT_EXPIRATION=86400000
 
 # CORS Configuration
-CORS_ORIGINS=https://anhcuong.space,https://www.anhcuong.space
+CORS_ORIGINS=https://domainCuaban,https://www.domainCuaban
 
 # Domain Configuration
-DOMAIN=anhcuong.space
+DOMAIN=domainCuaban
 
 # Frontend Build Arguments
-VITE_API_URL=https://anhcuong.space/api
-VITE_WS_URL=wss://anhcuong.space/api/ws
-VITE_HLS_BASE_URL=https://anhcuong.space/hls
+VITE_API_URL=https://domainCuaban/api
+VITE_WS_URL=wss://domainCuaban/api/ws
+VITE_HLS_BASE_URL=https://domainCuaban/hls
 
 # Streaming Configuration
-STREAM_HLS_BASE_URL=https://anhcuong.space/hls
+STREAM_HLS_BASE_URL=https://domainCuaban/hls
 ```
 
 **Generate secure secrets:**
@@ -310,46 +277,60 @@ Kiểm tra:
 
 - ✅ Tất cả giá trị đã được thay thế (không còn `<GENERATE_WITH...>`)
 - ✅ JWT_SECRET trên 1 dòng (không có line break)
-- ✅ Domain đúng (anhcuong.space)
+- ✅ Domain đúng (domainCuaban)
 
-### BƯỚC 5: Copy config files từ GitHub
+### BƯỚC 5: Tạo GitHub Personal Access Token (PAT)
 
-**Tùy chọn 1: Download từ GitHub**
+Để VPS có thể pull Docker images từ GitHub Container Registry (GHCR), bạn cần tạo Personal Access Token:
 
-```bash
-cd /opt/livestream-cicd
+**Trên GitHub:**
 
-# Download docker-compose.cicd.yml
-curl -o docker-compose.cicd.yml https://raw.githubusercontent.com/cuong78/livestream/main/docker-compose.cicd.yml
+1. Click vào **avatar** (góc phải) → **Settings**
+2. Scroll xuống dưới → **Developer settings** (menu bên trái)
+3. Click **Personal access tokens** → **Tokens (classic)**
+4. Click **Generate new token** → **Generate new token (classic)**
+5. Điền thông tin:
+   - **Note**: `VPS GHCR Access Token`
+   - **Expiration**: `No expiration` (hoặc tùy chọn)
+   - **Select scopes**:
+     - ✅ `read:packages` (bắt buộc - để pull images)
+     - ✅ `write:packages` (tùy chọn - nếu muốn push từ VPS)
+6. Click **Generate token**
+7. **⚠️ COPY TOKEN NGAY** - Chỉ hiện 1 lần duy nhất!
 
-# Download nginx-prod.conf
-curl -o nginx-prod.conf https://raw.githubusercontent.com/cuong78/livestream/main/nginx-prod.conf
-
-# Download srs.conf
-curl -o srs.conf https://raw.githubusercontent.com/cuong78/livestream/main/srs.conf
-
-# Download deploy-cicd.sh
-curl -o deploy-cicd.sh https://raw.githubusercontent.com/cuong78/livestream/main/deploy-cicd.sh
-chmod +x deploy-cicd.sh
-```
-
-**Tùy chọn 2: GitHub Actions sẽ tự động copy khi deploy**
-
-GitHub Actions workflow đã config để tự động copy các file này khi deploy.
-
-### BƯỚC 6: Kiểm tra SSL Certificate
+### BƯỚC 6: Login vào GHCR trên VPS
 
 ```bash
-ls -la /etc/letsencrypt/live/anhcuong.space/
+# Login vào GitHub Container Registry
+# Thay <YOUR_GITHUB_PAT> bằng token vừa tạo
+echo "<YOUR_GITHUB_PAT>" | docker login ghcr.io -u nameGithub --password-stdin
 ```
 
 **Kết quả mong đợi:**
 
 ```
-lrwxrwxrwx 1 root root   37 ... cert.pem -> ../../archive/anhcuong.space/cert1.pem
-lrwxrwxrwx 1 root root   38 ... chain.pem -> ../../archive/anhcuong.space/chain1.pem
-lrwxrwxrwx 1 root root   42 ... fullchain.pem -> ../../archive/anhcuong.space/fullchain1.pem
-lrwxrwxrwx 1 root root   40 ... privkey.pem -> ../../archive/anhcuong.space/privkey1.pem
+WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+```
+
+**Lưu ý:** Token sẽ được lưu trong `/root/.docker/config.json`, VPS sẽ tự động dùng để pull images sau này.
+
+### BƯỚC 7: Kiểm tra SSL Certificate
+
+```bash
+ls -la /etc/letsencrypt/live/domainCuaban/
+```
+
+**Kết quả mong đợi:**
+
+```
+lrwxrwxrwx 1 root root   37 ... cert.pem -> ../../archive/domainCuaban/cert1.pem
+lrwxrwxrwx 1 root root   38 ... chain.pem -> ../../archive/domainCuaban/chain1.pem
+lrwxrwxrwx 1 root root   42 ... fullchain.pem -> ../../archive/domainCuaban/fullchain1.pem
+lrwxrwxrwx 1 root root   40 ... privkey.pem -> ../../archive/domainCuaban/privkey1.pem
 ```
 
 **Nếu chưa có SSL certificate:**
@@ -363,7 +344,7 @@ apt-get update
 apt-get install -y certbot
 
 # Tạo certificate
-certbot certonly --standalone -d anhcuong.space -d www.anhcuong.space --agree-tos --email your-email@example.com
+certbot certonly --standalone -d domainCuaban -d www.domainCuaban --agree-tos --email your-email@example.com
 
 # Setup auto-renewal
 echo "0 3 * * * certbot renew --quiet --deploy-hook 'docker restart livestream-frontend'" | crontab -
@@ -373,66 +354,19 @@ echo "0 3 * * * certbot renew --quiet --deploy-hook 'docker restart livestream-f
 
 ## 🎬 DEPLOY LẦN ĐẦU
 
-### BƯỚC 1: Test SSH từ GitHub Actions
+### BƯỚC 1: Commit và Push Code lên GitHub
 
-Tạo workflow test để verify SSH connection:
+**⚠️ QUAN TRỌNG:** Push code lên GitHub trước để GitHub Actions tự động copy config files xuống VPS!
 
 ```bash
-# Trên máy local
-cd /path/to/livestream
+# Trên máy local Windows
+cd d:/github/liveStream
+
+# Kiểm tra branch hiện tại
+git branch
+
+# Đảm bảo đang ở branch main
 git checkout main
-```
-
-Tạo file test:
-
-```bash
-mkdir -p .github/workflows
-cat > .github/workflows/test-ssh.yml << 'EOF'
-name: Test SSH Connection
-
-on: workflow_dispatch
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Test SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.VPS_PORT }}
-          script: |
-            echo "✅ SSH connection successful!"
-            whoami
-            pwd
-            docker --version
-            docker-compose --version
-EOF
-
-git add .github/workflows/test-ssh.yml
-git commit -m "Add SSH test workflow"
-git push origin main
-```
-
-Vào GitHub → **Actions** → **Test SSH Connection** → **Run workflow**
-
-Nếu thành công, bạn sẽ thấy:
-
-```
-✅ SSH connection successful!
-root
-/root
-Docker version 24.x.x
-docker-compose version 1.29.2
-```
-
-### BƯỚC 2: Commit và push code
-
-```bash
-# Trên máy local
-cd /path/to/livestream
 
 # Kiểm tra các file mới
 git status
@@ -443,11 +377,62 @@ git add .
 # Commit
 git commit -m "Setup CI/CD deployment with GitHub Actions"
 
-# Push to GitHub
+# Push to GitHub main branch
 git push origin main
 ```
 
-### BƯỚC 3: Theo dõi deployment
+### BƯỚC 2: Theo dõi GitHub Actions Build Images
+
+Vào GitHub repository → **Actions**
+
+Bạn sẽ thấy workflow **"Deploy to Production"** đang chạy.
+
+**⚠️ LƯU Ý:** Lần chạy đầu tiên sẽ **BỊ LỖI** ở bước Deploy (do VPS chưa login GHCR), nhưng images đã được build và push lên GHCR thành công!
+
+**Các giai đoạn:**
+
+1. ✅ **Build and Push** (5-8 phút) - SẼ THÀNH CÔNG
+
+   - Build backend image
+   - Build frontend image
+   - Push to GHCR: `ghcr.io/cuong78/livestream-backend:latest`
+   - Push to GHCR: `ghcr.io/cuong78/livestream-frontend:latest`
+
+2. ❌ **Deploy** - SẼ BỊ LỖI (bình thường, sửa ở bước 3)
+   - Copy files to VPS: ✅ Thành công
+   - Pull images: ❌ Lỗi `denied` (chưa login GHCR)
+
+**Chờ workflow chạy xong (khoảng 10 phút), sau đó tiếp tục bước 3.**
+
+### BƯỚC 3: Pull Images và Start Containers trên VPS
+
+**Quay lại VPS**, bây giờ config files đã được GitHub Actions copy xuống:
+
+```bash
+cd /opt/livestream-cicd
+
+# Kiểm tra files đã được copy
+ls -la
+
+# Bạn sẽ thấy:
+# - docker-compose.cicd.yml ✅
+# - nginx-prod.conf ✅
+# - srs.conf ✅
+
+# Pull images từ GHCR (đã login ở Bước 6)
+docker-compose -f docker-compose.cicd.yml pull
+
+# Start containers
+docker-compose -f docker-compose.cicd.yml up -d
+
+# Đợi 30 giây để services khởi động
+sleep 30
+
+# Kiểm tra containers
+docker-compose -f docker-compose.cicd.yml ps
+```
+
+### BƯỚC 4: Theo dõi deployment
 
 Vào GitHub repository → **Actions**
 
@@ -464,8 +449,10 @@ Bạn sẽ thấy workflow **"Deploy to Production"** đang chạy.
 2. ✅ **Deploy** (2-3 phút)
    - Copy files to VPS
    - Pull images
-   - Restart containers
-   - Health check
+     **Lần deploy đầu tiên:** ~10-15 phút (build images + manual pull)  
+     **Lần deploy sau:** ~3-5 phút (có cache + tự động hoàn toàn)
+
+### BƯỚC 5: Kiểm tra Containers
 
 **Tổng thời gian: ~10 phút** (lần đầu, lần sau chỉ 3-5 phút nhờ cache)
 
@@ -486,11 +473,13 @@ docker-compose -f docker-compose.cicd.yml logs -f --tail=50
 
 ```
 NAME                      STATUS              PORTS
-livestream-backend        Up (healthy)        8080/tcp
-livestream-frontend       Up                  0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp
-livestream-postgres       Up (healthy)        5432/tcp
-livestream-redis          Up (healthy)        6379/tcp
 livestream-srs            Up                  0.0.0.0:1935->1935/tcp, 1985/tcp
+```
+
+### BƯỚC 6: Test Website Up (healthy) 6379/tcp
+
+livestream-srs Up 0.0.0.0:1935->1935/tcp, 1985/tcp
+
 ```
 
 ### BƯỚC 5: Test website
@@ -498,44 +487,42 @@ livestream-srs            Up                  0.0.0.0:1935->1935/tcp, 1985/tcp
 Mở trình duyệt:
 
 ```
-https://anhcuong.space
-```
+
+https://domainCuaban
+
+````
 
 Kiểm tra:
 
 - ✅ Website hiển thị
 - ✅ HTTPS có icon 🔒
 - ✅ Không có certificate warning
-- ✅ Chat WebSocket hoạt động
 - ✅ Video player hiển thị (nếu có stream)
 
----
+### BƯỚC 7: Re-run GitHub Actions (Để test deployment tự động)
 
-## 🔄 DEPLOY TỰ ĐỘNG
+Bây giờ VPS đã login GHCR và có đầy đủ config files, hãy test lại deployment:
 
-### Workflow thông thường
+**Vào GitHub → Actions:**
 
-Từ giờ, mỗi khi bạn push code lên GitHub:
+1. Click vào workflow run vừa bị lỗi
+2. Click **Re-run jobs** → **Re-run failed jobs**
+3. Lần này sẽ thành công 100%! ✅
+
+Hoặc đơn giản hơn, push 1 commit nhỏ:
 
 ```bash
-# 1. Sửa code trên máy local
-vim livestream-backend/src/main/java/com/livestream/service/SomeService.java
+# Trên máy local
+cd d:/github/liveStream
 
-# 2. Commit
-git add .
-git commit -m "Update SomeService logic"
-
-# 3. Push
+# Tạo commit nhỏ
+git commit --allow-empty -m "Test CI/CD deployment"
 git push origin main
+````
 
-# 4. GitHub Actions tự động:
-#    - Build images
-#    - Push to GHCR
-#    - Deploy to VPS
-#    - Health check
-#
-# ✅ DONE! (3-5 phút)
-```
+Workflow sẽ chạy lại và lần này sẽ hoàn toàn tự động! 🎉
+
+-
 
 ### Theo dõi deployment
 
@@ -615,16 +602,16 @@ docker-compose -f docker-compose.cicd.yml logs --tail=50 backend
 
 ```bash
 # Backend API
-curl https://anhcuong.space/api/actuator/health
+curl https://domainCuaban/api/actuator/health
 
 # Frontend
-curl -I https://anhcuong.space
+curl -I https://domainCuaban
 
 # WebSocket
-curl https://anhcuong.space/api/ws/chat/info
+curl https://domainCuaban/api/ws/chat/info
 
 # HLS endpoint
-curl -I https://anhcuong.space/hls/
+curl -I https://domainCuaban/hls/
 ```
 
 **Kết quả mong đợi:**
@@ -664,23 +651,41 @@ docker system df
 
 **Triệu chứng:**
 
+### Lỗi 2: Cannot pull images từ GHCR
+
+**Triệu chứng:**
+
 ```
-Permission denied (publickey)
+Error response from daemon: denied
+# hoặc
+Error response from daemon: unauthorized: authentication required
 ```
+
+**Nguyên nhân:** VPS chưa login vào GitHub Container Registry.
 
 **Giải pháp:**
 
-1. Kiểm tra SSH key trên VPS:
+1. Tạo GitHub Personal Access Token (nếu chưa có):
+
+   - GitHub → Settings → Developer settings → Personal access tokens
+   - Generate new token (classic)
+   - Chọn scope: `read:packages`
+
+2. Login vào GHCR trên VPS:
 
 ```bash
-cat ~/.ssh/authorized_keys
+# Thay <YOUR_GITHUB_PAT> bằng token vừa tạo
+echo "<YOUR_GITHUB_PAT>" | docker login ghcr.io -u cuong78 --password-stdin
 ```
 
-2. Test SSH từ máy local:
+3. Pull lại images:
 
-```bash
-ssh -i ~/.ssh/github_actions root@72.62.65.86
-```
+````bash
+cd /opt/livestream-cicd
+docker-compose -f docker-compose.cicd.yml pull
+docker-compose -f docker-compose.cicd.yml up -d
+``` -i ~/.ssh/github_actions root@72.62.65.86
+````
 
 3. Kiểm tra GitHub Secret `SSH_PRIVATE_KEY`:
    - Phải có `-----BEGIN OPENSSH PRIVATE KEY-----`
@@ -915,7 +920,7 @@ Không hardcode trong code:
 
 ```java
 // ❌ BAD
-String apiUrl = "https://anhcuong.space/api";
+String apiUrl = "https://domainCuaban/api";
 
 // ✅ GOOD
 @Value("${app.api.url}")
@@ -978,18 +983,24 @@ Tự động backup database:
 
 - Không commit `.env` file
 - Rotate secrets định kỳ
-- Enable 2FA cho GitHub
-- Restrict SSH access (chỉ GitHub Actions IP)
 
----
+### Cấu hình VPS
 
-## 📝 CHECKLIST HOÀN THÀNH
+- [ ] Thư mục `/opt/livestream-cicd` đã tạo
+- [ ] File `.env` đã tạo với secrets
+- [ ] GitHub Personal Access Token (PAT) đã tạo
+- [ ] VPS đã login vào GHCR với PAT
+- [ ] SSL certificate đã có tại `/etc/letsencrypt/`
+- [ ] Docker và Docker Compose đã cài
+- [ ] UFW firewall đã config (ports 22, 80, 443, 1935)
 
-### Cấu hình GitHub
+### Deploy lần đầu
 
-- [ ] Repository đã push code
-- [ ] File `.github/workflows/deploy.yml` đã tạo
-- [ ] 8 GitHub Secrets đã config:
+- [ ] Push code lên GitHub main branch
+- [ ] GitHub Actions build images thành công
+- [ ] Config files đã được copy xuống VPS
+- [ ] Pull images thành công trên VPS
+- [ ] 5 containers đang chạy:fig:
   - [ ] VPS_HOST
   - [ ] VPS_USERNAME
   - [ ] VPS_PORT
@@ -1020,7 +1031,7 @@ Tự động backup database:
   - [ ] livestream-srs
   - [ ] livestream-backend (healthy)
   - [ ] livestream-frontend
-- [ ] Website accessible tại https://anhcuong.space
+- [ ] Website accessible tại https://domainCuaban
 - [ ] HTTPS có icon 🔒
 - [ ] Backend API responding
 - [ ] WebSocket chat hoạt động
@@ -1054,25 +1065,36 @@ Sau khi hoàn thành CI/CD deployment, bạn có thể:
 
 3. **Setup monitoring**
 
-   - Prometheus + Grafana
-   - Error tracking với Sentry
-   - Uptime monitoring với UptimeRobot
+### Những gì đã làm
 
-4. **Improve performance**
+✅ Tạo GitHub Actions workflow tự động build & deploy  
+✅ Setup GitHub Container Registry (GHCR)  
+✅ Tạo GitHub Personal Access Token (PAT) để pull images  
+✅ Config SSH key cho GitHub Actions  
+✅ Tạo docker-compose.cicd.yml dùng pre-built images  
+✅ Tạo script deploy-cicd.sh tự động  
+✅ Config GitHub Secrets (8 secrets)  
+✅ Setup VPS với thư mục /opt/livestream-cicd  
+✅ Tạo file .env với secure secrets  
+✅ VPS login vào GHCR với PAT
 
-   - CDN cho static assets
-   - Redis caching
-   - Database indexing
+### Deploy workflow
 
-5. **Add more features**
-   - Live stream recording
-   - Video on demand (VOD)
-   - Multi-bitrate streaming
-   - Chat moderation
+```
+1. Developer: git push origin main (máy local)
+2. GitHub Actions:
+   - Build backend & frontend images
+   - Push to GHCR (ghcr.io/cuong78/livestream-*)
+   - SSH vào VPS
+   - Copy config files xuống VPS
+   - Pull images mới từ GHCR
+   - Restart containers với zero-downtime
+   - Health check tất cả services
+3. ✅ LIVE in 3-5 minutes!
+```
 
----
-
-## 💡 TÓM TẮT
+**Lần đầu:** ~10-15 phút (build + setup)  
+**Lần sau:** ~3-5 phút (có cache + tự động hoàn toàn)💡 TÓM TẮT
 
 ### Những gì đã làm
 
