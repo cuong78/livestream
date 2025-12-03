@@ -79,10 +79,10 @@ jobs:
             export TAG=latest
 
             # Pull latest images
-            docker-compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml pull
 
             # Restart services
-            docker-compose -f docker-compose.prod.yml up -d
+            docker compose -f docker-compose.prod.yml up -d
 
             # Clean up unused images
             docker image prune -af
