@@ -113,9 +113,9 @@ management:
 # Swagger/OpenAPI - DISABLED in production
 springdoc:
   api-docs:
-    enabled: false
+    enabled: true
   swagger-ui:
-    enabled: false
+    enabled: true
 
 # Security
 security:
