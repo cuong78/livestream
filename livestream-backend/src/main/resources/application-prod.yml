@@ -1,7 +1,7 @@
 spring:
   application:
     name: livestream-backend
-  
+
   profiles:
     active: production
 
@@ -21,7 +21,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate  # NEVER use 'update' in production
+      ddl-auto: validate # NEVER use 'update' in production
     show-sql: false
     properties:
       hibernate:
@@ -58,7 +58,7 @@ server:
 # JWT Configuration
 jwt:
   secret: ${JWT_SECRET}
-  expiration: ${JWT_EXPIRATION:3600000}  # 1 hour
+  expiration: ${JWT_EXPIRATION:3600000} # 1 hour
 
 # CORS Configuration
 cors:
@@ -73,7 +73,7 @@ stream:
   rtmp:
     url: ${STREAM_RTMP_URL:rtmp://srs:1935/live}
   hls:
-    base-url: ${STREAM_HLS_BASE_URL:https://anhcuong.space/hls}
+    base-url: ${STREAM_HLS_BASE_URL:https://stream.anhcuong.space/hls}
     segment-duration: 2
   max-viewers: 10000
 
