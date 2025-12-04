@@ -176,12 +176,47 @@ public class ChatController {
             log.info("Delete comment request: displayName={}, createdAt={}", 
                 commentDto.getDisplayName(), commentDto.getCreatedAt());
             
+            // Remove comment from Redis history
+            deleteCommentFromHistory(commentDto);
+            
             // Broadcast delete event to all clients
             messagingTemplate.convertAndSend("/topic/comment-deleted", commentDto);
             
-            log.info("Comment delete event broadcasted");
+            log.info("Comment deleted from history and delete event broadcasted");
         } catch (Exception e) {
             log.error("Failed to delete comment", e);
+        }
+    }
+    
+    /**
+     * Delete comment from Redis history
+     */
+    private void deleteCommentFromHistory(CommentDto commentDto) {
+        try {
+            // Get all comments from Redis
+            List<String> comments = redisTemplate.opsForList().range(COMMENTS_HISTORY_KEY, 0, -1);
+            
+            if (comments != null && !comments.isEmpty()) {
+                // Find and remove the matching comment
+                for (String commentJson : comments) {
+                    if (commentJson.contains("\"displayName\":\"" + commentDto.getDisplayName() + "\"") &&
+                        commentJson.contains("\"createdAt\":\"" + commentDto.getCreatedAt() + "\"")) {
+                        
+                        // Remove from Redis list
+                        Long removed = redisTemplate.opsForList().remove(COMMENTS_HISTORY_KEY, 1, commentJson);
+                        
+                        if (removed != null && removed > 0) {
+                            log.info("Comment removed from Redis history: displayName={}, createdAt={}", 
+                                commentDto.getDisplayName(), commentDto.getCreatedAt());
+                        } else {
+                            log.warn("Comment not found in Redis history");
+                        }
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.error("Failed to delete comment from Redis history", e);
         }
     }
     
