@@ -20,8 +20,23 @@ export class WebSocketService {
     this.onViewerCountCallback = onViewerCount || null;
     this.onCommentDeletedCallback = onCommentDeleted || null;
 
+    // Get WebSocket URL from environment variable
+    // If full URL (wss://...), extract the path part
+    let wsUrl = import.meta.env.VITE_WS_URL || "/api/ws/chat";
+    
+    // Convert full URL to relative path for SockJS
+    if (wsUrl.startsWith("wss://") || wsUrl.startsWith("ws://")) {
+      try {
+        const url = new URL(wsUrl);
+        wsUrl = url.pathname;
+      } catch (e) {
+        console.warn("Invalid WebSocket URL, using default", e);
+        wsUrl = "/ws/chat";
+      }
+    }
+
     this.client = new Client({
-      webSocketFactory: () => new SockJS("/api/ws/chat"),
+      webSocketFactory: () => new SockJS(wsUrl),
       debug: (str) => {
         console.log("STOMP: " + str);
       },
