@@ -23,7 +23,7 @@ export class WebSocketService {
     // Get WebSocket URL from environment variable
     // If full URL (wss://...), extract the path part
     let wsUrl = import.meta.env.VITE_WS_URL || "/api/ws/chat";
-    
+
     // Convert full URL to relative path for SockJS
     if (wsUrl.startsWith("wss://") || wsUrl.startsWith("ws://")) {
       try {
