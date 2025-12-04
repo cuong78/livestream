@@ -61,9 +61,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            VITE_API_URL=https://anhcuong.space/api
-            VITE_WS_URL=wss://anhcuong.space/ws/chat
-            VITE_HLS_BASE_URL=https://anhcuong.space
+            VITE_API_URL=https://gachoilongthansoi.com/api
+            VITE_WS_URL=wss://gachoilongthansoi.com/ws/chat
+            VITE_HLS_BASE_URL=https://gachoilongthansoi.com
 
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master

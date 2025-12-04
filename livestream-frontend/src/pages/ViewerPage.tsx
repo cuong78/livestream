@@ -175,12 +175,12 @@ const ViewerPage = () => {
           <div className="header-content">
             <div className="logo-section">
               <img
-                src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764521032/logo_delivf.jpg"
-                alt="CLB Gà Chọi Cao Đổi"
+                src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/z7291002414848_46cd0bf4b57be31aa45972704457e36c_cwe4me.jpg"
+                alt="CLB Gà Chọi Long Thần Sói"
                 className="logo"
               />
               <div className="site-title">
-                <h1>CLB GÀ CHỌI CAO ĐỔI</h1>
+                <h1>CLB GÀ CHỌI LONG THẦN SÓI</h1>
                 <p className="subtitle">Tinh Hoa Việt</p>
               </div>
             </div>
@@ -251,7 +251,7 @@ const ViewerPage = () => {
                 {server}
               </button>
             ))}
-            <a href="tel:0387683857" className="phone-btn">
+            <a href="tel:0869801559" className="phone-btn">
               📞
             </a>
           </div>
@@ -273,8 +273,8 @@ const ViewerPage = () => {
             ) : (
               <div className="video-placeholder">
                 <img
-                  src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764521034/anhbia_wmfcto.png"
-                  alt="CLB Gà Chọi Cao Đổi"
+                  src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/unnamed_1_hcdvhw.jpg"
+                  alt="CLB Gà Chọi Long Thần Sói"
                   className="cover-image"
                 />
                 <div className="play-button-overlay">
@@ -330,53 +330,48 @@ const ViewerPage = () => {
           <h2 className="section-title">Kết Nối Đam Mê</h2>
           <div className="contact-card">
             <div className="phone-display">
-              <a href="tel:0387683857" className="phone-number">
-                0387 683 857
+              <a href="tel:0869801559" className="phone-number">
+                0869 801 559
               </a>
               <p className="contact-label">Hotline/Zalo liên hệ</p>
             </div>
 
             <div className="social-links">
               <a
-                href="https://zalo.me/0387683857"
+                href="https://zalo.me/0869801559"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-btn zalo-personal"
               >
-                <img
-                  src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764521032/zalo_c2phtl.jpg"
-                  alt="Zalo"
-                  className="zalo-qr"
-                />
                 <span>AE KẾT BẠN ZALO</span>
                 <small>📱 Giao Lưu Mua Bán Chiến Kê Trên Cả Nước</small>
               </a>
 
               <a
-                href="https://zalo.me/g/knfyuk510"
+                href="https://zalo.me/g/qrrpoi053"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-btn zalo-group"
               >
                 <span>NHÓM VIP ZALO</span>
-                <small>AE Vào Nhóm VIP Tuyển Gà Chiến Nhé!</small>
+                <small>📱 AE Vào Nhóm VIP Tuyển Gà Chiến Nhé!</small>
               </a>
 
               <a
-                href="https://www.facebook.com/ang.cuong.77"
+                href="https://www.facebook.com/ganhdua.trai"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-btn facebook"
               >
-                <span>AE KẾT BẠN FACEBOOK</span>
-                <small>📱 Giao Lưu Mua Bán Chiến Kê Trên Cả Nước</small>
+                <span>KÊNH FACEBOOK</span>
+                <small>📱 Theo Dõi Fanpage CLB Gà Chọi Long Thần Sói</small>
               </a>
             </div>
 
             <div className="address-info">
               <p>
-                📍 <strong>Địa chỉ:</strong> Ngọc Lâm 2, Hòa Mỹ Tây, Tây Hòa,
-                Phú Yên
+                📍 <strong>Địa chỉ:</strong> Thôn Giai Sơn, An Mỹ, Tuy An, Phú
+                Yên
               </p>
             </div>
           </div>
@@ -431,38 +426,48 @@ const ViewerPage = () => {
 
         {/* Video Archive Section */}
         <section className="video-archive">
+          {/* Designer Credit */}
+          <div className="designer-credit">
+            <p className="designer-text">
+              🎨 <strong>Thiết kế bởi Anh Cương</strong> (Sinh viên) - ☎️{" "}
+              <a href="tel:0387683857" className="designer-phone">
+                0387683857
+              </a>
+            </p>
+          </div>
+
           <h2 className="section-title">
             <span className="play-icon">▶️</span>
             VIDEO XEM LẠI
           </h2>
           <p className="archive-desc">
             Nơi lưu trữ các video vần xổ gà chọi được quay trực tiếp hàng ngày
-            18h tại Ngọc Lâm 2, Hòa Mỹ Tây, Tây Hòa, Phú Yên
+            18h tại thôn Giai Sơn, An Mỹ, Tuy An, Phú Yên
           </p>
 
           <div className="video-grid">
             {[
               {
                 date: "30/11/2025",
-                title: "Video Xem Lại Tối 30/11 – CLB Gà Chọi Cao Đổi",
+                title: "Video Xem Lại Tối 30/11 – CLB Gà Chọi Long Thần Sói",
               },
               {
                 date: "29/11/2025",
-                title: "Video Xem Lại Tối 29/11 – CLB Gà Chọi Cao Đổi",
+                title: "Video Xem Lại Tối 29/11 – CLB Gà Chọi Long Thần Sói",
               },
               {
                 date: "28/11/2025",
-                title: "Video Xem Lại Tối 28/11 – CLB Gà Chọi Cao Đổi",
+                title: "Video Xem Lại Tối 28/11 – CLB Gà Chọi Long Thần Sói",
               },
               {
                 date: "27/11/2025",
-                title: "Video Xem Lại Tối 27/11 – CLB Gà Chọi Cao Đổi",
+                title: "Video Xem Lại Tối 27/11 – CLB Gà Chọi Long Thần Sói",
               },
             ].map((video, index) => (
               <div key={index} className="video-card">
                 <div className="video-thumbnail">
                   <img
-                    src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764521034/anhbia_wmfcto.png"
+                    src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/unnamed_1_hcdvhw.jpg"
                     alt={video.title}
                   />
                   <div className="play-overlay">▶️</div>
@@ -496,7 +501,7 @@ const ViewerPage = () => {
               </button>
               <div className="modal-header">
                 <img
-                  src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764521032/logo_delivf.jpg"
+                  src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/z7291002414848_46cd0bf4b57be31aa45972704457e36c_cwe4me.jpg"
                   alt="Logo"
                   className="modal-logo"
                 />
@@ -504,24 +509,24 @@ const ViewerPage = () => {
               </div>
               <div className="modal-body">
                 <p>
-                  • Chào mừng bạn đến với <strong>gachoicaodoi.com</strong> nơi
-                  tạo ra sân chơi phục vụ niềm đam mê gà đòn cho anh em 24/7.
-                  Đây là website của CLB Gà Chọi Cao Đổi
+                  • Chào mừng bạn đến với{" "}
+                  <strong>CLB Gà Chọi Long Thần Sói</strong> nơi tạo ra sân chơi
+                  phục vụ niềm đam mê gà đòn cho anh em 24/7.
                 </p>
                 <p>
-                  • Tại CLB Gà Chọi Cao Đổi bạn có thể tìm hiểu về kiến thức về
-                  gà đòn, hay đơn giản là thưởng thức những video xổ gà trong
-                  những lúc rảnh rỗi. CLB Gà Chọi Cao Đổi sẽ đưa đến cho bạn
-                  những thông tin mới nhất về giống gà đòn, kinh nghiệm chăm sóc
-                  gà, cách huấn luyện gà chọi và nhiều hơn thế nữa.
+                  • Tại CLB Gà Chọi Long Thần Sói bạn có thể tìm hiểu về kiến
+                  thức về gà đòn, hay đơn giản là thưởng thức những video xổ gà
+                  trong những lúc rảnh rỗi. CLB sẽ đưa đến cho bạn những thông
+                  tin mới nhất về giống gà đòn, kinh nghiệm chăm sóc gà, cách
+                  huấn luyện gà chọi và nhiều hơn thế nữa.
                 </p>
                 <p>
-                  • <strong>gachoicaodoi.com</strong> còn cung cấp con giống gà
-                  đòn cho những ai đang quan tâm đến việc nuôi gà đòn.
+                  • <strong>CLB Gà Chọi Long Thần Sói</strong> còn cung cấp con
+                  giống gà đòn cho những ai đang quan tâm đến việc nuôi gà đòn.
                 </p>
                 <div className="intro-images">
                   <img
-                    src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764521034/anhbia_wmfcto.png"
+                    src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/unnamed_1_hcdvhw.jpg"
                     alt="CLB Gà Chọi"
                   />
                 </div>
@@ -578,25 +583,66 @@ const ViewerPage = () => {
         <div className="container">
           <div className="footer-grid">
             <div className="footer-col">
-              <h3>CLB Gà Chọi Cao Đổi</h3>
+              <h3>CLB Gà Chọi Long Thần Sói</h3>
               <ul>
                 <li>• Vần xổ gà trực tiếp 18h hàng ngày</li>
                 <li>• Giao lưu mua bán gà chọi đi các tỉnh</li>
               </ul>
+              <h3>Chuyển Khoản</h3>
+              <p>🏦 Ngân hàng MB</p>
+              <p>
+                💳 STK: <strong>0985340254</strong>
+              </p>
+              <p>👤 Nguyễn Văn Cư</p>
             </div>
             <div className="footer-col">
+              <h3>Liên Hệ</h3>
               <h3>
-                <a href="tel:0387683857">0387 683 857</a>
+                <a href="tel:0869801559">📞 0869 801 559</a>
               </h3>
-              <p>Ngọc Lâm 2, Hòa Mỹ Tây, Tây Hòa, Phú Yên</p>
+              <p>📍 Thôn Giai Sơn, An Mỹ, Tuy An, Phú Yên</p>
+              <div className="social-links" style={{ marginTop: "15px" }}>
+                <a
+                  href="https://zalo.me/g/qrrpoi053"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    color: "#0068FF",
+                    textDecoration: "none",
+                    marginRight: "15px",
+                  }}
+                >
+                  <img
+                    src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764831133/c6f42954-ecb7-4458-bb73-9ecb6b835f8b_yt3vqs.jpg"
+                    alt="Zalo"
+                    style={{
+                      width: "25px",
+                      height: "25px",
+                      borderRadius: "50%",
+                      marginRight: "5px",
+                    }}
+                  />
+                  Nhóm Zalo VIP
+                </a>
+                <a
+                  href="https://www.facebook.com/ganhdua.trai"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "#1877F2", textDecoration: "none" }}
+                >
+                  📘 Facebook
+                </a>
+              </div>
             </div>
             <div className="footer-col">
               <h3>Quy Định</h3>
               <ul>
                 <li>
-                  • Website CLB Gà Chọi Cao Đổi hoạt động với hình thức giải
-                  trí, vui lòng không cá độ dưới mọi hình thức vi phạm pháp luật
-                  Việt Nam
+                  • Website CLB Gà Chọi Long Thần Sói hoạt động với hình thức
+                  giải trí, vui lòng không cá độ dưới mọi hình thức vi phạm pháp
+                  luật Việt Nam
                 </li>
                 <li>
                   • Xổ Gà Mua Bán Trên Tinh Thần Giao Lưu Vui Vẻ, Lịch Sự trên
@@ -606,8 +652,12 @@ const ViewerPage = () => {
             </div>
           </div>
           <div className="footer-bottom">
-            <p>Thiết kế bởi Anh Cương - ĐT/Zalo tư vấn liên hệ: 0387683857</p>
-            <p>Bản quyền thuộc về CLB Gà Chọi Cao Đổi © 2025</p>
+            <p
+              style={{ fontSize: "16px", fontWeight: "bold", color: "#ffd700" }}
+            >
+              🎨 Thiết kế bởi Anh Cương (Sinh viên) - ☎️ 0387683857
+            </p>
+            <p>Bản quyền thuộc về CLB Gà Chọi Long Thần Sói © 2025</p>
           </div>
         </div>
       </footer>
@@ -627,29 +677,29 @@ const ViewerPage = () => {
 
       {/* Floating Action Buttons */}
       <div className="floating-buttons">
-        <a href="tel:0387683857" className="fab-btn fab-phone" title="Gọi Ngay">
+        <a href="tel:0869801559" className="fab-btn fab-phone" title="Gọi Ngay">
           <span className="fab-icon">📞</span>
           <span className="fab-text">Gọi Ngay</span>
         </a>
         <a
-          href="https://zalo.me/0387683857"
+          href="https://zalo.me/g/qrrpoi053"
           target="_blank"
           rel="noopener noreferrer"
           className="fab-btn fab-zalo"
-          title="Zalo"
-        >
-          <span className="fab-icon">💬</span>
-          <span className="fab-text">Zalo</span>
-        </a>
-        <a
-          href="https://zalo.me/g/knfyuk510"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fab-btn fab-zalo-vip"
           title="Zalo VIP"
         >
-          <span className="fab-icon">👑</span>
+          <span className="fab-icon">💬</span>
           <span className="fab-text">Zalo VIP</span>
+        </a>
+        <a
+          href="https://www.facebook.com/ganhdua.trai"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fab-btn fab-facebook"
+          title="Facebook"
+        >
+          <span className="fab-icon">📘</span>
+          <span className="fab-text">Facebook</span>
         </a>
       </div>
     </div>
