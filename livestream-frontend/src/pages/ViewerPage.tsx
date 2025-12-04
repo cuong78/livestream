@@ -384,13 +384,13 @@ const ViewerPage = () => {
             <h3>Thông Tin Chuyển Khoản</h3>
             <div className="bank-details">
               <p>
-                <strong>Ngân hàng Vietcombank</strong>
+                <strong>Ngân hàng MB</strong>
               </p>
               <p>
-                Tên người nhận: <strong>Cao Văn Đổi</strong>
+                Tên người nhận: <strong>Nguyễn Văn Cư</strong>
               </p>
               <p>
-                Số tài khoản: <strong>0966689355</strong>
+                Số tài khoản: <strong>0985340254</strong>
               </p>
               <button className="btn-copy" onClick={copyBankAccount}>
                 📋 Sao chép STK
