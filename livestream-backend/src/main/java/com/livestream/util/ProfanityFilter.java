@@ -63,11 +63,13 @@ public class ProfanityFilter {
             return false;
         }
         
-        String lowerText = text.toLowerCase().replaceAll("\\s+", "");
+        String lowerText = text.toLowerCase();
         
-        // Check bad words
+        // Check bad words - use word boundaries to avoid false positives
         for (String badWord : BAD_WORDS) {
-            if (lowerText.contains(badWord)) {
+            // Create pattern with word boundaries (không match nếu là phần của từ khác)
+            String pattern = "\\b" + Pattern.quote(badWord) + "\\b";
+            if (Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(lowerText).find()) {
                 return true;
             }
         }
@@ -114,10 +116,11 @@ public class ProfanityFilter {
             return null;
         }
         
-        String lowerText = text.toLowerCase().replaceAll("\\s+", "");
+        String lowerText = text.toLowerCase();
         
         for (String badWord : BAD_WORDS) {
-            if (lowerText.contains(badWord)) {
+            String pattern = "\\b" + Pattern.quote(badWord) + "\\b";
+            if (Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(lowerText).find()) {
                 return "Nội dung chứa từ ngữ không phù hợp";
             }
         }
