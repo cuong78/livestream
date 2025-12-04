@@ -63,7 +63,7 @@ jobs:
           build-args: |
             VITE_API_URL=https://gachoilongthansoi.com/api
             VITE_WS_URL=wss://gachoilongthansoi.com/ws/chat
-            VITE_HLS_BASE_URL=https://gachoilongthansoi.com
+            VITE_HLS_BASE_URL=https://stream.gachoilongthansoi.com
 
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
