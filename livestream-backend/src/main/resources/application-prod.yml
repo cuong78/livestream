@@ -73,7 +73,7 @@ stream:
   rtmp:
     url: ${STREAM_RTMP_URL:rtmp://srs:1935/live}
   hls:
-    base-url: ${STREAM_HLS_BASE_URL:https://stream.gachoilongthansoi.com/hls}
+    base-url: ${STREAM_HLS_BASE_URL:https://gachoilongthansoi.com/hls}
     segment-duration: 2
   max-viewers: 10000
 
