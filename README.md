@@ -1,5 +1,3 @@
-# 🎥 CLB Gà Chọi Cao Đổi - Live Streaming Platform
-
 Nền tảng live streaming chuyên nghiệp, phát trực tiếp từ điện thoại (RTMP) với chat real-time.
 
 ---
@@ -83,27 +81,6 @@ Nền tảng live streaming chuyên nghiệp, phát trực tiếp từ điện t
 │  (Data)      │        │  (Cache)     │
 └──────────────┘        └──────────────┘
 ```
-
-🚀 Kiến trúc của Chat System
-
-┌─────────────┐ WebSocket STOMP ┌─────────────┐
-│ Client A │ ─────────────────────────────▶ │ Backend │
-│ (Browser) │ │ ChatController │
-└─────────────┘ └──────┬──────┘
-│
-│ Validate
-┌─────────────┐ │ + Rate Limit
-│ Client B │ ◀────────── Broadcast ───────────────── │ (Redis)
-│ (Browser) │ /topic/live-comments │
-└─────────────┘ ▼
-│ ┌─────────────┐
-│ Circular Buffer │ Redis │
-│ (50 comments) │ rate_limit: │
-▼ │ comment:IP │
-┌─────────────┐ └─────────────┘
-│ localStorage│
-│ displayName │
-└─────────────┘
 
 ## 🚀 Hướng dẫn cài đặt
 
@@ -351,161 +328,16 @@ GRANT ALL PRIVILEGES ON DATABASE livestream_db TO livestream_user;
 
 ### Phase 9: Production Deployment
 
-- [ ] Environment configuration (.env)
-- [ ] Nginx SSL/TLS setup (Let's Encrypt)
-- [ ] Domain configuration
-- [ ] CDN integration (CloudFlare)
-- [ ] Backup strategy (database)
-- [ ] Monitoring setup
-  - [ ] Prometheus + Grafana
-  - [ ] Application logs (ELK stack optional)
-  - [ ] Alerting (email/Slack)
-- [ ] CI/CD pipeline (GitHub Actions)
-
-### Phase 10: Advanced Features (Optional)
-
-- [ ] Stream recording (save to storage)
-- [ ] VOD (Video on Demand) - replay past streams
-- [ ] Emoji reactions
-
----
-
-## 🔧 Cấu hình nâng cao
-
-### Environment Variables
-
-**Backend (.env hoặc application.yml)**
-
-```yaml
-SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/livestream_db
-SPRING_DATASOURCE_USERNAME=livestream_user
-SPRING_DATASOURCE_PASSWORD=change-this-password
-SPRING_REDIS_HOST=localhost
-SPRING_REDIS_PORT=6379
-JWT_SECRET=change-this-secret-minimum-256-bits
-CORS_ALLOWED_ORIGINS=https://yourdomain.com
-```
-
-**Frontend (.env)**
-
-```env
-VITE_API_URL=https://api.yourdomain.com
-VITE_WS_URL=wss://api.yourdomain.com/ws/chat
-VITE_HLS_BASE_URL=https://stream.yourdomain.com/live
-```
-
-### Production Nginx Configuration
-
-```nginx
-server {
-    listen 443 ssl http2;
-    server_name yourdomain.com;
-
-    ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
-
-    # Frontend
-    location / {
-        root /var/www/html;
-        try_files $uri $uri/ /index.html;
-    }
-
-    # Backend API
-    location /api {
-        proxy_pass http://backend:8080;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-
-    # WebSocket
-    location /ws {
-        proxy_pass http://backend:8080;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-    }
-
-    # HLS Streaming
-    location /live {
-        proxy_pass http://srs:8080;
-        add_header Cache-Control no-cache;
-        add_header Access-Control-Allow-Origin *;
-    }
-}
-
-
-
-### 2. Đăng ký user qua Swagger UI
-
-1. Mở trình duyệt: http://localhost:8080/api/swagger-ui.html
-2. Tìm endpoint `POST /auth/register`
-3. Click "Try it out" và điền:
-```
-
-username: cuong
-password: cuong123
-email: cuong@test.com
-
-````
-4. Click "Execute"
-5. Copy `streamKey` từ response
-
-### 3. Login và lấy JWT token
-
-1. Tìm endpoint `POST /auth/login`
-2. Điền username và password
-3. Copy `token` từ response
-4. Click nút **"Authorize"** ở đầu trang Swagger
-5. Nhập: `Bearer {token}` (thay {token} bằng token vừa copy)
-6. Click "Authorize"
-
-### 4. Test streaming từ điện thoại
-
-1. Cài app **Larix Broadcaster** (Android) hoặc **RTMP Camera** (iOS)
-2. Vào Settings:
-- **Server URL**: `rtmp://IP4:1935/live` ( điện thoại và laptop phải dùng chung 1 mạng , để lấy IP4 lan adress , cmd ->  ipconfig)
-- **Stream Key**: paste stream key từ bước 2
-3. Nhấn "Start Streaming"
-
-### 5. Xem live stream
-
-**Cách 1: Trên máy tính (trình duyệt)**
-
-- Mở: http://localhost:3000
-
-**Cách 2: Xem trực tiếp HLS**
-
-- URL: `http://domain(IP4localhost):8081/live/{streamKey}.m3u8`
-- Dùng VLC Player: Media → Open Network Stream → paste URL
-
-### 6. Kiểm tra logs
-
-```bash
-# Backend logs
-docker logs livestream-backend -f
-
-# SRS logs (xem RTMP connections)
-docker logs livestream-srs -f
-
-# All services
-docker-compose logs -f
-````
-
-## 🎯 Tình trạng dự án hiện tại
-
-**Dự án đã sẵn sàng để streaming! 🎊**
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these guidelines:
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open Pull Request
-
----
+- [x] Environment configuration (.env)
+- [x] Nginx SSL/TLS setup (Let's Encrypt)
+- [x] Domain configuration
+- [x] CDN integration (CloudFlare)
+- [x] Backup strategy (database)
+- [x] Monitoring setup
+  - [x] Prometheus + Grafana
+  - [x] Application logs (ELK stack optional)
+  - [x] Alerting (email/Slack)
+- [x] CI/CD pipeline (GitHub Actions)
 
 ## 📝 License
 
@@ -522,38 +354,3 @@ For issues and questions:
 - 👤 **Facebook:** [Anh Cương](https://www.facebook.com/ang.cuong.77)
 
 ---
-
-## 🎯 Khuyến nghị tối ưu
-
-### Performance
-
-1. **CDN**: Sử dụng CloudFlare hoặc AWS CloudFront cho HLS files
-2. **Redis**: Cache viewer count, stream status
-3. **Database Indexing**: Index trên `stream_id`, `created_at` cho comments
-4. **Connection Pooling**: HikariCP cho PostgreSQL (đã config sẵn)
-
-### Security
-
-1. **Rate Limiting**: Giới hạn comment frequency (1 comment/second/user)
-2. **Input Validation**: Sanitize HTML trong comments
-3. **HTTPS Only**: Bắt buộc SSL trong production
-4. **CORS**: Chỉ allow domain cụ thể
-5. **JWT Expiration**: Token expire sau 24h
-
-### Scalability
-
-1. **Horizontal Scaling**: Load balance multiple backend instances
-2. **Redis Pub/Sub**: Để sync chat giữa multiple instances
-3. **Database Replication**: Master-slave setup cho read-heavy workload
-4. **Stream Server Clustering**: Multiple SRS instances + load balancer
-
-### Monitoring
-
-1. **Health Checks**: `/actuator/health` endpoint
-2. **Metrics**: Prometheus metrics export
-3. **Logging**: Structured logging (JSON format)
-4. **Alerting**: Setup alerts cho downtime, high latency
-
----
-
-**Dự án đã sẵn sàng để phát triển! 🚀**
