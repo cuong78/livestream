@@ -22,7 +22,7 @@ const ViewerPage = () => {
   const [adminUser, setAdminUser] = useState<any>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showBlockedIpsModal, setShowBlockedIpsModal] = useState(false);
-  const [viewerCount, setViewerCount] = useState(0);
+  const [viewerCount, setViewerCount] = useState(200);
 
   useEffect(() => {
     // Check if admin already logged in
@@ -60,7 +60,8 @@ const ViewerPage = () => {
       },
       // onViewerCount: Nhận số lượng người đang xem
       (count) => {
-        setViewerCount(count);
+        // Cộng thêm 200 người xem ảo vào số người xem thật
+        setViewerCount(200 + count);
       },
       // onCommentDeleted: Nhận event xóa comment
       (deletedComment) => {
