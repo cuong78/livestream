@@ -139,20 +139,34 @@ jobs:
             export DOCKER_REGISTRY=ghcr.io/${{ github.repository }}
             export TAG=latest
 
-            # Pull latest images (force pull to ensure latest)
-            docker compose -f docker-compose.prod.yml pull --ignore-pull-failures
-
-            # Stop and remove old containers
+            # Stop and remove old containers first (to release resources)
+            echo "Stopping old containers..."
             docker compose -f docker-compose.prod.yml down
 
-            # Remove old backend image to force pull new one
-            docker rmi ghcr.io/${{ github.repository }}/livestream-backend:latest || true
+            # Remove old images to force pull new ones
+            # This ensures we always get the latest images, not cached ones
+            echo "Removing old images to force pull latest..."
+            docker rmi ${DOCKER_REGISTRY}/livestream-backend:latest || true
+            docker rmi ${DOCKER_REGISTRY}/livestream-frontend:latest || true
 
-            # Pull latest images again
+            # Pull latest images (force pull to ensure latest)
+            echo "Pulling latest images..."
             docker compose -f docker-compose.prod.yml pull
 
-            # Start services with new images and config files
-            docker compose -f docker-compose.prod.yml up -d --force-recreate
+            # Verify images were pulled
+            echo "Verifying images..."
+            docker images | grep ${DOCKER_REGISTRY} || echo "Warning: Some images may not be pulled"
 
-            # Clean up unused images
+            # Start services with new images and NEW config files
+            # --force-recreate ensures containers are recreated even if config changed
+            # --pull always would pull images, but we already pulled above
+            echo "Starting services with new images and config..."
+            docker compose -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
+
+            # Verify containers are running
+            echo "Checking container status..."
+            docker compose -f docker-compose.prod.yml ps
+
+            # Clean up unused images (keep recent ones)
+            echo "Cleaning up unused images..."
             docker image prune -af

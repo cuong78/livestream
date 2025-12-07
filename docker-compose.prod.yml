@@ -32,6 +32,8 @@ services:
     container_name: livestream-srs
     ports:
       - "1935:1935" # RTMP
+      - "1985:1985" # HTTP API
+      - "8080:8080" # HTTP Server (HLS)
     volumes:
       - ./srs.conf:/usr/local/srs/conf/srs.conf
       - srs_data:/usr/local/srs/objs/nginx/html
@@ -39,6 +41,8 @@ services:
       - livestream-network
     command: ./objs/srs -c conf/srs.conf
     restart: always
+    # Healthcheck removed - SRS container may not have curl installed
+    # Use docker logs to monitor instead
 
   # Spring Boot Backend
   backend:
