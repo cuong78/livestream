@@ -20,4 +20,5 @@ public class CommentDto {
     private String replyTo; // Display name of person being replied to
     private String ipAddress; // IP address of the commenter (for admin only)
     private Boolean isAdmin; // Whether the commenter is an admin
+    private String adminUsername; // Admin username if commenter is logged in as admin (for verification)
 }

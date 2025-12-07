@@ -371,6 +371,7 @@ const ViewerPage = () => {
               onSendComment={handleSendComment}
               viewerCount={viewerCount}
               isAdmin={isAdmin}
+              adminUsername={adminUser?.username || null}
               onDeleteComment={handleDeleteComment}
               onBlockIp={handleBlockIp}
             />

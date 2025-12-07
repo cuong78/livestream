@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Controller
@@ -112,22 +113,28 @@ public class ChatController {
             // Set IP address (will be sent to admin only)
             commentDto.setIpAddress(ipAddress);
             
-            // Check if commenter is admin (by matching displayName with admin username)
-            boolean isAdmin = userRepository.findByUsername(commentDto.getDisplayName())
-                .map(user -> {
-                    boolean isAdminUser = user.getRole() == User.Role.ADMIN;
-                    log.info("Checking admin status for displayName: {}, username: {}, role: {}, isAdmin: {}", 
-                        commentDto.getDisplayName(), user.getUsername(), user.getRole(), isAdminUser);
-                    return isAdminUser;
-                })
-                .orElse(false);
+            // Check if commenter is admin - ONLY through logged-in session (adminUsername)
+            // Security: Do NOT check displayName to prevent impersonation
+            boolean isAdmin = false;
             
-            if (!isAdmin) {
-                log.debug("User {} is not an admin or not found in database", commentDto.getDisplayName());
+            if (commentDto.getAdminUsername() != null && !commentDto.getAdminUsername().trim().isEmpty()) {
+                // Admin is logged in and provided username - verify it's actually an admin
+                Optional<User> adminUser = userRepository.findByUsername(commentDto.getAdminUsername());
+                if (adminUser.isPresent() && adminUser.get().getRole() == User.Role.ADMIN) {
+                    isAdmin = true;
+                    log.info("Admin comment from logged-in admin - displayName: {}, adminUsername: {}", 
+                        commentDto.getDisplayName(), commentDto.getAdminUsername());
+                } else {
+                    log.warn("Invalid adminUsername provided: {} - user not found or not admin", 
+                        commentDto.getAdminUsername());
+                }
+            } else {
+                // No adminUsername provided - definitely not an admin
+                log.debug("Comment from {} - not an admin (no adminUsername provided)", 
+                    commentDto.getDisplayName());
             }
             
             commentDto.setIsAdmin(isAdmin);
-            log.info("Comment from {} - isAdmin set to: {}", commentDto.getDisplayName(), isAdmin);
             
             // Save to Redis history (last 50 comments)
             saveCommentToHistory(commentDto);

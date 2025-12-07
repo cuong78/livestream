@@ -17,6 +17,7 @@ export interface Comment {
   replyTo?: string;
   ipAddress?: string; // IP address (only visible to admin)
   isAdmin?: boolean; // Whether the commenter is an admin
+  adminUsername?: string; // Admin username if commenter is logged in as admin
 }
 
 export interface User {

@@ -7,6 +7,7 @@ interface ChatBoxProps {
   onSendComment: (comment: Comment) => void;
   viewerCount?: number;
   isAdmin?: boolean;
+  adminUsername?: string | null;
   onDeleteComment?: (comment: Comment) => void;
   onBlockIp?: (ipAddress: string) => void;
 }
@@ -21,6 +22,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
   onSendComment,
   viewerCount = 0,
   isAdmin = false,
+  adminUsername = null,
   onDeleteComment,
   onBlockIp,
 }) => {
@@ -167,12 +169,17 @@ const ChatBox: React.FC<ChatBoxProps> = ({
       localStorage.setItem(DISPLAY_NAME_KEY, displayName.trim());
 
       // Lưu giá trị trước khi clear để tránh bug miss content
-      const commentToSend = {
+      const commentToSend: Comment = {
         displayName: displayName.trim(),
         content: content.trim(),
         parentId: replyingTo?.id?.toString(),
         replyTo: replyingTo?.displayName,
       };
+
+      // Nếu đang đăng nhập với tư cách admin, gửi kèm adminUsername để backend verify
+      if (isAdmin && adminUsername) {
+        commentToSend.adminUsername = adminUsername;
+      }
 
       // Clear form trước
       setContent("");
