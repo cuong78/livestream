@@ -114,9 +114,20 @@ public class ChatController {
             
             // Check if commenter is admin (by matching displayName with admin username)
             boolean isAdmin = userRepository.findByUsername(commentDto.getDisplayName())
-                .map(user -> user.getRole() == User.Role.ADMIN)
+                .map(user -> {
+                    boolean isAdminUser = user.getRole() == User.Role.ADMIN;
+                    log.info("Checking admin status for displayName: {}, username: {}, role: {}, isAdmin: {}", 
+                        commentDto.getDisplayName(), user.getUsername(), user.getRole(), isAdminUser);
+                    return isAdminUser;
+                })
                 .orElse(false);
+            
+            if (!isAdmin) {
+                log.debug("User {} is not an admin or not found in database", commentDto.getDisplayName());
+            }
+            
             commentDto.setIsAdmin(isAdmin);
+            log.info("Comment from {} - isAdmin set to: {}", commentDto.getDisplayName(), isAdmin);
             
             // Save to Redis history (last 50 comments)
             saveCommentToHistory(commentDto);

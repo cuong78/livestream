@@ -51,6 +51,8 @@ jobs:
           tags: ghcr.io/${{ github.repository }}/livestream-backend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          no-cache: false
+          pull: true
 
       - name: Build and Push Frontend Docker Image
         uses: docker/build-push-action@v4
@@ -81,11 +83,20 @@ jobs:
             export DOCKER_REGISTRY=ghcr.io/${{ github.repository }}
             export TAG=latest
 
-            # Pull latest images
+            # Pull latest images (force pull to ensure latest)
+            docker compose -f docker-compose.prod.yml pull --ignore-pull-failures
+
+            # Stop and remove old containers
+            docker compose -f docker-compose.prod.yml down
+
+            # Remove old backend image to force pull new one
+            docker rmi ghcr.io/${{ github.repository }}/livestream-backend:latest || true
+
+            # Pull latest images again
             docker compose -f docker-compose.prod.yml pull
 
-            # Restart services
-            docker compose -f docker-compose.prod.yml up -d
+            # Start services with new images
+            docker compose -f docker-compose.prod.yml up -d --force-recreate
 
             # Clean up unused images
             docker image prune -af
