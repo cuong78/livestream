@@ -26,8 +26,9 @@ services:
     restart: always
 
   # RTMP Server (SRS - Simple Realtime Server)
+  # Using SRS v6.0 (Stable) - recommended version
   srs:
-    image: ossrs/srs:5
+    image: ossrs/srs:6
     container_name: livestream-srs
     ports:
       - "1935:1935" # RTMP

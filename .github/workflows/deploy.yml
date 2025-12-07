@@ -67,6 +67,16 @@ jobs:
             VITE_WS_URL=wss://gachoilongthansoi.com/ws/chat
             VITE_HLS_BASE_URL=https://gachoilongthansoi.com
 
+      - name: Sync Config Files to Server
+        uses: appleboy/scp-action@master
+        with:
+          host: 72.62.65.86
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "docker-compose.prod.yml,srs.conf,nginx-hls.conf"
+          target: "/var/www/livestream"
+          strip_components: 0
+
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
         with:
@@ -75,6 +85,52 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/livestream
+
+            # Create backup directory if it doesn't exist
+            mkdir -p ./backups
+
+            # Backup existing config files (if they exist) before overwriting
+            echo "Backing up existing config files..."
+            TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+            
+            if [ -f docker-compose.prod.yml ]; then
+              cp docker-compose.prod.yml ./backups/docker-compose.prod.yml.$TIMESTAMP || true
+              echo "Backed up docker-compose.prod.yml"
+            else
+              echo "docker-compose.prod.yml not found, will be created"
+            fi
+            
+            if [ -f srs.conf ]; then
+              cp srs.conf ./backups/srs.conf.$TIMESTAMP || true
+              echo "Backed up srs.conf"
+            else
+              echo "srs.conf not found, will be created"
+            fi
+            
+            if [ -f nginx-hls.conf ]; then
+              cp nginx-hls.conf ./backups/nginx-hls.conf.$TIMESTAMP || true
+              echo "Backed up nginx-hls.conf"
+            else
+              echo "nginx-hls.conf not found, will be created"
+            fi
+
+            # Verify new config files are present (copied from repo)
+            echo "Verifying new configuration files..."
+            if [ ! -f docker-compose.prod.yml ]; then
+              echo "ERROR: docker-compose.prod.yml not found after sync!"
+              exit 1
+            fi
+            if [ ! -f srs.conf ]; then
+              echo "ERROR: srs.conf not found after sync!"
+              exit 1
+            fi
+            if [ ! -f nginx-hls.conf ]; then
+              echo "ERROR: nginx-hls.conf not found after sync!"
+              exit 1
+            fi
+            
+            echo "All config files verified successfully"
+            ls -la docker-compose.prod.yml srs.conf nginx-hls.conf
 
             # Login to GitHub Container Registry (for private repo)
             echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -95,7 +151,7 @@ jobs:
             # Pull latest images again
             docker compose -f docker-compose.prod.yml pull
 
-            # Start services with new images
+            # Start services with new images and config files
             docker compose -f docker-compose.prod.yml up -d --force-recreate
 
             # Clean up unused images
