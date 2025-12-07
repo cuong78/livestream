@@ -7,7 +7,6 @@ interface ChatBoxProps {
   onSendComment: (comment: Comment) => void;
   viewerCount?: number;
   isAdmin?: boolean;
-  adminUser?: { username: string; role?: string } | null;
   onDeleteComment?: (comment: Comment) => void;
   onBlockIp?: (ipAddress: string) => void;
 }
@@ -22,7 +21,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({
   onSendComment,
   viewerCount = 0,
   isAdmin = false,
-  adminUser = null,
   onDeleteComment,
   onBlockIp,
 }) => {
