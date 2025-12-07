@@ -114,7 +114,17 @@ public class ChatController {
             commentDto.setIpAddress(ipAddress);
             
             // Check if commenter is admin - ONLY through logged-in session (adminUsername)
-            // Security: Do NOT check displayName to prevent impersonation
+            // 
+            // Rule 1: Admin CSS is applied ONLY if:
+            //   - User is logged in (adminUsername is provided)
+            //   - adminUsername exists in database
+            //   - User has ADMIN role
+            //   - displayName can be ANY value (not checked)
+            //
+            // Rule 2: If user is NOT logged in (no adminUsername):
+            //   - isAdmin = false (even if displayName matches admin username)
+            //   - This prevents impersonation attacks
+            //
             boolean isAdmin = false;
             
             if (commentDto.getAdminUsername() != null && !commentDto.getAdminUsername().trim().isEmpty()) {
@@ -122,15 +132,16 @@ public class ChatController {
                 Optional<User> adminUser = userRepository.findByUsername(commentDto.getAdminUsername());
                 if (adminUser.isPresent() && adminUser.get().getRole() == User.Role.ADMIN) {
                     isAdmin = true;
-                    log.info("Admin comment from logged-in admin - displayName: {}, adminUsername: {}", 
+                    log.info("Admin comment detected - displayName: '{}' (can be any value), adminUsername: '{}' (verified)", 
                         commentDto.getDisplayName(), commentDto.getAdminUsername());
                 } else {
-                    log.warn("Invalid adminUsername provided: {} - user not found or not admin", 
+                    log.warn("Invalid adminUsername provided: '{}' - user not found or not admin. Comment will NOT have admin CSS.", 
                         commentDto.getAdminUsername());
                 }
             } else {
-                // No adminUsername provided - definitely not an admin
-                log.debug("Comment from {} - not an admin (no adminUsername provided)", 
+                // Rule 2: No adminUsername provided - definitely not an admin
+                // Even if displayName matches an admin username, it's NOT an admin comment
+                log.debug("Comment from displayName: '{}' - NOT an admin (no adminUsername provided, user not logged in)", 
                     commentDto.getDisplayName());
             }
             

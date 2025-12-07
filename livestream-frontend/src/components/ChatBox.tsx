@@ -176,10 +176,15 @@ const ChatBox: React.FC<ChatBoxProps> = ({
         replyTo: replyingTo?.displayName,
       };
 
-      // Nếu đang đăng nhập với tư cách admin, gửi kèm adminUsername để backend verify
+      // Rule 1: Nếu đang đăng nhập với tư cách admin, gửi kèm adminUsername
+      // Backend sẽ verify adminUsername và set isAdmin = true
+      // displayName có thể là bất kỳ giá trị nào, không cần match với username
       if (isAdmin && adminUsername) {
         commentToSend.adminUsername = adminUsername;
       }
+      // Rule 2: Nếu không đăng nhập (isAdmin = false hoặc không có adminUsername)
+      // Không gửi adminUsername → Backend sẽ set isAdmin = false
+      // Dù displayName có giống admin username cũng không được CSS admin
 
       // Clear form trước
       setContent("");

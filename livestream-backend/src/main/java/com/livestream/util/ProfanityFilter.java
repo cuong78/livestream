@@ -15,15 +15,10 @@ public class ProfanityFilter {
         "đm", "dm", "dcm", "dcmm", "dmm", "đmm", "vl", "vcl", "vkl", "cc", "cặc", "buồi", 
         "lồn", "lon", "dit", "đit", "địt", "fuck", "shit", "bitch", "ass", "damn",
         "chó", "dog", "ngu", "ngốc", "khốn", "súc vật", "con chó", "thằng", "đĩ", 
-        "cave", "gái điếm", "ma men", "ma túy", "cá độ", "cá cược", "đánh bạc",
-        // Phone patterns
-        "zalo", "facebook", "fb", "phone", "số đt", "sđt", "liên hệ"
+        "cave", "gái điếm", "ma men", "ma túy", "cá độ", "cá cược", "đánh bạc"
     ));
     
-    private static final Pattern PHONE_PATTERN = Pattern.compile(
-        "(?:\\+84|0)\\s?(?:[0-9]{9,10})|" +  // Vietnamese phone
-        "(?:[0-9]{3}[-\\s]?){2}[0-9]{3,4}"    // Generic phone pattern
-    );
+   
     
     private static final Pattern URL_PATTERN = Pattern.compile(
         "(?:https?://)?(?:www\\.)?[a-zA-Z0-9-]+\\.[a-z]{2,}(?:/[^\\s]*)?"
@@ -74,10 +69,7 @@ public class ProfanityFilter {
             }
         }
         
-        // Check phone numbers
-        if (PHONE_PATTERN.matcher(text).find()) {
-            return true;
-        }
+     
         
         // Check URLs
         if (URL_PATTERN.matcher(text).find()) {
@@ -125,9 +117,7 @@ public class ProfanityFilter {
             }
         }
         
-        if (PHONE_PATTERN.matcher(text).find()) {
-            return "Không được để số điện thoại";
-        }
+    
         
         if (URL_PATTERN.matcher(text).find()) {
             return "Không được để link website";
