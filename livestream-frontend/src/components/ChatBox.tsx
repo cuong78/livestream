@@ -7,6 +7,7 @@ interface ChatBoxProps {
   onSendComment: (comment: Comment) => void;
   viewerCount?: number;
   isAdmin?: boolean;
+  adminUser?: { username: string; role?: string } | null;
   onDeleteComment?: (comment: Comment) => void;
   onBlockIp?: (ipAddress: string) => void;
 }
@@ -21,6 +22,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
   onSendComment,
   viewerCount = 0,
   isAdmin = false,
+  adminUser = null,
   onDeleteComment,
   onBlockIp,
 }) => {
@@ -320,19 +322,23 @@ const ChatBox: React.FC<ChatBoxProps> = ({
             <p>Chưa có bình luận nào. Hãy là người đầu tiên!</p>
           </div>
         ) : (
-          displayedComments.map((comment, index) => (
+          displayedComments.map((comment, index) => {
+            const isAdminComment = comment.isAdmin === true;
+            return (
             <div
               key={comment.id || `${comment.displayName}-${index}`}
-              className={`chat-message ${comment.parentId ? "is-reply" : ""}`}
+              className={`chat-message ${comment.parentId ? "is-reply" : ""} ${isAdminComment ? "is-admin" : ""}`}
               onClick={(e) => handleCommentClick(comment, e)}
               style={{ cursor: "pointer" }}
             >
               <div className="message-avatar">
-                {comment.displayName.charAt(0).toUpperCase()}
+                {isAdminComment ? "👑" : comment.displayName.charAt(0).toUpperCase()}
               </div>
               <div className="message-content-wrapper">
                 <div className="message-header">
-                  <div className="message-name">{comment.displayName}</div>
+                  <div className="message-name">
+                    {comment.displayName}
+                  </div>
                   {isAdmin && comment.ipAddress && (
                     <span className="admin-ip-badge" title="IP Address">
                       🌐 {comment.ipAddress}
@@ -351,7 +357,8 @@ const ChatBox: React.FC<ChatBoxProps> = ({
                 </div>
               </div>
             </div>
-          ))
+          );
+          })
         )}
         <div ref={messagesEndRef} />
       </div>

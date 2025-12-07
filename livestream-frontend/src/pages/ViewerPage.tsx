@@ -256,6 +256,9 @@ const ViewerPage = () => {
               📞
             </a>
           </div>
+          <p className="server-hint">
+            ⚠️ Nếu mạng lag hay chạy chậm bạn hãy chuyển đổi sang HD2, HD3, HD4
+          </p>
         </div>
 
         {/* Main Content Grid */}
@@ -313,6 +316,7 @@ const ViewerPage = () => {
               onSendComment={handleSendComment}
               viewerCount={viewerCount}
               isAdmin={isAdmin}
+              adminUser={adminUser}
               onDeleteComment={handleDeleteComment}
               onBlockIp={handleBlockIp}
             />

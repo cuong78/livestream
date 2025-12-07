@@ -134,10 +134,10 @@
   max-height: calc(100% - 220px); /* Trừ đi header + form */
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 16px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
   background: #1a1a1a;
   scroll-behavior: smooth;
   order: 2; /* Đặt chat ở dưới */
@@ -190,10 +190,10 @@
 
 .chat-message {
   display: flex;
-  gap: 10px;
-  padding: 10px 12px;
+  gap: 8px;
+  padding: 6px 10px;
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
+  border-radius: 6px;
   border-left: 3px solid #ffd700;
   transition: all 0.3s ease;
   flex-shrink: 0; /* Không bị co lại */
@@ -205,8 +205,8 @@
 }
 
 .message-avatar {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: linear-gradient(135deg, #dc143c 0%, #ff4444 100%);
   display: flex;
@@ -215,8 +215,9 @@
   font-weight: bold;
   color: white;
   flex-shrink: 0;
-  font-size: 16px;
+  font-size: 14px;
   border: 2px solid #ffd700;
+  position: relative;
 }
 
 .message-content-wrapper {
@@ -228,13 +229,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .message-name {
   font-weight: bold;
   color: #ffd700;
-  font-size: 14px;
+  font-size: 13px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
@@ -250,12 +251,12 @@
 
 /* Reply Quote Container - Shows original comment content */
 .reply-quote-container {
-  margin-bottom: 8px;
-  padding: 8px 12px;
+  margin-bottom: 4px;
+  padding: 4px 8px;
   background: rgba(74, 158, 255, 0.15);
   border-left: 3px solid #4a9eff;
-  border-radius: 6px;
-  font-size: 12px;
+  border-radius: 4px;
+  font-size: 11px;
 }
 
 .reply-quote-header {
@@ -291,7 +292,7 @@
 }
 
 .chat-message.is-reply {
-  margin-left: 24px;
+  margin-left: 16px;
   border-left-color: #4a9eff;
 }
 
@@ -299,11 +300,43 @@
   background: linear-gradient(135deg, #4a9eff 0%, #6bb6ff 100%);
 }
 
+/* Admin Comment Styles */
+.chat-message.is-admin {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.12) 0%, rgba(255, 193, 7, 0.08) 100%);
+  border-left: 3px solid #ffd700;
+  box-shadow: 0 1px 6px rgba(255, 215, 0, 0.15);
+}
+
+.chat-message.is-admin:hover {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 193, 7, 0.1) 100%);
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
+  transform: translateX(2px);
+}
+
+.chat-message.is-admin .message-avatar {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  border: 2px solid #ffd700;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.chat-message.is-admin .message-name {
+  color: #ffd700;
+  font-weight: bold;
+  text-shadow: 0 0 4px rgba(255, 215, 0, 0.3);
+}
+
+.chat-message.is-admin.is-reply {
+  border-left-color: #ffd700;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 193, 7, 0.06) 100%);
+}
+
 .message-text {
   color: #ffffff;
   word-wrap: break-word;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 .chatbox-form {
@@ -471,7 +504,7 @@
   }
 
   .chat-message {
-    padding: 6px 8px;
+    padding: 5px 8px;
     gap: 6px;
   }
 
@@ -481,13 +514,17 @@
     font-size: 12px;
   }
 
+  .chat-message.is-admin .message-avatar {
+    font-size: 16px;
+  }
+
   .message-name {
     font-size: 12px;
   }
 
   .message-text {
     font-size: 12px;
-    line-height: 1.4;
+    line-height: 1.3;
   }
 
   .chatbox-form {
@@ -639,6 +676,15 @@
   }
 
   .chatbox-empty p {
+    font-size: 12px;
+  }
+
+  .chat-message.is-admin .message-avatar {
+    border-width: 2px;
+    font-size: 14px;
+  }
+
+  .chat-message.is-admin .message-name {
     font-size: 12px;
   }
 }

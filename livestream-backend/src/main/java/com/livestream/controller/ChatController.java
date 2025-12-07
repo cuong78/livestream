@@ -2,6 +2,8 @@ package com.livestream.controller;
 
 import com.livestream.dto.CommentDto;
 import com.livestream.dto.MatchInfoDto;
+import com.livestream.entity.User;
+import com.livestream.repository.UserRepository;
 import com.livestream.service.ViewerCountService;
 import com.livestream.util.ProfanityFilter;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +15,12 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +33,9 @@ public class ChatController {
     private final RedisTemplate<String, String> redisTemplate;
     private final SimpMessagingTemplate messagingTemplate;
     private final ViewerCountService viewerCountService;
+    private final UserRepository userRepository;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
     
     private static final int MAX_DISPLAY_NAME_LENGTH = 50;
     private static final int MAX_CONTENT_LENGTH = 500;
@@ -104,6 +112,12 @@ public class ChatController {
             // Set IP address (will be sent to admin only)
             commentDto.setIpAddress(ipAddress);
             
+            // Check if commenter is admin (by matching displayName with admin username)
+            boolean isAdmin = userRepository.findByUsername(commentDto.getDisplayName())
+                .map(user -> user.getRole() == User.Role.ADMIN)
+                .orElse(false);
+            commentDto.setIsAdmin(isAdmin);
+            
             // Save to Redis history (last 50 comments)
             saveCommentToHistory(commentDto);
             
@@ -121,13 +135,19 @@ public class ChatController {
      */
     private void saveCommentToHistory(CommentDto commentDto) {
         try {
-            // Convert comment to JSON (include IP address)
+            // Format createdAt consistently
+            String createdAtStr = commentDto.getCreatedAt() != null 
+                ? commentDto.getCreatedAt().format(DATE_TIME_FORMATTER) 
+                : "";
+            
+            // Convert comment to JSON (include IP address and isAdmin)
             String commentJson = String.format(
-                "{\"displayName\":\"%s\",\"content\":\"%s\",\"createdAt\":\"%s\",\"ipAddress\":\"%s\"}",
+                "{\"displayName\":\"%s\",\"content\":\"%s\",\"createdAt\":\"%s\",\"ipAddress\":\"%s\",\"isAdmin\":%s}",
                 commentDto.getDisplayName(),
                 commentDto.getContent().replace("\"", "\\\""),
-                commentDto.getCreatedAt(),
-                commentDto.getIpAddress() != null ? commentDto.getIpAddress() : ""
+                createdAtStr,
+                commentDto.getIpAddress() != null ? commentDto.getIpAddress() : "",
+                commentDto.getIsAdmin() != null && commentDto.getIsAdmin() ? "true" : "false"
             );
             
             // Add to Redis list (LPUSH for newest first)
@@ -197,21 +217,54 @@ public class ChatController {
             List<String> comments = redisTemplate.opsForList().range(COMMENTS_HISTORY_KEY, 0, -1);
             
             if (comments != null && !comments.isEmpty()) {
+                // Format createdAt for comparison
+                String targetCreatedAt = commentDto.getCreatedAt() != null 
+                    ? commentDto.getCreatedAt().format(DATE_TIME_FORMATTER) 
+                    : null;
+                
                 // Find and remove the matching comment
                 for (String commentJson : comments) {
-                    if (commentJson.contains("\"displayName\":\"" + commentDto.getDisplayName() + "\"") &&
-                        commentJson.contains("\"createdAt\":\"" + commentDto.getCreatedAt() + "\"")) {
+                    try {
+                        // Parse JSON to compare accurately
+                        Map<String, Object> commentMap = objectMapper.readValue(commentJson, LinkedHashMap.class);
                         
-                        // Remove from Redis list
-                        Long removed = redisTemplate.opsForList().remove(COMMENTS_HISTORY_KEY, 1, commentJson);
+                        String displayName = (String) commentMap.get("displayName");
+                        String createdAt = (String) commentMap.get("createdAt");
                         
-                        if (removed != null && removed > 0) {
-                            log.info("Comment removed from Redis history: displayName={}, createdAt={}", 
-                                commentDto.getDisplayName(), commentDto.getCreatedAt());
-                        } else {
-                            log.warn("Comment not found in Redis history");
+                        // Normalize createdAt format for comparison
+                        if (createdAt != null && createdAt.length() > 19) {
+                            createdAt = createdAt.substring(0, 19); // Take only date-time part
                         }
-                        break;
+                        
+                        // Compare displayName and createdAt
+                        boolean displayNameMatches = displayName != null && displayName.equals(commentDto.getDisplayName());
+                        boolean createdAtMatches = targetCreatedAt != null && createdAt != null && createdAt.equals(targetCreatedAt);
+                        
+                        if (displayNameMatches && createdAtMatches) {
+                            // Remove from Redis list
+                            Long removed = redisTemplate.opsForList().remove(COMMENTS_HISTORY_KEY, 1, commentJson);
+                            
+                            if (removed != null && removed > 0) {
+                                log.info("Comment removed from Redis history: displayName={}, createdAt={}", 
+                                    commentDto.getDisplayName(), targetCreatedAt);
+                                break; // Found and removed, exit loop
+                            } else {
+                                log.warn("Comment found but could not be removed from Redis history");
+                            }
+                        }
+                    } catch (Exception parseException) {
+                        // If JSON parsing fails, try fallback string matching
+                        log.warn("Failed to parse comment JSON, using fallback matching: {}", parseException.getMessage());
+                        if (commentJson.contains("\"displayName\":\"" + commentDto.getDisplayName() + "\"") &&
+                            commentDto.getCreatedAt() != null &&
+                            commentJson.contains(commentDto.getCreatedAt().format(DATE_TIME_FORMATTER))) {
+                            
+                            Long removed = redisTemplate.opsForList().remove(COMMENTS_HISTORY_KEY, 1, commentJson);
+                            if (removed != null && removed > 0) {
+                                log.info("Comment removed from Redis history using fallback method");
+                                break;
+                            }
+                        }
                     }
                 }
             }

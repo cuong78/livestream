@@ -16,6 +16,7 @@ export interface Comment {
   parentId?: string;
   replyTo?: string;
   ipAddress?: string; // IP address (only visible to admin)
+  isAdmin?: boolean; // Whether the commenter is an admin
 }
 
 export interface User {
