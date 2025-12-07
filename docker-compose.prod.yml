@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   # PostgreSQL Database
   postgres:
@@ -32,8 +30,6 @@ services:
     container_name: livestream-srs
     ports:
       - "1935:1935" # RTMP
-      - "1985:1985" # HTTP API
-      - "8080:8080" # HTTP Server (HLS)
     volumes:
       - ./srs.conf:/usr/local/srs/conf/srs.conf
       - srs_data:/usr/local/srs/objs/nginx/html
