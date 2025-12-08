@@ -51,8 +51,6 @@ jobs:
           tags: ghcr.io/${{ github.repository }}/livestream-backend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          no-cache: false
-          pull: true
 
       - name: Build and Push Frontend Docker Image
         uses: docker/build-push-action@v4
@@ -67,16 +65,6 @@ jobs:
             VITE_WS_URL=wss://gachoilongthansoi.com/ws/chat
             VITE_HLS_BASE_URL=https://gachoilongthansoi.com
 
-      - name: Sync Config Files to Server
-        uses: appleboy/scp-action@master
-        with:
-          host: 72.62.65.86
-          username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "docker-compose.prod.yml,srs.conf,nginx-hls.conf"
-          target: "/var/www/livestream"
-          strip_components: 0
-
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
         with:
@@ -86,52 +74,6 @@ jobs:
           script: |
             cd /var/www/livestream
 
-            # Create backup directory if it doesn't exist
-            mkdir -p ./backups
-
-            # Backup existing config files (if they exist) before overwriting
-            echo "Backing up existing config files..."
-            TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-            
-            if [ -f docker-compose.prod.yml ]; then
-              cp docker-compose.prod.yml ./backups/docker-compose.prod.yml.$TIMESTAMP || true
-              echo "Backed up docker-compose.prod.yml"
-            else
-              echo "docker-compose.prod.yml not found, will be created"
-            fi
-            
-            if [ -f srs.conf ]; then
-              cp srs.conf ./backups/srs.conf.$TIMESTAMP || true
-              echo "Backed up srs.conf"
-            else
-              echo "srs.conf not found, will be created"
-            fi
-            
-            if [ -f nginx-hls.conf ]; then
-              cp nginx-hls.conf ./backups/nginx-hls.conf.$TIMESTAMP || true
-              echo "Backed up nginx-hls.conf"
-            else
-              echo "nginx-hls.conf not found, will be created"
-            fi
-
-            # Verify new config files are present (copied from repo)
-            echo "Verifying new configuration files..."
-            if [ ! -f docker-compose.prod.yml ]; then
-              echo "ERROR: docker-compose.prod.yml not found after sync!"
-              exit 1
-            fi
-            if [ ! -f srs.conf ]; then
-              echo "ERROR: srs.conf not found after sync!"
-              exit 1
-            fi
-            if [ ! -f nginx-hls.conf ]; then
-              echo "ERROR: nginx-hls.conf not found after sync!"
-              exit 1
-            fi
-            
-            echo "All config files verified successfully"
-            ls -la docker-compose.prod.yml srs.conf nginx-hls.conf
-
             # Login to GitHub Container Registry (for private repo)
             echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
@@ -139,34 +81,11 @@ jobs:
             export DOCKER_REGISTRY=ghcr.io/${{ github.repository }}
             export TAG=latest
 
-            # Stop and remove old containers first (to release resources)
-            echo "Stopping old containers..."
-            docker compose -f docker-compose.prod.yml down
-
-            # Remove old images to force pull new ones
-            # This ensures we always get the latest images, not cached ones
-            echo "Removing old images to force pull latest..."
-            docker rmi ${DOCKER_REGISTRY}/livestream-backend:latest || true
-            docker rmi ${DOCKER_REGISTRY}/livestream-frontend:latest || true
-
-            # Pull latest images (force pull to ensure latest)
-            echo "Pulling latest images..."
+            # Pull latest images
             docker compose -f docker-compose.prod.yml pull
 
-            # Verify images were pulled
-            echo "Verifying images..."
-            docker images | grep ${DOCKER_REGISTRY} || echo "Warning: Some images may not be pulled"
+            # Restart services
+            docker compose -f docker-compose.prod.yml up -d
 
-            # Start services with new images and NEW config files
-            # --force-recreate ensures containers are recreated even if config changed
-            # --pull always would pull images, but we already pulled above
-            echo "Starting services with new images and config..."
-            docker compose -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
-
-            # Verify containers are running
-            echo "Checking container status..."
-            docker compose -f docker-compose.prod.yml ps
-
-            # Clean up unused images (keep recent ones)
-            echo "Cleaning up unused images..."
+            # Clean up unused images
             docker image prune -af

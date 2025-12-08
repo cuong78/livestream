@@ -35,13 +35,11 @@ services:
       timeout: 5s
       retries: 5
 
-  # RTMP Server (SRS - Simple Realtime Server)
-  # Using SRS v6.0 (Stable) - same as production
   srs:
     image: ossrs/srs:6
     container_name: livestream-srs
     ports:
-      - "8081:80"
+      - "1935:1935" # RTMP
     volumes:
       - ./srs.conf:/usr/local/srs/conf/srs.conf
       - srs_data:/usr/local/srs/objs/nginx/html

@@ -80,60 +80,16 @@ const ViewerPage = () => {
     };
   }, []);
 
-  // Tính viewer ảo dựa trên thời gian đã live
-  const calculateVirtualViewers = (startedAt: string | undefined): number => {
-    if (!startedAt || stream?.status !== "LIVE") {
-      return 0;
-    }
-
-    try {
-      const startTime = new Date(startedAt).getTime();
-      const now = new Date().getTime();
-      const liveDurationMinutes = Math.floor((now - startTime) / (1000 * 60));
-
-      // Tăng dần theo thời gian:
-      // 0-5 phút: +50
-      // 5-10 phút: +100
-      // 10-15 phút: +150
-      // 15-20 phút: +200
-      // Sau 20 phút: giữ ở +200
-      if (liveDurationMinutes < 5) {
-        return 50;
-      } else if (liveDurationMinutes < 10) {
-        return 100;
-      } else if (liveDurationMinutes < 15) {
-        return 150;
-      } else if (liveDurationMinutes < 20) {
-        return 200;
-      } else {
-        return 200; // Giữ ở 200 sau 20 phút
-      }
-    } catch (error) {
-      console.error("Error calculating virtual viewers:", error);
-      return 0;
-    }
-  };
-
-  // Cập nhật viewer count mỗi giây
+  // Cập nhật viewer count khi có thay đổi về stream status hoặc real viewer count
   useEffect(() => {
-    if (stream?.status !== "LIVE" || !stream?.startedAt) {
+    if (stream?.status === "LIVE") {
+      // Khi stream LIVE: viewer ảo = 200 + viewer thực
+      setViewerCount(realViewerCount + 200);
+    } else {
+      // Khi stream OFFLINE: chỉ có viewer thực (nếu có)
       setViewerCount(realViewerCount);
-      return;
     }
-
-    const updateViewerCount = () => {
-      const virtualViewers = calculateVirtualViewers(stream.startedAt);
-      setViewerCount(realViewerCount + virtualViewers);
-    };
-
-    // Cập nhật ngay lập tức
-    updateViewerCount();
-
-    // Cập nhật mỗi giây để đảm bảo số liệu chính xác
-    const interval = setInterval(updateViewerCount, 1000);
-
-    return () => clearInterval(interval);
-  }, [stream?.status, stream?.startedAt, realViewerCount]);
+  }, [stream?.status, realViewerCount]);
 
   const handleSendComment = (comment: Comment) => {
     websocketService.sendComment(comment);
