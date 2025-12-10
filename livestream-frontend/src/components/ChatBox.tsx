@@ -93,7 +93,27 @@ const ChatBox: React.FC<ChatBoxProps> = ({
     if (isAdmin) {
       e.preventDefault();
       e.stopPropagation();
-      setContextMenu({ comment, x: e.clientX, y: e.clientY });
+
+      // Calculate menu position to avoid overflow
+      const menuHeight = 250; // Estimated height of context menu
+      const menuWidth = 200;
+      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
+
+      let x = e.clientX;
+      let y = e.clientY;
+
+      // Adjust Y position if menu would overflow bottom
+      if (y + menuHeight > viewportHeight) {
+        y = viewportHeight - menuHeight - 10; // 10px padding from bottom
+      }
+
+      // Adjust X position if menu would overflow right
+      if (x + menuWidth > viewportWidth) {
+        x = viewportWidth - menuWidth - 10; // 10px padding from right
+      }
+
+      setContextMenu({ comment, x, y });
     } else {
       handleReplyClick(comment);
     }
