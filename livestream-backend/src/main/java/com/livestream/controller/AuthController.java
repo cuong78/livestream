@@ -37,7 +37,6 @@ public class AuthController {
         @ApiResponse(responseCode = "401", description = "Invalid credentials")
     })
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        // Input validation with proper HTTP status codes
         if (request.getUsername() == null || request.getUsername().trim().isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("error", "Username is required"));
         }
