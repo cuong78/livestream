@@ -85,7 +85,6 @@ recording:
   thumbnail-url-base: ${RECORDING_THUMBNAIL_URL_BASE:https://gachoilongthansoi.com/videos/thumbnails}
   retention-days: ${RECORDING_RETENTION_DAYS:3}
 
-# Logging
 logging:
   level:
     root: WARN
