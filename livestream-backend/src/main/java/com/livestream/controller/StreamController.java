@@ -3,6 +3,7 @@ package com.livestream.controller;
 import com.livestream.dto.StreamDto;
 import com.livestream.entity.User;
 import com.livestream.repository.UserRepository;
+import com.livestream.service.RecordingService;
 import com.livestream.service.StreamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,6 +25,7 @@ public class StreamController {
     
     private final StreamService streamService;
     private final UserRepository userRepository;
+    private final RecordingService recordingService;
     
     @Value("${stream.hls.base-url}")
     private String hlsBaseUrl;
@@ -93,6 +95,9 @@ public class StreamController {
                         log.info("Stream ended for user: {}", user.getUsername());
                     }
                 });
+                
+                // Mark all active recordings as complete
+                recordingService.markAllActiveRecordingsComplete(stream);
             }
         } catch (Exception e) {
             log.error("Error in unpublish callback", e);

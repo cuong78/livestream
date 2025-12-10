@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Stream } from "@/types";
+import type { Stream, DailyRecording } from "@/types";
 
 const API_BASE_URL = "/api";
 
@@ -29,6 +29,20 @@ export const authApi = {
 export const streamApi = {
   getCurrentStream: async (): Promise<Stream | null> => {
     const response = await axios.get(`${API_BASE_URL}/stream/current`);
+    return response.data;
+  },
+};
+
+export const recordingApi = {
+  // Get recent recordings (last 3 days)
+  getRecentRecordings: async (): Promise<DailyRecording[]> => {
+    const response = await axios.get(`${API_BASE_URL}/recordings/recent`);
+    return response.data;
+  },
+
+  // Get recording by specific date
+  getRecordingByDate: async (date: string): Promise<DailyRecording | null> => {
+    const response = await axios.get(`${API_BASE_URL}/recordings/date/${date}`);
     return response.data;
   },
 };

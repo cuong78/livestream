@@ -5,9 +5,9 @@ import LoginModal from "@/components/LoginModal";
 import BlockedIpsModal from "@/components/BlockedIpsModal";
 import MatchScoreboard from "@/components/MatchScoreboard";
 import MatchInfoPanel from "@/components/MatchInfoPanel";
-import { streamApi } from "@/services/api";
+import { streamApi, recordingApi } from "@/services/api";
 import { websocketService } from "@/services/websocket";
-import type { Stream, Comment } from "@/types";
+import type { Stream, Comment, DailyRecording } from "@/types";
 import "./ViewerPage.css";
 
 const ViewerPage = () => {
@@ -24,6 +24,10 @@ const ViewerPage = () => {
   const [showBlockedIpsModal, setShowBlockedIpsModal] = useState(false);
   const [viewerCount, setViewerCount] = useState(0);
   const [realViewerCount, setRealViewerCount] = useState(0);
+  const [recordings, setRecordings] = useState<DailyRecording[]>([]);
+  const [selectedVideo, setSelectedVideo] = useState<DailyRecording | null>(
+    null
+  );
 
   useEffect(() => {
     // Check if admin already logged in
@@ -90,6 +94,19 @@ const ViewerPage = () => {
       setViewerCount(realViewerCount);
     }
   }, [stream?.status, realViewerCount]);
+
+  // Fetch recordings for replay section
+  useEffect(() => {
+    const fetchRecordings = async () => {
+      try {
+        const data = await recordingApi.getRecentRecordings();
+        setRecordings(data);
+      } catch (err) {
+        console.error("Failed to fetch recordings:", err);
+      }
+    };
+    fetchRecordings();
+  }, []);
 
   const handleSendComment = (comment: Comment) => {
     websocketService.sendComment(comment);
@@ -173,6 +190,28 @@ const ViewerPage = () => {
   const getCurrentDate = () => {
     const today = new Date();
     return today.toLocaleDateString("vi-VN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
+
+  // Format duration from seconds to HH:MM:SS
+  const formatDuration = (seconds: number): string => {
+    if (!seconds || seconds <= 0) return "00:00:00";
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  // Format recording date from yyyy-MM-dd to dd/MM/yyyy
+  const formatRecordingDate = (dateString: string): string => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("vi-VN", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -462,39 +501,46 @@ const ViewerPage = () => {
           </p>
 
           <div className="video-grid">
-            {[
-              {
-                date: "30/11/2025",
-                title: "Video Xem Lại Tối 30/11 – CLB Gà Chọi Long Thần Sói",
-              },
-              {
-                date: "29/11/2025",
-                title: "Video Xem Lại Tối 29/11 – CLB Gà Chọi Long Thần Sói",
-              },
-              {
-                date: "28/11/2025",
-                title: "Video Xem Lại Tối 28/11 – CLB Gà Chọi Long Thần Sói",
-              },
-              {
-                date: "27/11/2025",
-                title: "Video Xem Lại Tối 27/11 – CLB Gà Chọi Long Thần Sói",
-              },
-            ].map((video, index) => (
-              <div key={index} className="video-card">
-                <div className="video-thumbnail">
-                  <img
-                    src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/unnamed_1_hcdvhw.jpg"
-                    alt={video.title}
-                  />
-                  <div className="play-overlay">▶️</div>
+            {recordings.length > 0 ? (
+              recordings.map((recording) => (
+                <div
+                  key={recording.id}
+                  className="video-card"
+                  onClick={() => setSelectedVideo(recording)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <div className="video-thumbnail">
+                    <img
+                      src={
+                        recording.thumbnailUrl ||
+                        "https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/unnamed_1_hcdvhw.jpg"
+                      }
+                      alt={recording.title}
+                    />
+                    <div className="play-overlay">▶️</div>
+                    {recording.durationSeconds > 0 && (
+                      <span className="video-duration">
+                        {formatDuration(recording.durationSeconds)}
+                      </span>
+                    )}
+                  </div>
+                  <div className="video-info">
+                    <h4>{recording.title}</h4>
+                    <p className="video-date">
+                      {formatRecordingDate(recording.recordingDate)}
+                    </p>
+                    <span className="video-category">VIDEO XỔ GÀ XEM LẠI</span>
+                  </div>
                 </div>
-                <div className="video-info">
-                  <h4>{video.title}</h4>
-                  <p className="video-date">{video.date}</p>
-                  <span className="video-category">VIDEO XỔ GÀ XEM LẠI</span>
-                </div>
+              ))
+            ) : (
+              <div className="no-recordings">
+                <p>
+                  Chưa có video xem lại. Video sẽ được cập nhật sau mỗi buổi
+                  live.
+                </p>
               </div>
-            ))}
+            )}
           </div>
 
           <div className="archive-note">
@@ -689,6 +735,38 @@ const ViewerPage = () => {
       {/* Blocked IPs Modal */}
       {showBlockedIpsModal && (
         <BlockedIpsModal onClose={() => setShowBlockedIpsModal(false)} />
+      )}
+
+      {/* Video Replay Modal */}
+      {selectedVideo && (
+        <div className="modal-overlay" onClick={() => setSelectedVideo(null)}>
+          <div
+            className="video-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="modal-close"
+              onClick={() => setSelectedVideo(null)}
+            >
+              ✕
+            </button>
+            <div className="video-modal-header">
+              <h3>{selectedVideo.title}</h3>
+              <p className="video-modal-date">
+                Ngày {formatRecordingDate(selectedVideo.recordingDate)} • Thời
+                lượng: {formatDuration(selectedVideo.durationSeconds)}
+              </p>
+            </div>
+            <div className="video-modal-player">
+              <video
+                src={selectedVideo.videoUrl}
+                controls
+                autoPlay
+                className="replay-video-player"
+              />
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Floating Action Buttons */}

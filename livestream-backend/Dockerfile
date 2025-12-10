@@ -10,7 +10,13 @@ RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:17-jre-alpine
 
+# Install FFmpeg for video processing
+RUN apk add --no-cache ffmpeg
+
 WORKDIR /app
+
+# Create directories for recordings and videos
+RUN mkdir -p /recordings /videos/daily /videos/thumbnails
 
 COPY --from=build /app/target/*.jar app.jar
 

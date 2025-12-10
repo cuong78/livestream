@@ -54,6 +54,14 @@ stream:
     segment-duration: 2
   max-viewers: 10000
 
+# Recording Configuration
+recording:
+  base-path: ${RECORDING_BASE_PATH:/usr/local/srs/objs/nginx/html/recordings}
+  output-path: ${RECORDING_OUTPUT_PATH:/usr/local/srs/objs/nginx/html/videos}
+  video-url-base: ${RECORDING_VIDEO_URL_BASE:http://192.168.1.9:8081/videos}
+  thumbnail-url-base: ${RECORDING_THUMBNAIL_URL_BASE:http://192.168.1.9:8081/videos/thumbnails}
+  retention-days: ${RECORDING_RETENTION_DAYS:3}
+
 # Logging
 logging:
   level:

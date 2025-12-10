@@ -37,3 +37,16 @@ export interface LoginResponse {
   token: string;
   user: User;
 }
+
+export interface DailyRecording {
+  id: number;
+  recordingDate: string;
+  title: string;
+  videoUrl: string;
+  thumbnailUrl: string;
+  durationSeconds: number;
+  fileSizeBytes: number;
+  segmentCount: number;
+  status: "PENDING" | "PROCESSING" | "READY" | "FAILED" | "DELETED";
+  createdAt: string;
+}

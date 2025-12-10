@@ -31,8 +31,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/login", "/auth/register").permitAll()
                 .requestMatchers("/stream/current", "/stream/callback/**").permitAll()
+                .requestMatchers("/recordings/recent", "/recordings/date/**", "/recordings/callback/**").permitAll()
                 .requestMatchers("/comments/**", "/ws/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+                .requestMatchers("/recordings/admin/**").hasRole("ADMIN")
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )

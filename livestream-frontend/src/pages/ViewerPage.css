@@ -1269,3 +1269,90 @@ body {
     transform: translateY(0);
   }
 }
+
+/* Video Duration Badge */
+.video-duration {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Video Thumbnail - make it relative for duration badge */
+.video-thumbnail {
+  position: relative;
+}
+
+/* No Recordings Message */
+.no-recordings {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 20px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  border: 1px dashed var(--border-color);
+}
+
+.no-recordings p {
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+/* Video Replay Modal */
+.video-modal-content {
+  background: var(--card-bg);
+  border-radius: 16px;
+  max-width: 900px;
+  width: 95%;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--primary-red);
+}
+
+.video-modal-header {
+  padding: 20px;
+  background: linear-gradient(135deg, var(--primary-black) 0%, #2a2a2a 100%);
+  border-bottom: 2px solid var(--primary-red);
+}
+
+.video-modal-header h3 {
+  color: var(--primary-yellow);
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.video-modal-date {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.video-modal-player {
+  background: #000;
+  padding: 0;
+}
+
+.replay-video-player {
+  width: 100%;
+  max-height: 70vh;
+  display: block;
+}
+
+/* Video Card Hover Effect */
+.video-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(220, 20, 60, 0.3);
+}
+
+.video-card:hover .play-overlay {
+  transform: scale(1.2);
+}
