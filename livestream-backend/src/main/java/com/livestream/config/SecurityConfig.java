@@ -33,6 +33,8 @@ public class SecurityConfig {
                 .requestMatchers("/stream/current", "/stream/callback/**").permitAll()
                 .requestMatchers("/recordings/recent", "/recordings/date/**", "/recordings/callback/**").permitAll()
                 .requestMatchers("/comments/**", "/ws/**").permitAll()
+                .requestMatchers("/location").permitAll() // Allow anonymous location tracking
+                .requestMatchers("/location/admin/**").hasRole("ADMIN")
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/recordings/admin/**").hasRole("ADMIN")
                 .requestMatchers("/admin/**").hasRole("ADMIN")

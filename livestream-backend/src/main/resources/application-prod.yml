@@ -85,6 +85,11 @@ recording:
   thumbnail-url-base: ${RECORDING_THUMBNAIL_URL_BASE:https://gachoilongthansoi.com/videos/thumbnails}
   retention-days: ${RECORDING_RETENTION_DAYS:3}
 
+# Goong Maps API Configuration
+goong:
+  api-key: ${GOONG_API_KEY:7fsYZuT47xRR2OBV52VP1uIa8XeVuj5Za59bUR9q}
+  geocode-url: ${GOONG_GEOCODE_URL:https://rsapi.goong.io/geocode}
+
 logging:
   level:
     root: WARN

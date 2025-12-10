@@ -2,9 +2,12 @@ package com.livestream.controller;
 
 import com.livestream.dto.CommentDto;
 import com.livestream.dto.MatchInfoDto;
+import com.livestream.dto.SaveLocationRequest;
 import com.livestream.entity.User;
 import com.livestream.repository.UserRepository;
 import com.livestream.service.ViewerCountService;
+import com.livestream.service.GoongService;
+import com.livestream.service.UserLocationService;
 import com.livestream.util.ProfanityFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +38,8 @@ public class ChatController {
     private final SimpMessagingTemplate messagingTemplate;
     private final ViewerCountService viewerCountService;
     private final UserRepository userRepository;
+    private final GoongService goongService;
+    private final UserLocationService userLocationService;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
     
@@ -113,6 +118,37 @@ public class ChatController {
             // Set IP address (will be sent to admin only)
             commentDto.setIpAddress(ipAddress);
             
+            // Process location if provided
+            if (commentDto.getLatitude() != null && commentDto.getLongitude() != null) {
+                try {
+                    Map<String, String> addressData = goongService.reverseGeocode(
+                        commentDto.getLatitude(), 
+                        commentDto.getLongitude()
+                    );
+                    commentDto.setCity(addressData.get("city"));
+                    commentDto.setAddress(addressData.get("address"));
+                    log.info("Location resolved for comment: {}, {}", 
+                        commentDto.getCity(), commentDto.getAddress());
+                    
+                    // Save location to database
+                    try {
+                        SaveLocationRequest locationRequest = new SaveLocationRequest();
+                        locationRequest.setLatitude(commentDto.getLatitude());
+                        locationRequest.setLongitude(commentDto.getLongitude());
+                        locationRequest.setUserAgent(commentDto.getDisplayName()); // Use displayName as userAgent
+                        
+                        userLocationService.saveAnonymousLocation(locationRequest, ipAddress);
+                        log.info("Location saved to database for IP: {}", ipAddress);
+                    } catch (Exception dbError) {
+                        log.warn("Failed to save location to database: {}", dbError.getMessage());
+                        // Continue even if database save fails
+                    }
+                } catch (Exception e) {
+                    log.warn("Failed to resolve location for comment: {}", e.getMessage());
+                    // Continue without location data
+                }
+            }
+            
             // Check if commenter is admin - ONLY through logged-in session (adminUsername)
             // 
             // Rule 1: Admin CSS is applied ONLY if:
@@ -169,14 +205,18 @@ public class ChatController {
                 ? commentDto.getCreatedAt().format(DATE_TIME_FORMATTER) 
                 : "";
             
-            // Convert comment to JSON (include IP address and isAdmin)
+            // Convert comment to JSON (include IP address, isAdmin, and location)
             String commentJson = String.format(
-                "{\"displayName\":\"%s\",\"content\":\"%s\",\"createdAt\":\"%s\",\"ipAddress\":\"%s\",\"isAdmin\":%s}",
+                "{\"displayName\":\"%s\",\"content\":\"%s\",\"createdAt\":\"%s\",\"ipAddress\":\"%s\",\"isAdmin\":%s,\"latitude\":%s,\"longitude\":%s,\"city\":\"%s\",\"address\":\"%s\"}",
                 commentDto.getDisplayName(),
                 commentDto.getContent().replace("\"", "\\\""),
                 createdAtStr,
                 commentDto.getIpAddress() != null ? commentDto.getIpAddress() : "",
-                commentDto.getIsAdmin() != null && commentDto.getIsAdmin() ? "true" : "false"
+                commentDto.getIsAdmin() != null && commentDto.getIsAdmin() ? "true" : "false",
+                commentDto.getLatitude() != null ? commentDto.getLatitude().toString() : "null",
+                commentDto.getLongitude() != null ? commentDto.getLongitude().toString() : "null",
+                commentDto.getCity() != null ? commentDto.getCity() : "",
+                commentDto.getAddress() != null ? commentDto.getAddress().replace("\"", "\\\"") : ""
             );
             
             // Add to Redis list (LPUSH for newest first)

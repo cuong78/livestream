@@ -18,6 +18,11 @@ export interface Comment {
   ipAddress?: string; // IP address (only visible to admin)
   isAdmin?: boolean; // Whether the commenter is an admin
   adminUsername?: string; // Admin username if commenter is logged in as admin
+  // Location fields
+  latitude?: number;
+  longitude?: number;
+  city?: string;
+  address?: string;
 }
 
 export interface User {
@@ -49,4 +54,25 @@ export interface DailyRecording {
   segmentCount: number;
   status: "PENDING" | "PROCESSING" | "READY" | "FAILED" | "DELETED";
   createdAt: string;
+}
+
+export interface UserLocation {
+  id: number;
+  userId?: number;
+  username: string;
+  latitude: number;
+  longitude: number;
+  address: string;
+  city?: string;
+  district?: string;
+  ward?: string;
+  country?: string;
+  ipAddress?: string;
+  createdAt: string;
+}
+
+export interface SaveLocationRequest {
+  latitude: number;
+  longitude: number;
+  userAgent?: string;
 }

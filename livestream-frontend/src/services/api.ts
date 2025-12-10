@@ -1,5 +1,10 @@
 import axios from "axios";
-import type { Stream, DailyRecording } from "@/types";
+import type {
+  Stream,
+  DailyRecording,
+  UserLocation,
+  SaveLocationRequest,
+} from "@/types";
 
 const API_BASE_URL = "/api";
 
@@ -43,6 +48,26 @@ export const recordingApi = {
   // Get recording by specific date
   getRecordingByDate: async (date: string): Promise<DailyRecording | null> => {
     const response = await axios.get(`${API_BASE_URL}/recordings/date/${date}`);
+    return response.data;
+  },
+};
+
+export const locationApi = {
+  // Save user location
+  saveLocation: async (request: SaveLocationRequest): Promise<UserLocation> => {
+    const response = await axios.post(`${API_BASE_URL}/location`, request);
+    return response.data;
+  },
+
+  // Get current user location
+  getCurrentLocation: async (): Promise<UserLocation | null> => {
+    const response = await api.get(`/location/current`);
+    return response.data;
+  },
+
+  // Get location history
+  getLocationHistory: async (): Promise<UserLocation[]> => {
+    const response = await api.get(`/location/history`);
     return response.data;
   },
 };

@@ -21,4 +21,10 @@ public class CommentDto {
     private String ipAddress; // IP address of the commenter (for admin only)
     private Boolean isAdmin; // Whether the commenter is an admin
     private String adminUsername; // Admin username if commenter is logged in as admin (for verification)
+    
+    // Location fields
+    private Double latitude;
+    private Double longitude;
+    private String city; // City from Goong API
+    private String address; // Full address from Goong API
 }

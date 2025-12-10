@@ -176,6 +176,60 @@ const ChatBox: React.FC<ChatBoxProps> = ({
         replyTo: replyingTo?.displayName,
       };
 
+      // Try to get user location (non-blocking)
+      if (navigator.geolocation) {
+        try {
+          // Check permission first
+          if (navigator.permissions) {
+            const permissionStatus = await navigator.permissions.query({
+              name: "geolocation",
+            });
+            if (permissionStatus.state === "denied") {
+              console.warn("Geolocation permission denied by user");
+              // Continue without location
+            } else {
+              const position = await new Promise<GeolocationPosition>(
+                (resolve, reject) => {
+                  navigator.geolocation.getCurrentPosition(resolve, reject, {
+                    enableHighAccuracy: false,
+                    timeout: 10000,
+                    maximumAge: 300000, // Cache for 5 minutes
+                  });
+                }
+              );
+              commentToSend.latitude = position.coords.latitude;
+              commentToSend.longitude = position.coords.longitude;
+              console.log(
+                "Location added to comment:",
+                position.coords.latitude,
+                position.coords.longitude
+              );
+            }
+          } else {
+            // Fallback for browsers without Permissions API
+            const position = await new Promise<GeolocationPosition>(
+              (resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject, {
+                  enableHighAccuracy: false,
+                  timeout: 10000,
+                  maximumAge: 300000,
+                });
+              }
+            );
+            commentToSend.latitude = position.coords.latitude;
+            commentToSend.longitude = position.coords.longitude;
+            console.log(
+              "Location added to comment:",
+              position.coords.latitude,
+              position.coords.longitude
+            );
+          }
+        } catch (geoError) {
+          console.warn("Failed to get location for comment:", geoError);
+          // Continue without location
+        }
+      }
+
       // Rule 1: Nếu đang đăng nhập với tư cách admin, gửi kèm adminUsername
       // Backend sẽ verify adminUsername và set isAdmin = true
       // displayName có thể là bất kỳ giá trị nào, không cần match với username
@@ -335,39 +389,49 @@ const ChatBox: React.FC<ChatBoxProps> = ({
           displayedComments.map((comment, index) => {
             const isAdminComment = comment.isAdmin === true;
             return (
-            <div
-              key={comment.id || `${comment.displayName}-${index}`}
-              className={`chat-message ${comment.parentId ? "is-reply" : ""} ${isAdminComment ? "is-admin" : ""}`}
-              onClick={(e) => handleCommentClick(comment, e)}
-              style={{ cursor: "pointer" }}
-            >
-              <div className="message-avatar">
-                {isAdminComment ? "👑" : comment.displayName.charAt(0).toUpperCase()}
-              </div>
-              <div className="message-content-wrapper">
-                <div className="message-header">
-                  <div className="message-name">
-                    {comment.displayName}
-                  </div>
-                  {isAdmin && comment.ipAddress && (
-                    <span className="admin-ip-badge" title="IP Address">
-                      🌐 {comment.ipAddress}
-                    </span>
-                  )}
+              <div
+                key={comment.id || `${comment.displayName}-${index}`}
+                className={`chat-message ${
+                  comment.parentId ? "is-reply" : ""
+                } ${isAdminComment ? "is-admin" : ""}`}
+                onClick={(e) => handleCommentClick(comment, e)}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="message-avatar">
+                  {isAdminComment
+                    ? "👑"
+                    : comment.displayName.charAt(0).toUpperCase()}
                 </div>
-                {comment.replyTo && comment.parentId && (
-                  <div className="reply-quote-container">
-                    <div className="reply-quote-header">
-                      ↩️ Trả lời <strong>@{comment.replyTo}</strong>
+                <div className="message-content-wrapper">
+                  <div className="message-header">
+                    <div className="message-name">{comment.displayName}</div>
+                    {isAdmin && comment.ipAddress && (
+                      <span className="admin-ip-badge" title="IP Address">
+                        🌐 {comment.ipAddress}
+                      </span>
+                    )}
+                    {isAdmin && comment.city && (
+                      <span
+                        className="admin-location-badge"
+                        title={comment.address || "Location"}
+                      >
+                        📍 {comment.city}
+                      </span>
+                    )}
+                  </div>
+                  {comment.replyTo && comment.parentId && (
+                    <div className="reply-quote-container">
+                      <div className="reply-quote-header">
+                        ↩️ Trả lời <strong>@{comment.replyTo}</strong>
+                      </div>
                     </div>
+                  )}
+                  <div className="message-text">
+                    {renderContentWithMentions(comment.content)}
                   </div>
-                )}
-                <div className="message-text">
-                  {renderContentWithMentions(comment.content)}
                 </div>
               </div>
-            </div>
-          );
+            );
           })
         )}
         <div ref={messagesEndRef} />
@@ -398,6 +462,17 @@ const ChatBox: React.FC<ChatBoxProps> = ({
                 🚫 Chặn IP
               </button>
             </>
+          )}
+          {contextMenu.comment.latitude && contextMenu.comment.longitude && (
+            <div className="context-menu-location">
+              <div className="location-label">🗺️ Tọa độ:</div>
+              <div className="location-coords">
+                Lat: {contextMenu.comment.latitude.toFixed(6)}
+              </div>
+              <div className="location-coords">
+                Lng: {contextMenu.comment.longitude.toFixed(6)}
+              </div>
+            </div>
           )}
         </div>
       )}
