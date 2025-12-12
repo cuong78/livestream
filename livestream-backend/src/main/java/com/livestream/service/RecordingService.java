@@ -56,27 +56,28 @@ public class RecordingService {
      */
     @Transactional
     public RecordingDto onDvrCallback(String app, String stream, String filePath) {
-        LocalDate today = LocalDate.now();
+        // Parse date from file path: .../2025-12-10/timestamp.flv
+        LocalDate recordingDate = parseDateFromPath(filePath);
         
-        // Count existing recordings for today to determine segment order
-        int segmentOrder = recordingRepository.countByRecordingDate(today) + 1;
+        // Count existing recordings for this date to determine segment order
+        int segmentOrder = recordingRepository.countByRecordingDate(recordingDate) + 1;
         
         Recording recording = Recording.builder()
-                .recordingDate(today)
+                .recordingDate(recordingDate)
                 .streamKey(stream)
                 .appName(app)
                 .filePath(filePath)
                 .segmentOrder(segmentOrder)
-                .status(RecordingStatus.RECORDING)
+                .status(RecordingStatus.READY) // Set to READY immediately for auto-merge
                 .startedAt(LocalDateTime.now())
                 .build();
         
         Recording saved = recordingRepository.save(recording);
-        log.info("DVR recording started: app={}, stream={}, file={}, segmentOrder={}", 
-                app, stream, filePath, segmentOrder);
+        log.info("DVR recording registered: app={}, stream={}, file={}, date={}, segmentOrder={}", 
+                app, stream, filePath, recordingDate, segmentOrder);
         
         // Ensure daily recording entry exists
-        ensureDailyRecordingExists(today);
+        ensureDailyRecordingExists(recordingDate);
         
         return toDto(saved);
     }
@@ -434,6 +435,26 @@ public class RecordingService {
      */
     public void triggerMerge(LocalDate date) {
         mergeRecordingsForDate(date);
+    }
+    
+    /**
+     * Parse recording date from file path
+     * Path format: ./objs/nginx/html/recordings/live/stream/2025-12-10/timestamp.flv
+     */
+    private LocalDate parseDateFromPath(String filePath) {
+        try {
+            // Extract date part from path (format: YYYY-MM-DD)
+            String[] parts = filePath.split("/");
+            for (String part : parts) {
+                if (part.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                    return LocalDate.parse(part);
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Failed to parse date from path: {}, using today", filePath);
+        }
+        // Fallback to today if parsing fails
+        return LocalDate.now();
     }
     
     // DTO Mappers
