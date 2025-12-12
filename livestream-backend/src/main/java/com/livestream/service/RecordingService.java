@@ -234,7 +234,12 @@ public class RecordingService {
             
             for (Recording r : recordings) {
                 // FFmpeg concat format: file 'path'
-                content.append("file '").append(r.getFilePath()).append("'\n");
+                // Convert SRS relative path to container absolute path
+                String filePath = r.getFilePath();
+                if (filePath.startsWith("./objs/nginx/html/recordings/")) {
+                    filePath = filePath.replace("./objs/nginx/html/recordings/", "/recordings/");
+                }
+                content.append("file '").append(filePath).append("'\n");
             }
             
             Files.writeString(listFile, content.toString());
