@@ -186,8 +186,12 @@ public class RecordingService {
             boolean mergeSuccess = mergeWithFFmpeg(recordings, outputFilePath);
             
             if (mergeSuccess) {
-                // Generate thumbnail
-                generateThumbnail(outputFilePath, thumbnailFilePath);
+                // Generate thumbnail URL with date overlay using Cloudinary
+                String formattedDate = date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                String thumbnailUrl = String.format(
+                    "https://res.cloudinary.com/duklfdbqf/image/upload/l_text:Arial_60_bold:%s,co_white,g_south,y_50/v1764830389/unnamed_1_hcdvhw.jpg",
+                    formattedDate.replace("/", "%%2F")
+                );
                 
                 // Get duration and file size
                 long duration = getVideoDuration(outputFilePath);
@@ -196,7 +200,7 @@ public class RecordingService {
                 // Update daily recording
                 dailyRecording.setFilePath(outputFilePath);
                 dailyRecording.setVideoUrl(videoUrlBase + "/daily/" + outputFileName);
-                dailyRecording.setThumbnailUrl(thumbnailUrlBase + "/" + thumbnailFileName);
+                dailyRecording.setThumbnailUrl(thumbnailUrl);
                 dailyRecording.setDurationSeconds(duration);
                 dailyRecording.setFileSizeBytes(fileSize);
                 dailyRecording.setSegmentCount(recordings.size());
