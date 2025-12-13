@@ -20,7 +20,6 @@ export class WebSocketService {
     this.onViewerCountCallback = onViewerCount || null;
     this.onCommentDeletedCallback = onCommentDeleted || null;
 
-    // WebSocket URL - must include /api prefix to match backend context path
     const wsUrl = "/api/ws/chat";
 
     this.client = new Client({
