@@ -87,8 +87,7 @@ const ViewerPage = () => {
   // Cập nhật viewer count khi có thay đổi về stream status hoặc real viewer count
   useEffect(() => {
     if (stream?.status === "LIVE") {
-      // Khi stream LIVE: viewer ảo = 200 + viewer thực
-      setViewerCount(realViewerCount + 200);
+      setViewerCount(realViewerCount + 350);
     } else {
       // Khi stream OFFLINE: chỉ có viewer thực (nếu có)
       setViewerCount(realViewerCount);
