@@ -316,7 +316,9 @@ const ChatBox: React.FC<ChatBoxProps> = ({
       {/* Header với nút Load lại trang và viewer count */}
       <div className="chatbox-header">
         <div className="header-left">
-          <h3>💬 Chat trực tiếp</h3>
+          <a href="tel:0869801559" className="phone-link" title="Gọi ngay">
+            📞 0869 801 559
+          </a>
           <span className="viewer-count">👁️ {viewerCount} đang xem</span>
         </div>
         <button
