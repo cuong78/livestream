@@ -10,6 +10,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isMuted, setIsMuted] = useState(false);
 
   useEffect(() => {
     if (!videoRef.current || !hlsUrl) return;
@@ -37,9 +38,16 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         console.log("HLS manifest parsed successfully");
+        // Try to play with sound first
+        video.muted = false;
         video.play().catch((err) => {
-          console.log("Autoplay prevented:", err);
-          // User needs to click play button
+          console.log("Autoplay with sound prevented, trying muted:", err);
+          // If failed, try muted autoplay
+          video.muted = true;
+          setIsMuted(true);
+          video.play().catch((err2) => {
+            console.log("Autoplay prevented:", err2);
+          });
         });
       });
 
@@ -68,7 +76,16 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
       // Native HLS support (Safari)
       video.src = hlsUrl;
       video.addEventListener("loadedmetadata", () => {
-        video.play().catch((err) => console.log("Autoplay prevented:", err));
+        // Try to play with sound first
+        video.muted = false;
+        video.play().catch((err) => {
+          console.log("Autoplay with sound prevented, trying muted:", err);
+          video.muted = true;
+          setIsMuted(true);
+          video
+            .play()
+            .catch((err2) => console.log("Autoplay prevented:", err2));
+        });
       });
     } else {
       setError("Trình duyệt không hỗ trợ HLS streaming");
@@ -82,6 +99,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
     };
   }, [hlsUrl]);
 
+  const handleUnmute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = false;
+      setIsMuted(false);
+    }
+  };
+
   return (
     <div className="video-player-wrapper">
       <video
@@ -89,8 +113,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ hlsUrl }) => {
         controls
         className="video-player"
         playsInline
-        muted
+        controlsList="nodownload nofullscreen"
+        disablePictureInPicture
+        style={{ objectFit: "contain" }}
       />
+      {isMuted && (
+        <button className="unmute-button" onClick={handleUnmute}>
+          🔊 Bật tiếng
+        </button>
+      )}
       {error && (
         <div className="video-error-message">
           <p>{error}</p>

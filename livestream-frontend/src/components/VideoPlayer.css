@@ -50,3 +50,64 @@
   color: #ffd700;
   font-size: 14px;
 }
+
+.unmute-button {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 215, 0, 0.95);
+  color: #000;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 100;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+  transition: all 0.3s ease;
+  animation: pulse 2s infinite;
+}
+
+.unmute-button:hover {
+  background: rgba(255, 215, 0, 1);
+  transform: translateX(-50%) scale(1.05);
+}
+
+.unmute-button:active {
+  transform: translateX(-50%) scale(0.95);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 4px 25px rgba(255, 215, 0, 0.8);
+  }
+}
+
+/* Mobile specific styles */
+@media (max-width: 768px) {
+  .video-player-wrapper {
+    border-radius: 0;
+  }
+
+  .unmute-button {
+    bottom: 70px;
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  /* Prevent fullscreen on mobile */
+  .video-player::-webkit-media-controls-fullscreen-button {
+    display: none !important;
+  }
+
+  .video-player::-webkit-media-controls-play-button,
+  .video-player::-webkit-media-controls-timeline {
+    pointer-events: auto;
+  }
+}
