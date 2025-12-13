@@ -939,60 +939,117 @@ body {
 /* Floating Action Buttons */
 .floating-buttons {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  bottom: 20px;
+  right: 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
   z-index: 999;
 }
 
 .fab-btn {
-  width: 60px;
-  height: 60px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  color: white;
-  font-weight: bold;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s ease;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  overflow: hidden;
+}
+
+.fab-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.fab-btn:hover::before {
+  opacity: 1;
 }
 
 .fab-btn:hover {
-  transform: scale(1.15);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.fab-btn:active {
+  transform: translateY(-1px) scale(1.02);
 }
 
 .fab-icon {
-  font-size: 28px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fab-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .fab-text {
   display: none;
   position: absolute;
-  right: 70px;
-  background: rgba(0, 0, 0, 0.9);
-  padding: 8px 12px;
-  border-radius: 6px;
+  right: 65px;
+  background: rgba(0, 0, 0, 0.92);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
   white-space: nowrap;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.fab-text::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid rgba(0, 0, 0, 0.92);
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
 }
 
 .fab-btn:hover .fab-text {
   display: block;
+  animation: fadeInRight 0.3s ease;
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .fab-phone {
-  background: linear-gradient(135deg, #28a745 0%, #34d058 100%);
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
 }
 
 .fab-zalo {
-  background: linear-gradient(135deg, #0068ff 0%, #0084ff 100%);
+  background: linear-gradient(135deg, #0068ff 0%, #0052cc 100%);
 }
 
 .fab-zalo-vip {
@@ -1003,10 +1060,10 @@ body {
 @keyframes pulse-vip {
   0%,
   100% {
-    box-shadow: 0 4px 16px rgba(220, 20, 60, 0.4);
+    box-shadow: 0 3px 12px rgba(220, 20, 60, 0.4);
   }
   50% {
-    box-shadow: 0 4px 24px rgba(220, 20, 60, 0.8);
+    box-shadow: 0 3px 20px rgba(220, 20, 60, 0.7);
   }
 }
 
@@ -1151,18 +1208,23 @@ body {
   }
 
   .floating-buttons {
-    bottom: 15px;
-    right: 15px;
+    bottom: 80px;
+    right: 12px;
     gap: 10px;
   }
 
   .fab-btn {
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
   }
 
   .fab-icon {
-    font-size: 24px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .fab-text {
+    display: none !important;
   }
 
   .modal-content {
@@ -1238,17 +1300,18 @@ body {
   }
 
   .floating-buttons {
-    bottom: 10px;
+    bottom: 70px;
     right: 10px;
   }
 
   .fab-btn {
-    width: 45px;
-    height: 45px;
+    width: 44px;
+    height: 44px;
   }
 
   .fab-icon {
-    font-size: 20px;
+    width: 26px;
+    height: 26px;
   }
 }
 

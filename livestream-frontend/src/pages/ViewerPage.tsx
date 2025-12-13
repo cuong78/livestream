@@ -771,28 +771,28 @@ const ViewerPage = () => {
       {/* Floating Action Buttons */}
       <div className="floating-buttons">
         <a href="tel:0869801559" className="fab-btn fab-phone" title="Gọi Ngay">
-          <span className="fab-icon">📞</span>
+          <span className="fab-icon">
+            <img
+              src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764553112/yellow-phone-icon-11_pypubp.png"
+              alt="Phone"
+            />
+          </span>
           <span className="fab-text">Gọi Ngay</span>
         </a>
         <a
-          href="https://zalo.me/g/qrrpoi053"
+          href="https://zalo.me/0869801559"
           target="_blank"
           rel="noopener noreferrer"
           className="fab-btn fab-zalo"
           title="Zalo VIP"
         >
-          <span className="fab-icon">💬</span>
-          <span className="fab-text">Zalo VIP</span>
-        </a>
-        <a
-          href="https://www.facebook.com/ganhdua.trai"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fab-btn fab-facebook"
-          title="Facebook"
-        >
-          <span className="fab-icon">📘</span>
-          <span className="fab-text">Facebook</span>
+          <span className="fab-icon">
+            <img
+              src="https://res.cloudinary.com/duklfdbqf/image/upload/v1765639125/zalo-icon_etabmt.png"
+              alt="Zalo"
+            />
+          </span>
+          <span className="fab-text">Zalo</span>
         </a>
       </div>
     </div>
