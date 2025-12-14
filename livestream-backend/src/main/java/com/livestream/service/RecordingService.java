@@ -186,13 +186,8 @@ public class RecordingService {
             boolean mergeSuccess = mergeWithFFmpeg(recordings, outputFilePath);
             
             if (mergeSuccess) {
-                // Generate thumbnail URL with date overlay using Cloudinary
-                // Format: dd-MM-yyyy (use dash instead of slash for better URL compatibility)
-                String formattedDate = date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-                String thumbnailUrl = String.format(
-                    "https://res.cloudinary.com/duklfdbqf/image/upload/l_text:Arial_70_bold:%s,co_rgb:FFD700,g_south,y_60,b_rgb:000000,o_80/v1764830389/unnamed_1_hcdvhw.jpg",
-                    formattedDate
-                );
+                // Use simple base image as thumbnail (date will be shown in title below)
+                String thumbnailUrl = "https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/unnamed_1_hcdvhw.jpg";
                 
                 // Get duration and file size
                 long duration = getVideoDuration(outputFilePath);
