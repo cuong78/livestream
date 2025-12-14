@@ -50,6 +50,22 @@ export const recordingApi = {
     const response = await axios.get(`${API_BASE_URL}/recordings/date/${date}`);
     return response.data;
   },
+
+  // Admin: Trigger merge for today's recordings
+  triggerMerge: async (
+    date: string
+  ): Promise<{ success: boolean; message: string }> => {
+    const response = await api.post(`/recordings/admin/merge/${date}`);
+    return response.data;
+  },
+
+  // Admin: Delete recording by date
+  deleteRecording: async (
+    date: string
+  ): Promise<{ success: boolean; message: string }> => {
+    const response = await api.delete(`/recordings/admin/delete/${date}`);
+    return response.data;
+  },
 };
 
 export const locationApi = {

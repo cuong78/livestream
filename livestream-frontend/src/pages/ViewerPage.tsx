@@ -165,6 +165,66 @@ const ViewerPage = () => {
     setAdminUser(null);
   };
 
+  // Admin: Trigger merge for today's recordings
+  const handleMergeToday = async () => {
+    if (!isAdmin) return;
+
+    const today = new Date().toISOString().split("T")[0]; // Format: yyyy-MM-dd
+    const confirmMerge = window.confirm(
+      `Bạn có muốn upload video ngày ${getCurrentDate()} lên hệ thống không?\n\nLưu ý: Quá trình này sẽ gộp tất cả các đoạn video đã ghi trong ngày.`
+    );
+
+    if (!confirmMerge) return;
+
+    try {
+      const result = await recordingApi.triggerMerge(today);
+      if (result.success) {
+        alert(
+          '✅ Đang xử lý video! Video sẽ xuất hiện trong phần "Video Xem Lại" sau vài phút.'
+        );
+        // Refresh recordings after a delay
+        setTimeout(async () => {
+          const data = await recordingApi.getRecentRecordings();
+          setRecordings(data);
+        }, 5000);
+      } else {
+        alert("❌ " + result.message);
+      }
+    } catch (err: any) {
+      alert(
+        "❌ Lỗi: " + (err.response?.data?.message || "Không thể xử lý video")
+      );
+    }
+  };
+
+  // Admin: Delete recording by date
+  const handleDeleteRecording = async (date: string) => {
+    if (!isAdmin) return;
+
+    const formattedDate = formatRecordingDate(date);
+    const confirmDelete = window.confirm(
+      `⚠️ Bạn có chắc muốn XÓA video ngày ${formattedDate}?\n\nHành động này không thể hoàn tác!`
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      const result = await recordingApi.deleteRecording(date);
+      if (result.success) {
+        alert("✅ Đã xóa video thành công!");
+        // Refresh recordings
+        const data = await recordingApi.getRecentRecordings();
+        setRecordings(data);
+      } else {
+        alert("❌ " + result.message);
+      }
+    } catch (err: any) {
+      alert(
+        "❌ Lỗi: " + (err.response?.data?.message || "Không thể xóa video")
+      );
+    }
+  };
+
   if (loading) {
     return (
       <div className="loading-container">
@@ -499,6 +559,19 @@ const ViewerPage = () => {
             18h tại thôn Giai Sơn, An Mỹ, Tuy An, Phú Yên
           </p>
 
+          {/* Admin: Upload Video Button */}
+          {isAdmin && (
+            <div className="admin-video-controls">
+              <button
+                className="btn-upload-video"
+                onClick={handleMergeToday}
+                title="Upload video hôm nay lên hệ thống"
+              >
+                📤 Upload Video Hôm Nay ({getCurrentDate()})
+              </button>
+            </div>
+          )}
+
           <div className="video-grid">
             {recordings.length > 0 ? (
               recordings.map((recording) => (
@@ -529,6 +602,19 @@ const ViewerPage = () => {
                       {formatRecordingDate(recording.recordingDate)}
                     </p>
                     <span className="video-category">VIDEO XỔ GÀ XEM LẠI</span>
+                    {/* Admin: Delete button */}
+                    {isAdmin && (
+                      <button
+                        className="btn-delete-video"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteRecording(recording.recordingDate);
+                        }}
+                        title="Xóa video này"
+                      >
+                        🗑️ Xóa
+                      </button>
+                    )}
                   </div>
                 </div>
               ))

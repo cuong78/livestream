@@ -438,6 +438,67 @@ public class RecordingService {
     }
     
     /**
+     * Delete recording for a specific date (admin function)
+     */
+    @Transactional
+    public boolean deleteRecordingByDate(LocalDate date) {
+        log.info("Admin request: Deleting recording for date: {}", date);
+        
+        Optional<DailyRecording> dailyRecordingOpt = dailyRecordingRepository.findByRecordingDate(date);
+        if (dailyRecordingOpt.isEmpty()) {
+            log.warn("No daily recording found for date: {}", date);
+            return false;
+        }
+        
+        DailyRecording dr = dailyRecordingOpt.get();
+        
+        try {
+            // Delete video file
+            if (dr.getFilePath() != null) {
+                Files.deleteIfExists(Paths.get(dr.getFilePath()));
+                log.info("Deleted video file: {}", dr.getFilePath());
+            }
+            
+            // Delete thumbnail (if local file)
+            if (dr.getThumbnailUrl() != null && !dr.getThumbnailUrl().contains("cloudinary")) {
+                String thumbnailPath = dr.getThumbnailUrl()
+                        .replace(thumbnailUrlBase, outputPath + "/thumbnails");
+                Files.deleteIfExists(Paths.get(thumbnailPath));
+            }
+            
+            // Update status to DELETED
+            dr.setStatus(DailyRecordingStatus.DELETED);
+            dailyRecordingRepository.save(dr);
+            
+            // Delete segment recordings for this date
+            List<Recording> segments = recordingRepository.findByRecordingDate(date);
+            for (Recording r : segments) {
+                try {
+                    if (r.getFilePath() != null) {
+                        // Convert SRS path to container path
+                        String filePath = r.getFilePath();
+                        if (filePath.startsWith("./objs/nginx/html/recordings/")) {
+                            filePath = filePath.replace("./objs/nginx/html/recordings/", "/recordings/");
+                        }
+                        Files.deleteIfExists(Paths.get(filePath));
+                    }
+                    r.setStatus(RecordingStatus.DELETED);
+                    recordingRepository.save(r);
+                } catch (IOException e) {
+                    log.error("Failed to delete segment: {}", r.getFilePath(), e);
+                }
+            }
+            
+            log.info("Successfully deleted recording for date: {}", date);
+            return true;
+            
+        } catch (IOException e) {
+            log.error("Failed to delete recording for date: {}", date, e);
+            return false;
+        }
+    }
+    
+    /**
      * Parse recording date from file path
      * Path format: ./objs/nginx/html/recordings/live/stream/2025-12-10/timestamp.flv
      */

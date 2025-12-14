@@ -42,6 +42,11 @@ public interface RecordingRepository extends JpaRepository<Recording, Long> {
     List<Recording> findByRecordingDateBefore(LocalDate date);
     
     /**
+     * Find all recordings for a specific date
+     */
+    List<Recording> findByRecordingDate(LocalDate recordingDate);
+    
+    /**
      * Find all recordings with READY status for a specific date
      */
     List<Recording> findByRecordingDateAndStatus(LocalDate recordingDate, RecordingStatus status);

@@ -123,4 +123,36 @@ public class RecordingController {
             ));
         }
     }
+    
+    /**
+     * Admin endpoint to delete recording for a specific date
+     */
+    @DeleteMapping("/admin/delete/{date}")
+    @Operation(summary = "Delete recording by date", 
+               description = "Admin endpoint to delete video recording for a specific date")
+    public ResponseEntity<Map<String, Object>> deleteRecordingByDate(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        log.info("Admin request: Delete recording for date: {}", date);
+        
+        try {
+            boolean success = recordingService.deleteRecordingByDate(date);
+            if (success) {
+                return ResponseEntity.ok(Map.of(
+                        "success", true,
+                        "message", "Recording deleted for date: " + date
+                ));
+            } else {
+                return ResponseEntity.ok(Map.of(
+                        "success", false,
+                        "message", "No recording found for date: " + date
+                ));
+            }
+        } catch (Exception e) {
+            log.error("Error deleting recording", e);
+            return ResponseEntity.internalServerError().body(Map.of(
+                    "success", false,
+                    "message", "Error: " + e.getMessage()
+            ));
+        }
+    }
 }

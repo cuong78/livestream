@@ -1067,6 +1067,60 @@ body {
   }
 }
 
+/* Admin Video Controls */
+.admin-video-controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(220, 20, 60, 0.1);
+  border: 2px dashed var(--primary-red);
+  border-radius: 12px;
+}
+
+.btn-upload-video {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+}
+
+.btn-upload-video:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.6);
+  background: linear-gradient(135deg, #34ce57 0%, #28a745 100%);
+}
+
+.btn-upload-video:active {
+  transform: translateY(0);
+}
+
+.btn-delete-video {
+  margin-top: 10px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffffff;
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  width: 100%;
+}
+
+.btn-delete-video:hover {
+  background: linear-gradient(135deg, #e74c5c 0%, #dc3545 100%);
+  transform: scale(1.02);
+}
+
 /* Loading */
 .loading-container {
   display: flex;
