@@ -457,8 +457,15 @@ const ViewerPage = () => {
                 rel="noopener noreferrer"
                 className="social-btn zalo-personal"
               >
-                <span>AE KẾT BẠN ZALO</span>
-                <small>📱 Giao Lưu Mua Bán Chiến Kê Trên Cả Nước</small>
+                <img
+                  src="https://res.cloudinary.com/duklfdbqf/image/upload/v1765771851/zalo1_fwawgm.png"
+                  alt="Zalo"
+                  className="social-icon"
+                />
+                <div className="social-text">
+                  <span>AE KẾT BẠN ZALO</span>
+                  <small>📱 Giao Lưu Mua Bán Chiến Kê Trên Cả Nước</small>
+                </div>
               </a>
 
               <a
@@ -467,8 +474,15 @@ const ViewerPage = () => {
                 rel="noopener noreferrer"
                 className="social-btn zalo-group"
               >
-                <span>NHÓM VIP ZALO</span>
-                <small>📱 AE Vào Nhóm VIP Tuyển Gà Chiến Nhé!</small>
+                <img
+                  src="https://res.cloudinary.com/duklfdbqf/image/upload/v1765771858/zalo-vip-1_yx9lgh.png"
+                  alt="Nhóm VIP Zalo"
+                  className="social-icon"
+                />
+                <div className="social-text">
+                  <span>NHÓM VIP ZALO</span>
+                  <small>📱 AE Vào Nhóm VIP Tuyển Gà Chiến Nhé!</small>
+                </div>
               </a>
 
               <a
@@ -477,8 +491,15 @@ const ViewerPage = () => {
                 rel="noopener noreferrer"
                 className="social-btn facebook"
               >
-                <span>KÊNH FACEBOOK</span>
-                <small>📱 Theo Dõi Fanpage CLB Gà Chọi Long Thần Sói</small>
+                <img
+                  src="https://res.cloudinary.com/duklfdbqf/image/upload/v1765771846/fb-1_xfr0sa.png"
+                  alt="Facebook"
+                  className="social-icon"
+                />
+                <div className="social-text">
+                  <span>KÊNH FACEBOOK</span>
+                  <small>📱 Theo Dõi Fanpage CLB Gà Chọi Long Thần Sói</small>
+                </div>
               </a>
             </div>
 
@@ -540,16 +561,6 @@ const ViewerPage = () => {
 
         {/* Video Archive Section */}
         <section className="video-archive">
-          {/* Designer Credit */}
-          <div className="designer-credit">
-            <p className="designer-text">
-              🎨 <strong>Thiết kế bởi Anh Cương</strong> (Sinh viên) - ☎️{" "}
-              <a href="tel:0387683857" className="designer-phone">
-                0387683857
-              </a>
-            </p>
-          </div>
-
           <h2 className="section-title">
             <span className="play-icon">▶️</span>
             VIDEO XEM LẠI
