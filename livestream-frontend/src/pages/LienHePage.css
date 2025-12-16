@@ -1,0 +1,483 @@
+/* Lien He Page Styles */
+:root {
+  --primary-red: #dc143c;
+  --primary-yellow: #ffd700;
+  --primary-black: #1a1a1a;
+  --text-light: #ffffff;
+  --text-muted: #b0b0b0;
+  --card-bg: #2a2a2a;
+  --border-color: #3a3a3a;
+}
+
+.lien-he-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+  color: var(--text-light);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header */
+.page-header {
+  background: linear-gradient(135deg, var(--primary-black) 0%, #2a2a2a 100%);
+  padding: 15px 30px;
+  border-bottom: 3px solid var(--primary-red);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-decoration: none;
+  color: var(--text-light);
+}
+
+.header-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--primary-yellow);
+}
+
+.header-content h1 {
+  font-size: 24px;
+  color: var(--primary-yellow);
+  margin: 0;
+}
+
+.main-nav {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.main-nav a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+  background: var(--primary-red);
+  color: white;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/unnamed_1_hcdvhw.jpg");
+  background-size: cover;
+  background-position: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.hero-overlay h1 {
+  font-size: 42px;
+  color: var(--primary-yellow);
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.hero-overlay p {
+  font-size: 20px;
+  color: var(--text-light);
+}
+
+/* Contact Content */
+.contact-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Contact Main */
+.contact-main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.contact-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+  border: 2px solid var(--border-color);
+  transition: transform 0.3s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-5px);
+}
+
+.contact-card.hotline {
+  border-color: var(--primary-yellow);
+}
+
+.contact-card.address {
+  border-color: var(--primary-red);
+}
+
+.contact-card.schedule {
+  border-color: #32cd32;
+}
+
+.card-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.contact-card h2 {
+  color: var(--primary-yellow);
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.phone-number {
+  display: block;
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--primary-yellow);
+  text-decoration: none;
+  margin-bottom: 15px;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.address-text {
+  font-size: 16px;
+  color: var(--text-light);
+  margin-bottom: 15px;
+}
+
+.contact-card p {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.schedule-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.schedule-time .time {
+  font-size: 36px;
+  font-weight: bold;
+  color: #32cd32;
+}
+
+.schedule-time .period {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.btn-contact {
+  display: inline-block;
+  padding: 12px 25px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.btn-contact:hover {
+  transform: scale(1.05);
+}
+
+.btn-zalo {
+  background: #0068ff;
+  color: white;
+}
+
+.btn-map {
+  background: var(--primary-red);
+  color: white;
+}
+
+.btn-watch {
+  background: #32cd32;
+  color: white;
+}
+
+/* Social Section */
+.social-section {
+  margin-bottom: 40px;
+}
+
+.social-section h2 {
+  color: var(--primary-yellow);
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.social-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.social-card {
+  display: flex;
+  align-items: stretch;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.social-card:hover {
+  transform: translateX(5px);
+}
+
+.social-card .social-icon {
+  width: 80px;
+  height: auto;
+  object-fit: cover;
+}
+
+.social-card .social-info {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.social-card h3 {
+  color: white;
+  margin: 0 0 5px 0;
+  font-size: 18px;
+}
+
+.social-card p {
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  font-size: 14px;
+}
+
+.social-card.zalo {
+  background: linear-gradient(135deg, #0068ff 0%, #0084ff 100%);
+}
+
+.social-card.zalo-group {
+  background: linear-gradient(135deg, #8b0000 0%, var(--primary-red) 100%);
+}
+
+.social-card.facebook {
+  background: linear-gradient(135deg, #1877f2 0%, #42b72a 100%);
+}
+
+/* Bank Section */
+.bank-section {
+  margin-bottom: 40px;
+}
+
+.bank-section h2 {
+  color: var(--primary-yellow);
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.bank-card {
+  background: linear-gradient(135deg, #006400 0%, #228b22 100%);
+  border-radius: 16px;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.bank-logo {
+  font-size: 48px;
+}
+
+.bank-info {
+  text-align: center;
+}
+
+.bank-name {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 10px 0;
+}
+
+.account-number {
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+  margin: 0 0 5px 0;
+  letter-spacing: 2px;
+}
+
+.account-holder {
+  font-size: 16px;
+  color: var(--primary-yellow);
+  margin: 0;
+}
+
+.btn-copy {
+  padding: 12px 25px;
+  background: var(--primary-yellow);
+  color: var(--primary-black);
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.btn-copy:hover {
+  transform: scale(1.05);
+}
+
+.bank-note {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-top: 15px;
+}
+
+/* FAQ Section */
+.faq-section {
+  margin-bottom: 40px;
+}
+
+.faq-section h2 {
+  color: var(--primary-yellow);
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.faq-item {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  border-left: 4px solid var(--primary-red);
+}
+
+.faq-item h3 {
+  color: var(--primary-yellow);
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+.faq-item p {
+  color: var(--text-muted);
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* CTA Section */
+.cta-section {
+  text-align: center;
+  background: linear-gradient(135deg, var(--primary-red) 0%, #8b0000 100%);
+  border-radius: 16px;
+  padding: 40px;
+}
+
+.cta-section h2 {
+  color: white;
+  margin-bottom: 10px;
+}
+
+.cta-section p {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 25px;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-call {
+  padding: 18px 40px;
+  background: var(--primary-yellow);
+  color: var(--primary-black);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+.btn-call:hover {
+  transform: scale(1.05);
+}
+
+/* Footer */
+.page-footer {
+  background: var(--primary-black);
+  text-align: center;
+  padding: 30px 20px;
+  border-top: 3px solid var(--primary-red);
+}
+
+.page-footer p {
+  margin: 5px 0;
+  color: var(--text-muted);
+}
+
+.page-footer a {
+  color: var(--primary-yellow);
+  text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-overlay h1 {
+    font-size: 28px;
+  }
+
+  .main-nav {
+    gap: 10px;
+  }
+
+  .main-nav a {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  .header-content h1 {
+    font-size: 18px;
+  }
+
+  .contact-main {
+    grid-template-columns: 1fr;
+  }
+
+  .bank-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}

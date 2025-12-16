@@ -1,0 +1,346 @@
+/* Quy Dinh Page Styles */
+:root {
+  --primary-red: #dc143c;
+  --primary-yellow: #ffd700;
+  --primary-black: #1a1a1a;
+  --text-light: #ffffff;
+  --text-muted: #b0b0b0;
+  --card-bg: #2a2a2a;
+  --border-color: #3a3a3a;
+}
+
+.quy-dinh-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+  color: var(--text-light);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header - Same as GioiThieuPage */
+.page-header {
+  background: linear-gradient(135deg, var(--primary-black) 0%, #2a2a2a 100%);
+  padding: 15px 30px;
+  border-bottom: 3px solid var(--primary-red);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-decoration: none;
+  color: var(--text-light);
+}
+
+.header-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--primary-yellow);
+}
+
+.header-content h1 {
+  font-size: 24px;
+  color: var(--primary-yellow);
+  margin: 0;
+}
+
+.main-nav {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.main-nav a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+  background: var(--primary-red);
+  color: white;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+    url("https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/unnamed_1_hcdvhw.jpg");
+  background-size: cover;
+  background-position: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.hero-overlay h1 {
+  font-size: 42px;
+  color: var(--primary-yellow);
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.hero-overlay p {
+  font-size: 20px;
+  color: var(--text-light);
+}
+
+/* Rules Content */
+.rules-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.rules-section {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+  border: 1px solid var(--border-color);
+}
+
+.rules-section.warning {
+  border-color: var(--primary-red);
+  background: linear-gradient(135deg, #2a1a1a 0%, #1a1a1a 100%);
+}
+
+.rules-section.schedule {
+  border-color: var(--primary-yellow);
+  background: linear-gradient(135deg, #2a2a1a 0%, #1a1a1a 100%);
+}
+
+.rules-section.violation {
+  border-color: #ff6b6b;
+}
+
+.rules-section h2 {
+  color: var(--primary-yellow);
+  font-size: 28px;
+  margin-bottom: 25px;
+  border-bottom: 2px solid var(--primary-red);
+  padding-bottom: 10px;
+}
+
+/* Rules List */
+.rules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  border-left: 4px solid var(--border-color);
+}
+
+.rule-item.allowed {
+  border-left-color: #32cd32;
+}
+
+.rule-item.banned {
+  border-left-color: var(--primary-red);
+}
+
+.rule-item.info {
+  border-left-color: #0084ff;
+}
+
+.rule-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.rule-text h3 {
+  color: var(--text-light);
+  margin: 0 0 8px 0;
+  font-size: 18px;
+}
+
+.rule-text p {
+  color: var(--text-muted);
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Schedule Box */
+.schedule-box {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 25px;
+  background: rgba(255, 215, 0, 0.1);
+  border-radius: 12px;
+}
+
+.schedule-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 30px;
+  background: var(--primary-red);
+  border-radius: 12px;
+}
+
+.schedule-time .time {
+  font-size: 36px;
+  font-weight: bold;
+  color: white;
+}
+
+.schedule-time .period {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.schedule-box p {
+  font-size: 18px;
+  color: var(--text-light);
+  margin: 0;
+}
+
+/* Violation List */
+.violation-list {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.violation-item {
+  flex: 1;
+  min-width: 150px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.violation-item .level {
+  display: block;
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.violation-item .action {
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff6b6b;
+}
+
+/* CTA Section */
+.cta-section {
+  text-align: center;
+  background: linear-gradient(135deg, #32cd32 0%, #228b22 100%);
+  border-radius: 16px;
+  padding: 40px;
+  margin-top: 40px;
+}
+
+.cta-section h2 {
+  color: white;
+  margin-bottom: 10px;
+  border: none;
+  padding: 0;
+}
+
+.cta-section p {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 25px;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.cta-buttons a {
+  padding: 15px 30px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.cta-buttons a:hover {
+  transform: scale(1.05);
+}
+
+.btn-watch {
+  background: var(--primary-yellow);
+  color: var(--primary-black);
+}
+
+.btn-zalo {
+  background: #0068ff;
+  color: white;
+}
+
+/* Footer */
+.page-footer {
+  background: var(--primary-black);
+  text-align: center;
+  padding: 30px 20px;
+  border-top: 3px solid var(--primary-red);
+}
+
+.page-footer p {
+  margin: 5px 0;
+  color: var(--text-muted);
+}
+
+.page-footer a {
+  color: var(--primary-yellow);
+  text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-overlay h1 {
+    font-size: 28px;
+  }
+
+  .main-nav {
+    gap: 10px;
+  }
+
+  .main-nav a {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  .header-content h1 {
+    font-size: 18px;
+  }
+
+  .schedule-box {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .violation-list {
+    flex-direction: column;
+  }
+}
