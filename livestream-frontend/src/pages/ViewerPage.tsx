@@ -872,8 +872,25 @@ const ViewerPage = () => {
                 src={selectedVideo.videoUrl}
                 controls
                 autoPlay
+                playsInline
+                preload="metadata"
                 className="replay-video-player"
-              />
+                onError={(e) => {
+                  console.error("Video error:", e);
+                  console.error("Video URL:", selectedVideo.videoUrl);
+                  alert(
+                    `Không thể phát video. URL: ${selectedVideo.videoUrl}\n\nVui lòng kiểm tra:\n1. Video đã được upload đúng chưa?\n2. URL có đúng không?\n3. File video có tồn tại trên server không?`
+                  );
+                }}
+                onLoadStart={() =>
+                  console.log("Video loading started:", selectedVideo.videoUrl)
+                }
+                onCanPlay={() => console.log("Video can play")}
+              >
+                <source src={selectedVideo.videoUrl} type="video/mp4" />
+                <source src={selectedVideo.videoUrl} type="video/webm" />
+                Trình duyệt của bạn không hỗ trợ phát video.
+              </video>
             </div>
           </div>
         </div>
