@@ -94,7 +94,6 @@ const ViewerPage = () => {
     }
   }, [stream?.status, realViewerCount]);
 
-  // Fetch recordings for replay section
   useEffect(() => {
     const fetchRecordings = async () => {
       try {
