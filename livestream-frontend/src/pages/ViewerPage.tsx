@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import VideoPlayer from "@/components/VideoPlayer";
 import ChatBox from "@/components/ChatBox";
 import LoginModal from "@/components/LoginModal";
@@ -508,6 +509,15 @@ const ViewerPage = () => {
                 Yên
               </p>
             </div>
+
+            <div className="contact-links">
+              <Link to="/gioi-thieu" className="btn-contact-link">
+                ℹ️ Giới Thiệu
+              </Link>
+              <Link to="/lien-he" className="btn-contact-link">
+                📞 Liên Hệ
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -549,12 +559,17 @@ const ViewerPage = () => {
                 Không Để Số Điện Thoại, Không Cá Cược Dưới Mọi Hình Thức
               </li>
             </ul>
-            <button
-              className="btn-chat"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            >
-              💬 Chat Ngay
-            </button>
+            <div className="rules-buttons">
+              <button
+                className="btn-chat"
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              >
+                💬 Chat Ngay
+              </button>
+              <Link to="/quy-dinh" className="btn-view-rules">
+                📋 Xem Đầy Đủ Quy Định
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -643,6 +658,9 @@ const ViewerPage = () => {
               <strong>XEM LIVE HÔM NAY</strong> - Truy cập trực tiếp để xem vần
               xổ gà diễn ra lúc 18h hàng ngày
             </p>
+            <Link to="/video" className="btn-view-all-videos">
+              📹 Xem Tất Cả Video
+            </Link>
           </div>
         </section>
 

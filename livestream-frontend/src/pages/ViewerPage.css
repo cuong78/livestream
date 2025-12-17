@@ -579,6 +579,37 @@ body {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.contact-links {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-contact-link {
+  flex: 1;
+  min-width: 150px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #1877f2 0%, #0084ff 100%);
+  color: white;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-contact-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(24, 119, 242, 0.5);
 }
 
 /* Bank Card */
@@ -677,8 +708,15 @@ body {
   flex-shrink: 0;
 }
 
+.rules-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
 .btn-chat {
-  width: 100%;
+  flex: 1;
+  min-width: 200px;
   padding: 15px;
   background: var(--primary-yellow);
   color: var(--primary-black);
@@ -693,6 +731,30 @@ body {
 .btn-chat:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+}
+
+.btn-view-rules {
+  flex: 1;
+  min-width: 200px;
+  padding: 15px;
+  background: var(--primary-red);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-view-rules:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 20, 60, 0.5);
 }
 
 /* Video Archive */
@@ -787,11 +849,37 @@ body {
   border-radius: 12px;
   padding: 20px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
 }
 
 .archive-note p {
   font-size: 16px;
   color: var(--text-light);
+  margin: 0;
+}
+
+.btn-view-all-videos {
+  padding: 12px 30px;
+  background: var(--primary-yellow);
+  color: var(--primary-black);
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-view-all-videos:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
 }
 
 /* Modals */

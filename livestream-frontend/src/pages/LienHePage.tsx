@@ -13,7 +13,12 @@ function LienHePage() {
               alt="Logo CLB Gà Chọi Long Thần Sói"
               className="header-logo"
             />
-            <h1>CLB Gà Chọi Long Thần Sói</h1>
+            <div className="header-text">
+              <h1>CLB Gà Chọi Long Thần Sói</h1>
+              <p className="header-subtitle">
+                Kích vào trang chủ để xem video trực tiếp
+              </p>
+            </div>
           </Link>
         </div>
         <nav className="main-nav">

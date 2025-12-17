@@ -48,10 +48,23 @@
   border: 2px solid var(--primary-yellow);
 }
 
+.header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .header-content h1 {
   font-size: 24px;
   color: var(--primary-yellow);
   margin: 0;
+}
+
+.header-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+  font-weight: normal;
 }
 
 .main-nav {
