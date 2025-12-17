@@ -107,31 +107,6 @@ const ViewerPage = () => {
     fetchRecordings();
   }, []);
 
-  // Fix video URL to point to API domain
-  const getCorrectVideoUrl = (videoUrl: string): string => {
-    if (!videoUrl) return "";
-
-    // If URL already points to API domain, return as is
-    if (videoUrl.includes("api.gachoilongthansoi.com")) {
-      return videoUrl;
-    }
-
-    // Replace frontend domain with API domain
-    if (videoUrl.includes("gachoilongthansoi.com")) {
-      return videoUrl.replace(
-        "gachoilongthansoi.com",
-        "api.gachoilongthansoi.com"
-      );
-    }
-
-    // If it's a relative path, prepend API domain
-    if (videoUrl.startsWith("/")) {
-      return `https://api.gachoilongthansoi.com${videoUrl}`;
-    }
-
-    return videoUrl;
-  };
-
   const handleSendComment = (comment: Comment) => {
     websocketService.sendComment(comment);
   };
@@ -894,7 +869,7 @@ const ViewerPage = () => {
             </div>
             <div className="video-modal-player">
               <video
-                src={getCorrectVideoUrl(selectedVideo.videoUrl)}
+                src={selectedVideo.videoUrl}
                 controls
                 autoPlay
                 playsInline
@@ -902,35 +877,14 @@ const ViewerPage = () => {
                 className="replay-video-player"
                 onError={(e) => {
                   console.error("Video error:", e);
-                  console.error("Original URL:", selectedVideo.videoUrl);
-                  console.error(
-                    "Corrected URL:",
-                    getCorrectVideoUrl(selectedVideo.videoUrl)
-                  );
-                  alert(
-                    `Không thể phát video.\n\nURL gốc: ${
-                      selectedVideo.videoUrl
-                    }\nURL đã sửa: ${getCorrectVideoUrl(
-                      selectedVideo.videoUrl
-                    )}\n\nVui lòng kiểm tra:\n1. Video đã được upload đúng chưa?\n2. File video có tồn tại trên server không?\n3. Backend có serve file video không?`
-                  );
+                  console.error("Video URL:", selectedVideo.videoUrl);
                 }}
                 onLoadStart={() =>
-                  console.log(
-                    "Video loading started:",
-                    getCorrectVideoUrl(selectedVideo.videoUrl)
-                  )
+                  console.log("Video loading started:", selectedVideo.videoUrl)
                 }
                 onCanPlay={() => console.log("Video can play")}
               >
-                <source
-                  src={getCorrectVideoUrl(selectedVideo.videoUrl)}
-                  type="video/mp4"
-                />
-                <source
-                  src={getCorrectVideoUrl(selectedVideo.videoUrl)}
-                  type="video/webm"
-                />
+                <source src={selectedVideo.videoUrl} type="video/mp4" />
                 Trình duyệt của bạn không hỗ trợ phát video.
               </video>
             </div>
