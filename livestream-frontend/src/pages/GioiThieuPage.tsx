@@ -7,7 +7,7 @@ function GioiThieuPage() {
       {/* Header */}
       <header className="page-header">
         <div className="header-content">
-          <Link to="/" className="logo-link">
+          <Link to="/trang-chu" className="logo-link">
             <img
               src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/z7291002414848_46cd0bf4b57be31aa45972704457e36c_cwe4me.jpg"
               alt="Logo CLB Gà Chọi Long Thần Sói"
@@ -22,12 +22,11 @@ function GioiThieuPage() {
           </Link>
         </div>
         <nav className="main-nav">
-          <Link to="/">Trang chủ</Link>
+          <Link to="/trang-chu">Trang chủ</Link>
           <Link to="/gioi-thieu" className="active">
             Giới thiệu
           </Link>
           <Link to="/quy-dinh">Quy định</Link>
-          <Link to="/video">Video</Link>
           <Link to="/lien-he">Liên hệ</Link>
         </nav>
       </header>
@@ -126,7 +125,7 @@ function GioiThieuPage() {
             >
               📘 Theo Dõi Facebook
             </a>
-            <Link to="/" className="btn-watch">
+            <Link to="/trang-chu" className="btn-watch">
               ▶️ Xem Livestream
             </Link>
           </div>

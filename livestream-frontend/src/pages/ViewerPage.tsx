@@ -658,9 +658,6 @@ const ViewerPage = () => {
               <strong>XEM LIVE HÔM NAY</strong> - Truy cập trực tiếp để xem vần
               xổ gà diễn ra lúc 18h hàng ngày
             </p>
-            <Link to="/video" className="btn-view-all-videos">
-              📹 Xem Tất Cả Video
-            </Link>
           </div>
         </section>
 

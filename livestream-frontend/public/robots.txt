@@ -4,5 +4,3 @@ Allow: /
 # Sitemap location
 Sitemap: https://gachoilongthansoi.com/sitemap.xml
 
-# Disallow admin pages from search engines
-Disallow: /admin/
