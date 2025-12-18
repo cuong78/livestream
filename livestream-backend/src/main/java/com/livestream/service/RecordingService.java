@@ -51,6 +51,9 @@ public class RecordingService {
     @Value("${recording.retention-days:3}")
     private int retentionDays;
     
+    private static final int MAX_MERGE_RETRIES = 2;
+    private static final int RETRY_DELAY_MS = 10000;
+    
     /**
      * Callback from SRS when DVR file is created
      */
@@ -146,26 +149,53 @@ public class RecordingService {
     }
     
     /**
-     * Merge all recordings of a specific date into one video
+     * Merge all recordings of a specific date into one video with retry logic
      */
     @Async
     @Transactional
     public void mergeRecordingsForDate(LocalDate date) {
-        log.info("Starting merge process for date: {}", date);
+        for (int attempt = 1; attempt <= MAX_MERGE_RETRIES; attempt++) {
+            log.info("Merge attempt {} of {} for date: {}", attempt, MAX_MERGE_RETRIES, date);
+            
+            boolean success = attemptMerge(date);
+            
+            if (success) {
+                log.info("Merge successful on attempt {} for date: {}", attempt, date);
+                return;
+            }
+            
+            if (attempt < MAX_MERGE_RETRIES) {
+                log.warn("Merge failed on attempt {}, retrying in {} seconds...", attempt, RETRY_DELAY_MS / 1000);
+                try {
+                    Thread.sleep(RETRY_DELAY_MS);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    log.error("Retry interrupted for date: {}", date);
+                    return;
+                }
+            }
+        }
         
+        log.error("All {} merge attempts failed for date: {}", MAX_MERGE_RETRIES, date);
+    }
+    
+    /**
+     * Attempt to merge recordings for a specific date
+     */
+    private boolean attemptMerge(LocalDate date) {
         List<Recording> recordings = recordingRepository
                 .findByRecordingDateAndStatusOrderBySegmentOrderAsc(date, RecordingStatus.READY);
         
         if (recordings.isEmpty()) {
             log.warn("No ready recordings found for date: {}", date);
-            return;
+            return false;
         }
         
         // Update daily recording status to PROCESSING
         Optional<DailyRecording> dailyRecordingOpt = dailyRecordingRepository.findByRecordingDate(date);
         if (dailyRecordingOpt.isEmpty()) {
             log.error("Daily recording not found for date: {}", date);
-            return;
+            return false;
         }
         
         DailyRecording dailyRecording = dailyRecordingOpt.get();
@@ -175,17 +205,37 @@ public class RecordingService {
         try {
             String outputFileName = date.toString() + ".mp4";
             String outputFilePath = outputPath + "/daily/" + outputFileName;
-            String thumbnailFileName = date.toString() + ".jpg";
-            String thumbnailFilePath = outputPath + "/thumbnails/" + thumbnailFileName;
+            String backupFilePath = outputPath + "/daily/" + date.toString() + ".mp4.bak";
             
             // Ensure output directories exist
             Files.createDirectories(Paths.get(outputPath + "/daily"));
             Files.createDirectories(Paths.get(outputPath + "/thumbnails"));
             
+            // Backup existing file if it exists
+            Path outputFile = Paths.get(outputFilePath);
+            if (Files.exists(outputFile)) {
+                Files.copy(outputFile, Paths.get(backupFilePath), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                log.info("Backed up existing video to: {}", backupFilePath);
+            }
+            
             // Merge recordings using FFmpeg
             boolean mergeSuccess = mergeWithFFmpeg(recordings, outputFilePath);
             
             if (mergeSuccess) {
+                // Validate merged video
+                if (!validateMergedVideo(outputFilePath)) {
+                    log.error("Merged video validation failed for date: {}", date);
+                    
+                    // Restore backup if validation fails
+                    if (Files.exists(Paths.get(backupFilePath))) {
+                        Files.copy(Paths.get(backupFilePath), outputFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                        log.info("Restored backup video after validation failure");
+                    }
+                    
+                    dailyRecording.setStatus(DailyRecordingStatus.FAILED);
+                    dailyRecordingRepository.save(dailyRecording);
+                    return false;
+                }
                 // Use simple base image as thumbnail (date will be shown in title below)
                 String thumbnailUrl = "https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/unnamed_1_hcdvhw.jpg";
                 
@@ -203,24 +253,109 @@ public class RecordingService {
                 dailyRecording.setStatus(DailyRecordingStatus.READY);
                 dailyRecordingRepository.save(dailyRecording);
                 
-                // Mark all segments as merged
+                // Mark all segments as merged and delete FLV files
                 for (Recording recording : recordings) {
                     recording.setStatus(RecordingStatus.MERGED);
                     recordingRepository.save(recording);
+                    
+                    // Delete FLV segment file to save disk space
+                    try {
+                        String flvPath = recording.getFilePath();
+                        if (flvPath.startsWith("./objs/nginx/html/recordings/")) {
+                            flvPath = flvPath.replace("./objs/nginx/html/recordings/", "/recordings/");
+                        }
+                        if (Files.deleteIfExists(Paths.get(flvPath))) {
+                            log.info("Deleted FLV segment after successful merge: {}", flvPath);
+                        }
+                    } catch (IOException e) {
+                        log.warn("Failed to delete FLV segment: {}", recording.getFilePath(), e);
+                    }
                 }
+                
+                // Delete backup file after successful merge and validation
+                Files.deleteIfExists(Paths.get(backupFilePath));
+                log.info("Deleted backup file after successful merge");
                 
                 log.info("Successfully merged {} recordings for date: {}, output: {}", 
                         recordings.size(), date, outputFilePath);
+                return true;
             } else {
                 dailyRecording.setStatus(DailyRecordingStatus.FAILED);
                 dailyRecordingRepository.save(dailyRecording);
                 log.error("Failed to merge recordings for date: {}", date);
+                return false;
             }
             
         } catch (Exception e) {
             log.error("Error merging recordings for date: {}", date, e);
             dailyRecording.setStatus(DailyRecordingStatus.FAILED);
             dailyRecordingRepository.save(dailyRecording);
+            return false;
+        }
+    }
+    
+    /**
+     * Validate merged video file to ensure it's not corrupted
+     */
+    private boolean validateMergedVideo(String videoPath) {
+        try {
+            log.info("Validating merged video: {}", videoPath);
+            
+            ProcessBuilder pb = new ProcessBuilder(
+                    "ffprobe",
+                    "-v", "error",
+                    "-count_frames",
+                    "-select_streams", "v:0",
+                    "-show_entries", "stream=nb_read_frames,duration",
+                    "-of", "default=noprint_wrappers=1:nokey=1",
+                    videoPath
+            );
+            
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
+            
+            StringBuilder output = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    output.append(line).append("\n");
+                }
+            }
+            
+            int exitCode = process.waitFor();
+            
+            if (exitCode != 0) {
+                log.error("Video validation failed with exit code: {}", exitCode);
+                return false;
+            }
+            
+            String[] lines = output.toString().trim().split("\n");
+            if (lines.length < 2) {
+                log.error("Video validation failed: insufficient output");
+                return false;
+            }
+            
+            try {
+                int frameCount = Integer.parseInt(lines[0].trim());
+                double duration = Double.parseDouble(lines[1].trim());
+                
+                if (frameCount <= 0 || duration <= 0) {
+                    log.error("Video validation failed: frames={}, duration={}", frameCount, duration);
+                    return false;
+                }
+                
+                log.info("Video validated successfully: {} frames, {} seconds", frameCount, duration);
+                return true;
+                
+            } catch (NumberFormatException e) {
+                log.error("Video validation failed: invalid output format", e);
+                return false;
+            }
+            
+        } catch (IOException | InterruptedException e) {
+            log.error("Error validating video: {}", videoPath, e);
+            return false;
         }
     }
     
@@ -416,7 +551,11 @@ public class RecordingService {
         for (Recording r : oldRecordings) {
             try {
                 if (r.getFilePath() != null) {
-                    Files.deleteIfExists(Paths.get(r.getFilePath()));
+                    String filePath = r.getFilePath();
+                    if (filePath.startsWith("./objs/nginx/html/recordings/")) {
+                        filePath = filePath.replace("./objs/nginx/html/recordings/", "/recordings/");
+                    }
+                    Files.deleteIfExists(Paths.get(filePath));
                 }
                 r.setStatus(RecordingStatus.DELETED);
                 recordingRepository.save(r);
