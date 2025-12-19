@@ -337,8 +337,9 @@ public class RecordingService {
             }
             
             try {
-                int frameCount = Integer.parseInt(lines[0].trim());
-                double duration = Double.parseDouble(lines[1].trim());
+                // ffprobe outputs: duration (line 1), then frame count (line 2)
+                double duration = Double.parseDouble(lines[0].trim());
+                int frameCount = Integer.parseInt(lines[1].trim());
                 
                 if (frameCount <= 0 || duration <= 0) {
                     log.error("Video validation failed: frames={}, duration={}", frameCount, duration);
