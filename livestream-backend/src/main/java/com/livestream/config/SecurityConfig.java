@@ -29,7 +29,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/login", "/auth/register").permitAll()
+                .requestMatchers("/auth/login", "/auth/register", "/auth/refresh", "/auth/logout").permitAll()
                 .requestMatchers("/stream/current", "/stream/callback/**").permitAll()
                 .requestMatchers("/recordings/recent", "/recordings/date/**", "/recordings/callback/**").permitAll()
                 .requestMatchers("/comments/**", "/ws/**").permitAll()

@@ -58,7 +58,8 @@ server:
 # JWT Configuration
 jwt:
   secret: ${JWT_SECRET}
-  expiration: ${JWT_EXPIRATION:3600000} # 1 hour
+  expiration: ${JWT_EXPIRATION:86400000} # 24 hours (increased from 1 hour)
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000} # 7 days
 
 # CORS Configuration
 cors:
