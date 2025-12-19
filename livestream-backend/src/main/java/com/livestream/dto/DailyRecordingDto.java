@@ -24,6 +24,7 @@ public class DailyRecordingDto {
     private Integer segmentCount;
     private DailyRecordingStatus status;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     
     /**
      * Helper method to format duration as HH:MM:SS

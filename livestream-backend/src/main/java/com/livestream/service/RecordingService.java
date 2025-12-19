@@ -666,17 +666,25 @@ public class RecordingService {
     // DTO Mappers
     
     private DailyRecordingDto toDto(DailyRecording entity) {
+        // Add cache-busting timestamp to video URL
+        String videoUrl = entity.getVideoUrl();
+        if (videoUrl != null && entity.getUpdatedAt() != null) {
+            long timestamp = entity.getUpdatedAt().toEpochSecond(java.time.ZoneOffset.UTC);
+            videoUrl = videoUrl + "?v=" + timestamp;
+        }
+        
         return DailyRecordingDto.builder()
                 .id(entity.getId())
                 .recordingDate(entity.getRecordingDate())
                 .title(entity.getTitle())
-                .videoUrl(entity.getVideoUrl())
+                .videoUrl(videoUrl)
                 .thumbnailUrl(entity.getThumbnailUrl())
                 .durationSeconds(entity.getDurationSeconds())
                 .fileSizeBytes(entity.getFileSizeBytes())
                 .segmentCount(entity.getSegmentCount())
                 .status(entity.getStatus())
                 .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
     
