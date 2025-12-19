@@ -383,12 +383,17 @@ public class RecordingService {
             log.debug("FFmpeg concat list file created: {}", listFile);
             
             // Build FFmpeg command
+            // Re-encode to fix timestamps and ensure proper duration metadata
             ProcessBuilder pb = new ProcessBuilder(
                     "ffmpeg", "-y",
                     "-f", "concat",
                     "-safe", "0",
                     "-i", listFile.toString(),
-                    "-c", "copy",
+                    "-c:v", "libx264",
+                    "-preset", "fast",
+                    "-crf", "23",
+                    "-c:a", "aac",
+                    "-b:a", "128k",
                     "-movflags", "+faststart",
                     outputPath
             );
