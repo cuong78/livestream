@@ -26,6 +26,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,6 +55,9 @@ public class RecordingService {
     
     private static final int MAX_MERGE_RETRIES = 2;
     private static final int RETRY_DELAY_MS = 10000;
+    
+    // Lock to prevent parallel merges for the same date
+    private final Set<LocalDate> mergingDates = ConcurrentHashMap.newKeySet();
     
     /**
      * Callback from SRS when DVR file is created
@@ -154,29 +159,56 @@ public class RecordingService {
     @Async
     @Transactional
     public void mergeRecordingsForDate(LocalDate date) {
-        for (int attempt = 1; attempt <= MAX_MERGE_RETRIES; attempt++) {
-            log.info("Merge attempt {} of {} for date: {}", attempt, MAX_MERGE_RETRIES, date);
-            
-            boolean success = attemptMerge(date);
-            
-            if (success) {
-                log.info("Merge successful on attempt {} for date: {}", attempt, date);
+        // Prevent parallel merges for the same date
+        if (!mergingDates.add(date)) {
+            log.warn("Merge already in progress for date: {}, skipping duplicate request", date);
+            return;
+        }
+        
+        // Check if already merged or processing
+        Optional<DailyRecording> existingOpt = dailyRecordingRepository.findByRecordingDate(date);
+        if (existingOpt.isPresent()) {
+            DailyRecording existing = existingOpt.get();
+            if (existing.getStatus() == DailyRecordingStatus.PROCESSING) {
+                log.warn("Merge already processing for date: {}, skipping", date);
+                mergingDates.remove(date);
                 return;
             }
-            
-            if (attempt < MAX_MERGE_RETRIES) {
-                log.warn("Merge failed on attempt {}, retrying in {} seconds...", attempt, RETRY_DELAY_MS / 1000);
-                try {
-                    Thread.sleep(RETRY_DELAY_MS);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    log.error("Retry interrupted for date: {}", date);
-                    return;
-                }
+            if (existing.getStatus() == DailyRecordingStatus.READY && existing.getVideoUrl() != null) {
+                log.warn("Video already merged for date: {}, skipping", date);
+                mergingDates.remove(date);
+                return;
             }
         }
         
-        log.error("All {} merge attempts failed for date: {}", MAX_MERGE_RETRIES, date);
+        try {
+            for (int attempt = 1; attempt <= MAX_MERGE_RETRIES; attempt++) {
+                log.info("Merge attempt {} of {} for date: {}", attempt, MAX_MERGE_RETRIES, date);
+                
+                boolean success = attemptMerge(date);
+                
+                if (success) {
+                    log.info("Merge successful on attempt {} for date: {}", attempt, date);
+                    return;
+                }
+                
+                if (attempt < MAX_MERGE_RETRIES) {
+                    log.warn("Merge failed on attempt {}, retrying in {} seconds...", attempt, RETRY_DELAY_MS / 1000);
+                    try {
+                        Thread.sleep(RETRY_DELAY_MS);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        log.error("Retry interrupted for date: {}", date);
+                        return;
+                    }
+                }
+            }
+            
+            log.error("All {} merge attempts failed for date: {}", MAX_MERGE_RETRIES, date);
+        } finally {
+            // Always release the lock
+            mergingDates.remove(date);
+        }
     }
     
     /**
@@ -383,17 +415,14 @@ public class RecordingService {
             log.debug("FFmpeg concat list file created: {}", listFile);
             
             // Build FFmpeg command
-            // Re-encode to fix timestamps and ensure proper duration metadata
+            // Use -c copy for fast stream copy (no re-encoding)
+            // Add -movflags +faststart to move moov atom to beginning for web streaming
             ProcessBuilder pb = new ProcessBuilder(
                     "ffmpeg", "-y",
                     "-f", "concat",
                     "-safe", "0",
                     "-i", listFile.toString(),
-                    "-c:v", "libx264",
-                    "-preset", "fast",
-                    "-crf", "23",
-                    "-c:a", "aac",
-                    "-b:a", "128k",
+                    "-c", "copy",
                     "-movflags", "+faststart",
                     outputPath
             );
