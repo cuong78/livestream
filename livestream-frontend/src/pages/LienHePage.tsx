@@ -7,7 +7,7 @@ function LienHePage() {
       {/* Header */}
       <header className="page-header">
         <div className="header-content">
-          <Link to="/trang-chu" className="logo-link">
+          <Link to="/" className="logo-link">
             <img
               src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/z7291002414848_46cd0bf4b57be31aa45972704457e36c_cwe4me.jpg"
               alt="Logo CLB Gà Chọi Long Thần Sói"
@@ -22,7 +22,7 @@ function LienHePage() {
           </Link>
         </div>
         <nav className="main-nav">
-          <Link to="/trang-chu">Trang chủ</Link>
+          <Link to="/">Trang chủ</Link>
           <Link to="/gioi-thieu">Giới thiệu</Link>
           <Link to="/quy-dinh">Quy định</Link>
           <Link to="/lien-he" className="active">
@@ -85,7 +85,7 @@ function LienHePage() {
               <span className="period">Hàng Ngày</span>
             </div>
             <p>Vần xổ gà trực tiếp mỗi ngày</p>
-            <Link to="/trang-chu" className="btn-contact btn-watch">
+            <Link to="/" className="btn-contact btn-watch">
               ▶️ Xem Ngay
             </Link>
           </div>

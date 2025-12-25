@@ -14,13 +14,13 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/trang-chu" replace />} />
-        <Route path="/trang-chu" element={<ViewerPage />} />
+        <Route path="/" element={<Navigate to="/" replace />} />
+        <Route path="/" element={<ViewerPage />} />
         <Route path="/gioi-thieu" element={<GioiThieuPage />} />
         <Route path="/quy-dinh" element={<QuyDinhPage />} />
         <Route path="/lien-he" element={<LienHePage />} />
         <Route path="/admin/stream-settings" element={<StreamSettingsPage />} />
-        <Route path="*" element={<Navigate to="/trang-chu" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );

@@ -16,6 +16,6 @@
   "theme_color": "#dc143c",
   "background_color": "#1a1a1a",
   "display": "standalone",
-  "start_url": "/trang-chu",
+  "start_url": "/",
   "scope": "/"
 }
