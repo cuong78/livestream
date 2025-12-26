@@ -328,17 +328,18 @@ public class RecordingService {
     
     /**
      * Validate merged video file to ensure it's not corrupted
+     * Uses fast validation without counting frames (which is very slow for large files)
      */
     private boolean validateMergedVideo(String videoPath) {
         try {
             log.info("Validating merged video: {}", videoPath);
             
+            // Fast validation: check duration and file size only (no frame counting)
             ProcessBuilder pb = new ProcessBuilder(
                     "ffprobe",
                     "-v", "error",
-                    "-count_frames",
                     "-select_streams", "v:0",
-                    "-show_entries", "stream=nb_read_frames,duration",
+                    "-show_entries", "format=duration,size",
                     "-of", "default=noprint_wrappers=1:nokey=1",
                     videoPath
             );
@@ -369,16 +370,17 @@ public class RecordingService {
             }
             
             try {
-                // ffprobe outputs: duration (line 1), then frame count (line 2)
+                // ffprobe outputs: duration (line 1), then size (line 2)
                 double duration = Double.parseDouble(lines[0].trim());
-                int frameCount = Integer.parseInt(lines[1].trim());
+                long fileSize = Long.parseLong(lines[1].trim());
                 
-                if (frameCount <= 0 || duration <= 0) {
-                    log.error("Video validation failed: frames={}, duration={}", frameCount, duration);
+                // Validate: duration > 0 and file size > 1MB (basic sanity check)
+                if (duration <= 0 || fileSize < 1_000_000) {
+                    log.error("Video validation failed: duration={}, fileSize={}", duration, fileSize);
                     return false;
                 }
                 
-                log.info("Video validated successfully: {} frames, {} seconds", frameCount, duration);
+                log.info("Video validated successfully: {} seconds, {} bytes", duration, fileSize);
                 return true;
                 
             } catch (NumberFormatException e) {
