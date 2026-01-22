@@ -23,7 +23,7 @@ function VideoPage() {
       try {
         const response = await fetch(
           `${
-            import.meta.env.VITE_API_URL || "https://api.gachoilongthansoi.com"
+            import.meta.env.VITE_API_URL || "https://api.utgachoi.com"
           }/api/recordings`
         );
         if (response.ok) {

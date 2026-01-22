@@ -74,7 +74,7 @@ stream:
   rtmp:
     url: ${STREAM_RTMP_URL:rtmp://srs:1935/live}
   hls:
-    base-url: ${STREAM_HLS_BASE_URL:https://gachoilongthansoi.com/hls}
+    base-url: ${STREAM_HLS_BASE_URL:https://utgachoi.com/hls}
     segment-duration: 2
   max-viewers: 10000
 
@@ -82,8 +82,8 @@ stream:
 recording:
   base-path: ${RECORDING_BASE_PATH:/recordings}
   output-path: ${RECORDING_OUTPUT_PATH:/videos}
-  video-url-base: ${RECORDING_VIDEO_URL_BASE:https://gachoilongthansoi.com/videos}
-  thumbnail-url-base: ${RECORDING_THUMBNAIL_URL_BASE:https://gachoilongthansoi.com/videos/thumbnails}
+  video-url-base: ${RECORDING_VIDEO_URL_BASE:https://utgachoi.com/videos}
+  thumbnail-url-base: ${RECORDING_THUMBNAIL_URL_BASE:https://utgachoi.com/videos/thumbnails}
   retention-days: ${RECORDING_RETENTION_DAYS:3}
 
 # Goong Maps API Configuration
