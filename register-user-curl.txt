@@ -1,0 +1,31 @@
+# Lệnh curl để đăng ký tài khoản
+
+# Cách 1: Với email mặc định
+curl -X POST "https://utgachoi.com/api/auth/register" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "anhut7979",
+    "password": "anhut7979",
+    "email": "anhut7979@example.com"
+  }'
+
+# Cách 2: Với email tùy chỉnh (thay YOUR_EMAIL@example.com)
+curl -X POST "https://utgachoi.com/api/auth/register" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "anhut7979",
+    "password": "anhut7979",
+    "email": "YOUR_EMAIL@example.com"
+  }'
+
+# Cách 3: Format đẹp hơn với jq (nếu đã cài jq)
+curl -X POST "https://utgachoi.com/api/auth/register" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "anhut7979",
+    "password": "anhut7979",
+    "email": "anhut7979@example.com"
+  }' | jq '.'
+
+# Cách 4: Một dòng (dễ copy)
+curl -X POST "https://utgachoi.com/api/auth/register" -H "Content-Type: application/json" -d '{"username":"anhut7979","password":"anhut7979","email":"anhut7979@example.com"}'
