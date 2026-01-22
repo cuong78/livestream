@@ -140,7 +140,7 @@ public class RecordingService {
     private void ensureDailyRecordingExists(LocalDate date) {
         if (!dailyRecordingRepository.existsByRecordingDate(date)) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String title = "Video Xem Lại Tối " + date.format(formatter) + " – CLB Gà Chọi Long Thần Sói";
+            String title = "Video Xem Lại Tối " + date.format(formatter) + " – ÚT GÀ CHỌI";
             
             DailyRecording dailyRecording = DailyRecording.builder()
                     .recordingDate(date)
@@ -269,7 +269,7 @@ public class RecordingService {
                     return false;
                 }
                 // Use simple base image as thumbnail (date will be shown in title below)
-                String thumbnailUrl = "https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/unnamed_1_hcdvhw.jpg";
+                String thumbnailUrl = "https://res.cloudinary.com/duklfdbqf/image/upload/v1769088974/unname22d_cqnryy.jpg";
                 
                 // Get duration and file size
                 long duration = getVideoDuration(outputFilePath);

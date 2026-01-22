@@ -9,12 +9,12 @@ function LienHePage() {
         <div className="header-content">
           <Link to="/" className="logo-link">
             <img
-              src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/z7291002414848_46cd0bf4b57be31aa45972704457e36c_cwe4me.jpg"
-              alt="Logo CLB Gà Chọi Long Thần Sói"
+              src="https://res.cloudinary.com/duklfdbqf/image/upload/v1769088960/z7457929850853_bcb74ba3c41a23af4850bdca80ae7632_q6g4dl.jpg"
+              alt="Logo ÚT GÀ CHỌI"
               className="header-logo"
             />
             <div className="header-text">
-              <h1>CLB Gà Chọi Long Thần Sói</h1>
+              <h1>ÚT GÀ CHỌI</h1>
               <p className="header-subtitle">
                 Kích vào trang chủ để xem video trực tiếp
               </p>
@@ -46,12 +46,12 @@ function LienHePage() {
           <div className="contact-card hotline">
             <div className="card-icon">📞</div>
             <h2>Hotline / Zalo</h2>
-            <a href="tel:0869801559" className="phone-number">
-              0869 801 559
+            <a href="tel:0865232980" className="phone-number">
+              0865232980
             </a>
             <p>Gọi điện hoặc nhắn Zalo để được tư vấn nhanh nhất</p>
             <a
-              href="https://zalo.me/0869801559"
+              href="https://zalo.me/0865232980"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-contact btn-zalo"
@@ -64,7 +64,7 @@ function LienHePage() {
             <div className="card-icon">📍</div>
             <h2>Địa Chỉ</h2>
             <p className="address-text">
-              <strong>Thôn Giai Sơn, An Mỹ, Tuy An, Phú Yên</strong>
+              <strong>Thôn Hòa Đa, Xã Tuy An Nam, Tỉnh Đắk Lắk</strong>
             </p>
             <p>Anh em có thể đến trực tiếp xem gà và giao lưu</p>
             <a
@@ -96,7 +96,7 @@ function LienHePage() {
           <h2>🌐 Kết Nối Mạng Xã Hội</h2>
           <div className="social-grid">
             <a
-              href="https://zalo.me/0869801559"
+              href="https://zalo.me/0865232980"
               target="_blank"
               rel="noopener noreferrer"
               className="social-card zalo"
@@ -113,7 +113,7 @@ function LienHePage() {
             </a>
 
             <a
-              href="https://zalo.me/g/qrrpoi053"
+              href="https://zalo.me/g/ktbnws069"
               target="_blank"
               rel="noopener noreferrer"
               className="social-card zalo-group"
@@ -130,7 +130,7 @@ function LienHePage() {
             </a>
 
             <a
-              href="https://www.facebook.com/ganhdua.trai"
+              href="https://www.facebook.com/ut.phu.yen.bonsai"
               target="_blank"
               rel="noopener noreferrer"
               className="social-card facebook"
@@ -154,15 +154,15 @@ function LienHePage() {
           <div className="bank-card">
             <div className="bank-logo">🏦</div>
             <div className="bank-info">
-              <p className="bank-name">Ngân hàng MB (MBBank)</p>
-              <p className="account-number">0869801559</p>
+              <p className="bank-name">vietinbank (MBBank)</p>
+              <p className="account-number">0865232980</p>
               <p className="account-holder">VŨ THỊ MAI THẢO</p>
             </div>
             <button
               className="btn-copy"
               onClick={() => {
-                navigator.clipboard.writeText("0869801559");
-                alert("Đã sao chép số tài khoản!");
+                navigator.clipboard.writeText("0865232980");
+                alert("Đã sao chép !");
               }}
             >
               📋 Sao Chép STK
@@ -180,7 +180,7 @@ function LienHePage() {
             <div className="faq-item">
               <h3>Làm sao để mua gà?</h3>
               <p>
-                Anh em liên hệ trực tiếp qua Zalo 0869801559 để được tư vấn và
+                Anh em liên hệ trực tiếp qua Zalo 0865232980 để được tư vấn và
                 xem gà. Hỗ trợ giao gà đi các tỉnh.
               </p>
             </div>
@@ -213,8 +213,8 @@ function LienHePage() {
           <h2>Liên Hệ Ngay Hôm Nay!</h2>
           <p>Chúng tôi luôn sẵn sàng hỗ trợ anh em</p>
           <div className="cta-buttons">
-            <a href="tel:0869801559" className="btn-call">
-              📞 Gọi Ngay: 0869 801 559
+            <a href="tel:0865232980" className="btn-call">
+              📞 Gọi Ngay: 0865232980
             </a>
           </div>
         </section>
@@ -223,11 +223,11 @@ function LienHePage() {
       {/* Footer */}
       <footer className="page-footer">
         <p>
-          © 2025 CLB Gà Chọi Long Thần Sói - Thôn Giai Sơn, An Mỹ, Tuy An, Phú
+          © 2025 ÚT GÀ CHỌI - Thôn Giai Sơn, An Mỹ, Tuy An, Phú
           Yên
         </p>
         <p>
-          Hotline/Zalo: <a href="tel:0869801559">0869 801 559</a>
+          Hotline/Zalo: <a href="tel:0865232980">0865232980</a>
         </p>
       </footer>
     </div>

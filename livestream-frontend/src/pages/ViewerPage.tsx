@@ -147,7 +147,7 @@ const ViewerPage = () => {
 
   const copyBankAccount = () => {
     navigator.clipboard.writeText("0966689355");
-    alert("Đã sao chép số tài khoản!");
+    alert("Đã sao chép !");
   };
 
   const handleLoginSuccess = (token: string, user: any) => {
@@ -285,12 +285,12 @@ const ViewerPage = () => {
           <div className="header-content">
             <div className="logo-section">
               <img
-                src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/z7291002414848_46cd0bf4b57be31aa45972704457e36c_cwe4me.jpg"
-                alt="CLB Gà Chọi Long Thần Sói"
+                src="https://res.cloudinary.com/duklfdbqf/image/upload/v1769088960/z7457929850853_bcb74ba3c41a23af4850bdca80ae7632_q6g4dl.jpg"
+                alt="ÚT GÀ CHỌI"
                 className="logo"
               />
               <div className="site-title">
-                <h1>CLB GÀ CHỌI LONG THẦN SÓI</h1>
+                <h1>ÚT GÀ CHỌI</h1>
                 <p className="subtitle">Tinh Hoa Việt</p>
               </div>
             </div>
@@ -361,7 +361,7 @@ const ViewerPage = () => {
                 {server}
               </button>
             ))}
-            <a href="tel:0869801559" className="phone-btn">
+            <a href="tel:0865232980" className="phone-btn">
               📞
             </a>
           </div>
@@ -386,27 +386,23 @@ const ViewerPage = () => {
             ) : (
               <div className="video-placeholder">
                 <img
-                  src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/unnamed_1_hcdvhw.jpg"
-                  alt="CLB Gà Chọi Long Thần Sói"
+                  src="https://res.cloudinary.com/duklfdbqf/image/upload/v1769088974/unname22d_cqnryy.jpg"
+                  alt="ÚT GÀ CHỌI"
                   className="cover-image"
                 />
                 <div className="play-button-overlay">
                   <div className="play-button-circle">
-                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                    <svg width="50" height="50" viewBox="0 0 80 80" fill="none">
                       <circle
                         cx="40"
                         cy="40"
                         r="38"
-                        fill="rgba(220, 20, 60, 0.9)"
-                        stroke="#FFD700"
                         strokeWidth="4"
                       />
                       <path d="M32 25L55 40L32 55V25Z" fill="white" />
                     </svg>
                   </div>
-                  <p className="play-button-text">
-                    Stream offline - Vần xổ gà 18h hàng ngày
-                  </p>
+                  
                 </div>
               </div>
             )}
@@ -444,15 +440,15 @@ const ViewerPage = () => {
           <h2 className="section-title">Kết Nối Đam Mê</h2>
           <div className="contact-card">
             <div className="phone-display">
-              <a href="tel:0869801559" className="phone-number">
-                0869 801 559
+              <a href="tel:0865232980" className="phone-number">
+                0865232980
               </a>
               <p className="contact-label">Hotline/Zalo liên hệ</p>
             </div>
 
             <div className="social-links">
               <a
-                href="https://zalo.me/0869801559"
+                href="https://zalo.me/0865232980"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-btn zalo-personal"
@@ -469,7 +465,7 @@ const ViewerPage = () => {
               </a>
 
               <a
-                href="https://zalo.me/g/qrrpoi053"
+                href="https://zalo.me/g/ktbnws069"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-btn zalo-group"
@@ -486,7 +482,7 @@ const ViewerPage = () => {
               </a>
 
               <a
-                href="https://www.facebook.com/ganhdua.trai"
+                href="https://www.facebook.com/ut.phu.yen.bonsai"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-btn facebook"
@@ -498,7 +494,7 @@ const ViewerPage = () => {
                 />
                 <div className="social-text">
                   <span>KÊNH FACEBOOK</span>
-                  <small>📱 Theo Dõi Fanpage CLB Gà Chọi Long Thần Sói</small>
+                  <small>📱 Theo Dõi Fanpage ÚT GÀ CHỌI</small>
                 </div>
               </a>
             </div>
@@ -528,13 +524,13 @@ const ViewerPage = () => {
             <h3>Thông Tin Chuyển Khoản</h3>
             <div className="bank-details">
               <p>
-                <strong>Ngân hàng MB</strong>
+                <strong>vietinbank</strong>
               </p>
               <p>
                 Tên người nhận: <strong>Nguyễn Văn Cư</strong>
               </p>
               <p>
-                Số tài khoản: <strong>0985340254</strong>
+                : <strong>0865232980</strong>
               </p>
               <button className="btn-copy" onClick={copyBankAccount}>
                 📋 Sao chép STK
@@ -581,7 +577,7 @@ const ViewerPage = () => {
           </h2>
           <p className="archive-desc">
             Nơi lưu trữ các video vần xổ gà chọi được quay trực tiếp hàng ngày
-            18h tại thôn Giai Sơn, An Mỹ, Tuy An, Phú Yên
+            18h tại Thôn Hòa Đa, Xã Tuy An Nam, Tỉnh Đắk Lắk
           </p>
 
           {/* Admin: Upload Video Button */}
@@ -610,7 +606,7 @@ const ViewerPage = () => {
                     <img
                       src={
                         recording.thumbnailUrl ||
-                        "https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/unnamed_1_hcdvhw.jpg"
+                        "https://res.cloudinary.com/duklfdbqf/image/upload/v1769088974/unname22d_cqnryy.jpg"
                       }
                       alt={recording.title}
                     />
@@ -673,7 +669,7 @@ const ViewerPage = () => {
               </button>
               <div className="modal-header">
                 <img
-                  src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/z7291002414848_46cd0bf4b57be31aa45972704457e36c_cwe4me.jpg"
+                  src="https://res.cloudinary.com/duklfdbqf/image/upload/v1769088960/z7457929850853_bcb74ba3c41a23af4850bdca80ae7632_q6g4dl.jpg"
                   alt="Logo"
                   className="modal-logo"
                 />
@@ -682,23 +678,23 @@ const ViewerPage = () => {
               <div className="modal-body">
                 <p>
                   • Chào mừng bạn đến với{" "}
-                  <strong>CLB Gà Chọi Long Thần Sói</strong> nơi tạo ra sân chơi
+                  <strong>ÚT GÀ CHỌI</strong> nơi tạo ra sân chơi
                   phục vụ niềm đam mê gà đòn cho anh em 24/7.
                 </p>
                 <p>
-                  • Tại CLB Gà Chọi Long Thần Sói bạn có thể tìm hiểu về kiến
+                  • Tại ÚT GÀ CHỌI bạn có thể tìm hiểu về kiến
                   thức về gà đòn, hay đơn giản là thưởng thức những video xổ gà
                   trong những lúc rảnh rỗi. CLB sẽ đưa đến cho bạn những thông
                   tin mới nhất về giống gà đòn, kinh nghiệm chăm sóc gà, cách
                   huấn luyện gà chọi và nhiều hơn thế nữa.
                 </p>
                 <p>
-                  • <strong>CLB Gà Chọi Long Thần Sói</strong> còn cung cấp con
+                  • <strong>ÚT GÀ CHỌI</strong> còn cung cấp con
                   giống gà đòn cho những ai đang quan tâm đến việc nuôi gà đòn.
                 </p>
                 <div className="intro-images">
                   <img
-                    src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/unnamed_1_hcdvhw.jpg"
+                    src="https://res.cloudinary.com/duklfdbqf/image/upload/v1769088974/unname22d_cqnryy.jpg"
                     alt="CLB Gà Chọi"
                   />
                 </div>
@@ -755,27 +751,27 @@ const ViewerPage = () => {
         <div className="container">
           <div className="footer-grid">
             <div className="footer-col">
-              <h3>CLB Gà Chọi Long Thần Sói</h3>
+              <h3>ÚT GÀ CHỌI</h3>
               <ul>
                 <li>• Vần xổ gà trực tiếp 18h hàng ngày</li>
                 <li>• Giao lưu mua bán gà chọi đi các tỉnh</li>
               </ul>
               <h3>Chuyển Khoản</h3>
-              <p>🏦 Ngân hàng MB</p>
+              <p>🏦 vietinbank</p>
               <p>
-                💳 STK: <strong>0985340254</strong>
+                💳 STK: <strong>0865232980</strong>
               </p>
-              <p>👤 Nguyễn Văn Cư</p>
+              <p>👤Nguyễn Văn tám</p>
             </div>
             <div className="footer-col">
               <h3>Liên Hệ</h3>
               <h3>
-                <a href="tel:0869801559">📞 0869 801 559</a>
+                <a href="tel:0865232980">📞 0865232980</a>
               </h3>
-              <p>📍 Thôn Giai Sơn, An Mỹ, Tuy An, Phú Yên</p>
+              <p>📍 Thôn Hòa Đa, Xã Tuy An Nam, Tỉnh Đắk Lắk</p>
               <div className="social-links" style={{ marginTop: "15px" }}>
                 <a
-                  href="https://zalo.me/g/qrrpoi053"
+                  href="https://zalo.me/g/ktbnws069"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
@@ -799,7 +795,7 @@ const ViewerPage = () => {
                   Nhóm Zalo VIP
                 </a>
                 <a
-                  href="https://www.facebook.com/ganhdua.trai"
+                  href="https://www.facebook.com/ut.phu.yen.bonsai"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ color: "#1877F2", textDecoration: "none" }}
@@ -812,7 +808,7 @@ const ViewerPage = () => {
               <h3>Quy Định</h3>
               <ul>
                 <li>
-                  • Website CLB Gà Chọi Long Thần Sói hoạt động với hình thức
+                  • Website ÚT GÀ CHỌI hoạt động với hình thức
                   giải trí, vui lòng không cá độ dưới mọi hình thức vi phạm pháp
                   luật Việt Nam
                 </li>
@@ -827,9 +823,9 @@ const ViewerPage = () => {
             <p
               style={{ fontSize: "16px", fontWeight: "bold", color: "#ffd700" }}
             >
-              🎨 Thiết kế bởi Anh Cương (Sinh viên) - ☎️ 0387683857
+              🎨 Thiết kế bởi Anh Cương  - ☎️ 0387683857
             </p>
-            <p>Bản quyền thuộc về CLB Gà Chọi Long Thần Sói © 2025</p>
+            <p>Bản quyền thuộc về ÚT GÀ CHỌI © 2025</p>
           </div>
         </div>
       </footer>
@@ -894,7 +890,7 @@ const ViewerPage = () => {
 
       {/* Floating Action Buttons */}
       <div className="floating-buttons">
-        <a href="tel:0869801559" className="fab-btn fab-phone" title="Gọi Ngay">
+        <a href="tel:0865232980" className="fab-btn fab-phone" title="Gọi Ngay">
           <span className="fab-icon">
             <img
               src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764553112/yellow-phone-icon-11_pypubp.png"
@@ -904,7 +900,7 @@ const ViewerPage = () => {
           <span className="fab-text">Gọi Ngay</span>
         </a>
         <a
-          href="https://zalo.me/0869801559"
+          href="https://zalo.me/0865232980"
           target="_blank"
           rel="noopener noreferrer"
           className="fab-btn fab-zalo"

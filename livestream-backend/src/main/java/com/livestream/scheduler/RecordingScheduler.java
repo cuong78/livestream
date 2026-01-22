@@ -6,12 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-
-/**
- * Scheduled tasks for recording management:
- * - Clean up old recordings (older than 3 days) at 01:00 daily
- * - Manual merge is triggered by admin via API after livestream ends
- */
 @Component
 @RequiredArgsConstructor
 @Slf4j

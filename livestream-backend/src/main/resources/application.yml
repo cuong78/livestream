@@ -5,7 +5,7 @@ spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/livestream_db}
     username: ${SPRING_DATASOURCE_USERNAME:livestream_user}
-    password: ${SPRING_DATASOURCE_PASSWORD:livestream_pass}
+    password: ${SPRING_DATASOURCE_PASSWORD:123456}
     driver-class-name: org.postgresql.Driver
 
   jpa:

@@ -56,12 +56,12 @@ function VideoPage() {
         <div className="header-content">
           <Link to="/" className="logo-link">
             <img
-              src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/z7291002414848_46cd0bf4b57be31aa45972704457e36c_cwe4me.jpg"
-              alt="Logo CLB Gà Chọi Long Thần Sói"
+              src="https://res.cloudinary.com/duklfdbqf/image/upload/v1769088960/z7457929850853_bcb74ba3c41a23af4850bdca80ae7632_q6g4dl.jpg"
+              alt="Logo ÚT GÀ CHỌI"
               className="header-logo"
             />
             <div className="header-text">
-              <h1>CLB Gà Chọi Long Thần Sói</h1>
+              <h1>ÚT GÀ CHỌI</h1>
               <p className="header-subtitle">
                 Kích vào trang chủ để xem video trực tiếp
               </p>
@@ -197,7 +197,7 @@ function VideoPage() {
           <p>Theo dõi kênh để nhận thông báo mỗi khi có livestream mới</p>
           <div className="cta-buttons">
             <a
-              href="https://zalo.me/0869801559"
+              href="https://zalo.me/0865232980"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-zalo"
@@ -205,7 +205,7 @@ function VideoPage() {
               📱 Theo Dõi Zalo
             </a>
             <a
-              href="https://www.facebook.com/ganhdua.trai"
+              href="https://www.facebook.com/ut.phu.yen.bonsai"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-facebook"
@@ -219,11 +219,11 @@ function VideoPage() {
       {/* Footer */}
       <footer className="page-footer">
         <p>
-          © 2025 CLB Gà Chọi Long Thần Sói - Thôn Giai Sơn, An Mỹ, Tuy An, Phú
+          © 2025 ÚT GÀ CHỌI - Thôn Giai Sơn, An Mỹ, Tuy An, Phú
           Yên
         </p>
         <p>
-          Hotline/Zalo: <a href="tel:0869801559">0869 801 559</a>
+          Hotline/Zalo: <a href="tel:0865232980">0865232980</a>
         </p>
       </footer>
     </div>

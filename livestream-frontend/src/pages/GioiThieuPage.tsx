@@ -9,12 +9,12 @@ function GioiThieuPage() {
         <div className="header-content">
           <Link to="/" className="logo-link">
             <img
-              src="https://res.cloudinary.com/duklfdbqf/image/upload/v1764830389/z7291002414848_46cd0bf4b57be31aa45972704457e36c_cwe4me.jpg"
-              alt="Logo CLB Gà Chọi Long Thần Sói"
+              src="https://res.cloudinary.com/duklfdbqf/image/upload/v1769088960/z7457929850853_bcb74ba3c41a23af4850bdca80ae7632_q6g4dl.jpg"
+              alt="Logo ÚT GÀ CHỌI"
               className="header-logo"
             />
             <div className="header-text">
-              <h1>CLB Gà Chọi Long Thần Sói</h1>
+              <h1>ÚT GÀ CHỌI</h1>
               <p className="header-subtitle">
                 Kích vào trang chủ để xem video trực tiếp
               </p>
@@ -34,7 +34,7 @@ function GioiThieuPage() {
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-overlay">
-          <h1>Giới Thiệu CLB Gà Chọi Long Thần Sói</h1>
+          <h1>Giới Thiệu ÚT GÀ CHỌI</h1>
           <p>Nơi hội tụ đam mê - Giao lưu chiến kê toàn quốc</p>
         </div>
       </section>
@@ -44,7 +44,7 @@ function GioiThieuPage() {
         <section className="about-section">
           <h2>🐓 Về Chúng Tôi</h2>
           <p>
-            <strong>CLB Gà Chọi Long Thần Sói</strong> được thành lập với mục
+            <strong>ÚT GÀ CHỌI</strong> được thành lập với mục
             đích tạo ra một cộng đồng giao lưu, chia sẻ kinh nghiệm nuôi dưỡng
             và chăm sóc gà chọi cho những người yêu thích bộ môn này trên khắp
             cả nước.
@@ -60,10 +60,10 @@ function GioiThieuPage() {
           <h2>📍 Địa Chỉ</h2>
           <div className="address-box">
             <p>
-              <strong>Thôn Giai Sơn, An Mỹ, Tuy An, Phú Yên</strong>
+              <strong>Thôn Hòa Đa, Xã Tuy An Nam, Tỉnh Đắk Lắk</strong>
             </p>
             <p>
-              📞 Hotline/Zalo: <a href="tel:0869801559">0869 801 559</a>
+              📞 Hotline/Zalo: <a href="tel:0865232980">0865232980</a>
             </p>
           </div>
         </section>
@@ -110,7 +110,7 @@ function GioiThieuPage() {
           <h2>Tham Gia Cộng Đồng Ngay!</h2>
           <div className="cta-buttons">
             <a
-              href="https://zalo.me/0869801559"
+              href="https://zalo.me/0865232980"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-zalo"
@@ -118,7 +118,7 @@ function GioiThieuPage() {
               📱 Kết Bạn Zalo
             </a>
             <a
-              href="https://www.facebook.com/ganhdua.trai"
+              href="https://www.facebook.com/ut.phu.yen.bonsai"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-facebook"
@@ -135,11 +135,11 @@ function GioiThieuPage() {
       {/* Footer */}
       <footer className="page-footer">
         <p>
-          © 2025 CLB Gà Chọi Long Thần Sói - Thôn Giai Sơn, An Mỹ, Tuy An, Phú
+          © 2025 ÚT GÀ CHỌI - Thôn Giai Sơn, An Mỹ, Tuy An, Phú
           Yên
         </p>
         <p>
-          Hotline/Zalo: <a href="tel:0869801559">0869 801 559</a>
+          Hotline/Zalo: <a href="tel:0865232980">0865232980</a>
         </p>
       </footer>
     </div>
