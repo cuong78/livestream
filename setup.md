@@ -181,7 +181,7 @@ server {
     }
     
     location /live {
-        proxy_pass http://localhost:8081/live;
+        proxy_pass http://localhost:8081;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -243,7 +243,7 @@ CORS_ALLOWED_ORIGINS=https://utgachoi.com
 
 # Stream Configuration
 STREAM_RTMP_URL=rtmp://srs:1935/live
-STREAM_HLS_BASE_URL=https://utgachoi.com/live
+STREAM_HLS_BASE_URL=https://utgachoi.com
 
 # Recording Configuration
 RECORDING_BASE_PATH=/recordings
@@ -756,4 +756,8 @@ docker logs livestream-srs
 - Tất cả các biến khác được định nghĩa trong file `.env`
 
 
-
+chạy các file sh 
+scp fix-nginx-hls.sh root@72.61.119.173:/root/
+ssh root@72.61.119.173
+chmod +x /root/fix-nginx-hls.sh
+/root/fix-nginx-hls.sh
