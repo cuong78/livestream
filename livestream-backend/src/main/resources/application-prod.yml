@@ -74,7 +74,7 @@ stream:
   rtmp:
     url: ${STREAM_RTMP_URL:rtmp://srs:1935/live}
   hls:
-    base-url: ${STREAM_HLS_BASE_URL:https://utgachoi.com/hls}
+    base-url: ${STREAM_HLS_BASE_URL:https://utgachoi.com}
     segment-duration: 2
   max-viewers: 10000
 
