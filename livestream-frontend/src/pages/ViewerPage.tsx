@@ -527,7 +527,7 @@ const ViewerPage = () => {
                 <strong>vietinbank</strong>
               </p>
               <p>
-                Tên người nhận: <strong>Nguyễn Văn Cư</strong>
+                Tên người nhận: <strong>Nguyễn Văn Tám</strong>
               </p>
               <p>
                 : <strong>0865232980</strong>

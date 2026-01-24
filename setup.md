@@ -188,7 +188,6 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         add_header Cache-Control no-cache;
-        add_header Access-Control-Allow-Origin *;
     }
     
     location /videos {
@@ -383,24 +382,23 @@ EOL
 cat > nginx-hls.conf << 'EOL'
 server {
     listen 80;
-    server_name localhost;
     
-    # HLS streaming files
+    # HLS live streaming
     location /live {
         root /usr/share/nginx/html;
-        add_header Cache-Control no-cache;
-        add_header Access-Control-Allow-Origin *;
-        add_header Access-Control-Allow-Methods 'GET, OPTIONS';
-        add_header Access-Control-Allow-Headers 'Range';
+        add_header Cache-Control no-cache always;
+        add_header Access-Control-Allow-Origin * always;
+        add_header Access-Control-Allow-Methods "GET, OPTIONS" always;
+        add_header Access-Control-Allow-Headers "Range" always;
         
         # CORS preflight
         if ($request_method = 'OPTIONS') {
-            add_header Access-Control-Allow-Origin *;
-            add_header Access-Control-Allow-Methods 'GET, OPTIONS';
-            add_header Access-Control-Allow-Headers 'Range';
-            add_header Access-Control-Max-Age 1728000;
-            add_header Content-Type 'text/plain charset=UTF-8';
-            add_header Content-Length 0;
+            add_header Access-Control-Allow-Origin * always;
+            add_header Access-Control-Allow-Methods 'GET, OPTIONS' always;
+            add_header Access-Control-Allow-Headers 'Range' always;
+            add_header Access-Control-Max-Age 1728000 always;
+            add_header Content-Type 'text/plain charset=UTF-8' always;
+            add_header Content-Length 0 always;
             return 204;
         }
         
@@ -410,24 +408,31 @@ server {
         }
     }
     
-    # Video recordings
-    location /videos {
-        root /usr/share/nginx/html;
-        add_header Cache-Control public, max-age=3600;
-        add_header Access-Control-Allow-Origin *;
+    # Video recordings for replay
+    location /videos/ {
+        alias /usr/share/nginx/html/videos/;
+        add_header Cache-Control "public, max-age=86400" always;
+        add_header Access-Control-Allow-Origin * always;
+        add_header Access-Control-Allow-Methods "GET, OPTIONS" always;
+        add_header Access-Control-Allow-Headers "*" always;
         
+        # Enable range requests for video seeking
+        add_header Accept-Ranges bytes always;
+        
+        # MIME types for video files
         types {
             video/mp4 mp4;
+            video/x-flv flv;
             image/jpeg jpg jpeg;
             image/png png;
         }
     }
     
-    # Default location
-    location / {
-        root /usr/share/nginx/html;
-        add_header Cache-Control no-cache;
-        add_header Access-Control-Allow-Origin *;
+    # Thumbnails
+    location /videos/thumbnails/ {
+        alias /usr/share/nginx/html/videos/thumbnails/;
+        add_header Cache-Control "public, max-age=86400" always;
+        add_header Access-Control-Allow-Origin * always;
     }
 }
 EOL
@@ -757,7 +762,7 @@ docker logs livestream-srs
 
 
 chạy các file sh 
-scp fix-nginx-hls.sh root@72.61.119.173:/root/
+scp setup-utphuyen-domain.sh root@72.61.119.173:/root/
 ssh root@72.61.119.173
-chmod +x /root/fix-nginx-hls.sh
-/root/fix-nginx-hls.sh
+chmod +x /root/setup-utphuyen-domain.sh
+/root/setup-utphuyen-domain.sh
