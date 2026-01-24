@@ -487,6 +487,7 @@ vhost __defaultVhost__ {
         on_unpublish    http://backend:8080/api/stream/callback/unpublish;
         on_play         http://backend:8080/api/stream/callback/play;
         on_stop         http://backend:8080/api/stream/callback/stop;
+        on_dvr          http://backend:8080/api/recordings/callback/dvr;
     }
 }
 EOL
