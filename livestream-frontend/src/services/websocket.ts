@@ -8,6 +8,7 @@ export class WebSocketService {
   private onHistoryCallback: ((comments: Comment[]) => void) | null = null;
   private onViewerCountCallback: ((count: number) => void) | null = null;
   private onCommentDeletedCallback: ((comment: Comment) => void) | null = null;
+    private viewerCountIntervalId: number | null = null;
 
   connect(
     onMessage: (comment: Comment) => void,
@@ -53,6 +54,19 @@ export class WebSocketService {
           destination: "/app/viewer-count/request",
           body: JSON.stringify({}),
         });
+
+        // Periodically request viewer count to keep it in sync
+        if (this.viewerCountIntervalId !== null) {
+          window.clearInterval(this.viewerCountIntervalId);
+        }
+        this.viewerCountIntervalId = window.setInterval(() => {
+          if (this.client?.connected) {
+            this.client.publish({
+              destination: "/app/viewer-count/request",
+              body: JSON.stringify({}),
+            });
+          }
+        }, 30000); // every 30 seconds
       }
 
       // Subscribe to comment deleted events
@@ -112,6 +126,10 @@ export class WebSocketService {
   }
 
   disconnect(): void {
+    if (this.viewerCountIntervalId !== null) {
+      window.clearInterval(this.viewerCountIntervalId);
+      this.viewerCountIntervalId = null;
+    }
     if (this.client) {
       this.client.deactivate();
       this.client = null;
