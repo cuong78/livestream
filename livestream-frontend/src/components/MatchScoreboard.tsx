@@ -119,7 +119,7 @@ const MatchScoreboard: React.FC<MatchScoreboardProps> = ({ stompClient }) => {
         </div>
 
         <div className="fighter-info fighter-blue">
-          <div className="fighter-label">Xanh</div>
+          <div className="fighter-label">Đen</div>
           <div className="fighter-weight">
             {matchInfo.blueWeight.toFixed(2)} kg
           </div>

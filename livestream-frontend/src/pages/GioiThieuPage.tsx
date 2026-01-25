@@ -44,15 +44,18 @@ function GioiThieuPage() {
         <section className="about-section">
           <h2>🐓 Về Chúng Tôi</h2>
           <p>
-            <strong>ÚT GÀ CHỌI</strong> được thành lập với mục
+            <strong>Út Gà Chọi</strong> (ÚT GÀ CHỌI) được thành lập với mục
             đích tạo ra một cộng đồng giao lưu, chia sẻ kinh nghiệm nuôi dưỡng
             và chăm sóc gà chọi cho những người yêu thích bộ môn này trên khắp
-            cả nước.
+            cả nước. Út Gà Chọi là CLB gà chọi hàng đầu tại Phú Yên, nơi hội tụ
+            đam mê của anh em yêu thích gà chọi.
           </p>
           <p>
-            Chúng tôi tổ chức{" "}
+            Út Gà Chọi tổ chức{" "}
             <strong>vần xổ gà trực tiếp lúc 18h hàng ngày</strong>, mang đến cho
             anh em những trận đấu gay cấn, hấp dẫn với chất lượng hình ảnh HD.
+            Đến với Út Gà Chọi, bạn sẽ được trải nghiệm những trận đấu gà chọi
+            chất lượng cao nhất.
           </p>
         </section>
 

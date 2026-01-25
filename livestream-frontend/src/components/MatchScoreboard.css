@@ -3,7 +3,12 @@
   top: 10px;
   left: 10px;
   z-index: 100;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
   animation: slideInLeft 0.4s ease-out;
 }
 
@@ -44,17 +49,17 @@
 
 .match-label {
   color: #ffd700;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 700;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
 }
 
 .scoreboard-content {
   display: flex;
-  gap: 4px;
+  gap: 8px;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 .fighter-info {
@@ -65,9 +70,9 @@
 }
 
 .fighter-label {
-  font-size: 13px;
+  font-size: 18px;
   font-weight: 700;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
   text-transform: uppercase;
 }
 
@@ -76,14 +81,14 @@
 }
 
 .fighter-blue .fighter-label {
-  color: #5f27cd;
+  color: #1a1a1a;
 }
 
 .fighter-weight {
   color: white;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
   line-height: 1;
 }
 
@@ -92,7 +97,7 @@
 }
 
 .fighter-blue .fighter-weight {
-  color: #5f27cd;
+  color: #1a1a1a;
 }
 
 .versus-divider {
@@ -106,8 +111,8 @@
 }
 
 .vs-icon {
-  font-size: 28px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  font-size: 36px;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.7));
   animation: pulse 2s ease-in-out infinite;
 }
 
@@ -126,36 +131,56 @@
   .match-scoreboard {
     top: 8px;
     left: 8px;
-    min-width: 180px;
-    padding: 6px 10px;
+    min-width: 200px;
+    padding: 12px 16px;
+  }
+
+  .match-label {
+    font-size: 16px;
   }
 
   .fighter-weight {
+    font-size: 18px;
+  }
+
+  .fighter-label {
     font-size: 14px;
   }
 
-  .vs-text {
-    font-size: 11px;
+  .vs-icon {
+    font-size: 28px;
+  }
+
+  .scoreboard-content {
+    font-size: 16px;
+    gap: 6px;
   }
 }
 
 @media (max-width: 480px) {
   .match-scoreboard {
-    min-width: 160px;
-    padding: 5px 8px;
-    font-size: 11px;
+    min-width: 180px;
+    padding: 10px 12px;
+  }
+
+  .match-label {
+    font-size: 14px;
   }
 
   .fighter-weight {
-    font-size: 13px;
+    font-size: 16px;
   }
 
   .fighter-label {
-    font-size: 9px;
+    font-size: 12px;
   }
 
-  .match-number-badge {
-    font-size: 10px;
-    padding: 2px 8px;
+  .vs-icon {
+    font-size: 24px;
+  }
+
+  .scoreboard-content {
+    font-size: 14px;
+    gap: 4px;
   }
 }

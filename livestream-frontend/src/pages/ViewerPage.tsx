@@ -506,6 +506,39 @@ const ViewerPage = () => {
               </p>
             </div>
 
+            {/* Google Map Section */}
+            <div className="map-section">
+              <h3 className="map-title">📍 Vị Trí Út Gà Chọi</h3>
+              <div className="map-container">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.1234567890!2d109.1234567!3d13.1234567!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDA3JzI0LjQiTiAxMDnCsDA3JzI0LjQiRQ!5e0!3m2!1svi!2s!4v1234567890123!5m2!1svi!2s"
+                  width="100%"
+                  height="400"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Vị trí Út Gà Chọi - Thôn Giai Sơn, An Mỹ, Tuy An, Phú Yên"
+                ></iframe>
+              </div>
+              <p className="map-note">
+                <a
+                  href="https://share.google/A9T2PvxgPXX533Nyf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="map-link"
+                >
+                  🗺️ Xem bản đồ lớn hơn trên Google Maps
+                </a>
+              </p>
+              <p className="map-instruction">
+                <small>
+                  💡 <strong>Lưu ý:</strong> Để hiển thị bản đồ chính xác, vui lòng mở link Google Maps ở trên, 
+                  click "Share" → "Embed a map" → Copy iframe code và thay thế trong code.
+                </small>
+              </p>
+            </div>
+
             <div className="contact-links">
               <Link to="/gioi-thieu" className="btn-contact-link">
                 ℹ️ Giới Thiệu
@@ -678,19 +711,21 @@ const ViewerPage = () => {
               <div className="modal-body">
                 <p>
                   • Chào mừng bạn đến với{" "}
-                  <strong>ÚT GÀ CHỌI</strong> nơi tạo ra sân chơi
-                  phục vụ niềm đam mê gà đòn cho anh em 24/7.
+                  <strong>Út Gà Chọi</strong> (ÚT GÀ CHỌI) nơi tạo ra sân chơi
+                  phục vụ niềm đam mê gà đòn cho anh em 24/7. Út Gà Chọi là CLB gà chọi
+                  hàng đầu tại Phú Yên.
                 </p>
                 <p>
-                  • Tại ÚT GÀ CHỌI bạn có thể tìm hiểu về kiến
+                  • Tại Út Gà Chọi bạn có thể tìm hiểu về kiến
                   thức về gà đòn, hay đơn giản là thưởng thức những video xổ gà
-                  trong những lúc rảnh rỗi. CLB sẽ đưa đến cho bạn những thông
+                  trong những lúc rảnh rỗi. Út Gà Chọi sẽ đưa đến cho bạn những thông
                   tin mới nhất về giống gà đòn, kinh nghiệm chăm sóc gà, cách
                   huấn luyện gà chọi và nhiều hơn thế nữa.
                 </p>
                 <p>
-                  • <strong>ÚT GÀ CHỌI</strong> còn cung cấp con
+                  • <strong>Út Gà Chọi</strong> còn cung cấp con
                   giống gà đòn cho những ai đang quan tâm đến việc nuôi gà đòn.
+                  Út Gà Chọi cam kết chất lượng và uy tín.
                 </p>
                 <div className="intro-images">
                   <img
