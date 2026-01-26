@@ -3,13 +3,15 @@
   top: 10px;
   left: 10px;
   z-index: 100;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 12px;
-  padding: 16px 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
   animation: slideInLeft 0.4s ease-out;
+  /* Responsive sizing based on viewport */
+  font-size: clamp(12px, 1.5vw, 20px);
 }
 
 @keyframes slideInLeft {
@@ -44,36 +46,38 @@
 
 .match-header {
   text-align: center;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .match-label {
   color: #ffd700;
-  font-size: 20px;
+  font-size: clamp(14px, 2vw, 22px);
   font-weight: 700;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 1), 0 0 4px rgba(0, 0, 0, 0.8);
+  line-height: 1.2;
 }
 
 .scoreboard-content {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: clamp(14px, 1.8vw, 20px);
 }
 
 .fighter-info {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 1px;
 }
 
 .fighter-label {
-  font-size: 18px;
+  font-size: clamp(12px, 1.6vw, 18px);
   font-weight: 700;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 1), 0 0 4px rgba(0, 0, 0, 0.8);
   text-transform: uppercase;
+  line-height: 1.2;
 }
 
 .fighter-red .fighter-label {
@@ -86,10 +90,10 @@
 
 .fighter-weight {
   color: white;
-  font-size: 24px;
+  font-size: clamp(16px, 2.2vw, 26px);
   font-weight: 700;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
-  line-height: 1;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 1), 0 0 4px rgba(0, 0, 0, 0.8);
+  line-height: 1.1;
 }
 
 .fighter-red .fighter-weight {
@@ -103,7 +107,7 @@
 .versus-divider {
   display: flex;
   align-items: center;
-  padding: 0 6px;
+  padding: 0 4px;
 }
 
 .vs-text {
@@ -111,8 +115,8 @@
 }
 
 .vs-icon {
-  font-size: 36px;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.7));
+  font-size: clamp(20px, 2.5vw, 32px);
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.9));
   animation: pulse 2s ease-in-out infinite;
 }
 
@@ -126,61 +130,36 @@
   }
 }
 
-/* Responsive design */
+/* Responsive design - Scale based on video container */
 @media (max-width: 768px) {
   .match-scoreboard {
-    top: 8px;
-    left: 8px;
-    min-width: 200px;
-    padding: 12px 16px;
+    top: 6px;
+    left: 6px;
+    padding: 6px 10px;
+    border-radius: 6px;
   }
 
-  .match-label {
-    font-size: 16px;
-  }
-
-  .fighter-weight {
-    font-size: 18px;
-  }
-
-  .fighter-label {
-    font-size: 14px;
-  }
-
-  .vs-icon {
-    font-size: 28px;
-  }
-
-  .scoreboard-content {
-    font-size: 16px;
-    gap: 6px;
+  .match-header {
+    margin-bottom: 1px;
   }
 }
 
 @media (max-width: 480px) {
   .match-scoreboard {
-    min-width: 180px;
-    padding: 10px 12px;
+    top: 4px;
+    left: 4px;
+    padding: 5px 8px;
+    border-radius: 5px;
   }
+}
 
-  .match-label {
-    font-size: 14px;
+/* For very small screens */
+@media (max-width: 360px) {
+  .match-scoreboard {
+    padding: 4px 6px;
   }
-
-  .fighter-weight {
-    font-size: 16px;
-  }
-
-  .fighter-label {
-    font-size: 12px;
-  }
-
-  .vs-icon {
-    font-size: 24px;
-  }
-
-  .scoreboard-content {
-    font-size: 14px;
-    gap: 4px;
+  
+  .versus-divider {
+    padding: 0 2px;
   }
 }

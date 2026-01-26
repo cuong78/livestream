@@ -509,34 +509,38 @@ const ViewerPage = () => {
             {/* Google Map Section */}
             <div className="map-section">
               <h3 className="map-title">📍 Vị Trí Út Gà Chọi</h3>
-              <div className="map-container">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.1234567890!2d109.1234567!3d13.1234567!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDA3JzI0LjQiTiAxMDnCsDA3JzI0LjQiRQ!5e0!3m2!1svi!2s!4v1234567890123!5m2!1svi!2s"
-                  width="100%"
-                  height="400"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Vị trí Út Gà Chọi - Thôn Giai Sơn, An Mỹ, Tuy An, Phú Yên"
-                ></iframe>
+              <div className="address-display">
+                <p className="address-text">
+                  Địa chỉ: Thôn Giai Sơn, An Mỹ, Tuy An, Phú Yên
+                </p>
               </div>
-              <p className="map-note">
+              <div className="map-button-container">
                 <a
-                  href="https://share.google/A9T2PvxgPXX533Nyf"
+                  href="https://maps.app.goo.gl/M9k5SzKYhaMf2T7v5"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="map-link"
+                  className="map-button"
+                  onClick={(e) => {
+                    // Try to open in Google Maps app on mobile
+                    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                    if (isMobile) {
+                      // For Android: try Google Maps intent
+                      if (/Android/i.test(navigator.userAgent)) {
+                        const intentUrl = "https://maps.google.com/?q=Thôn+Giai+Sơn,+An+Mỹ,+Tuy+An,+Phú+Yên";
+                        window.location.href = intentUrl;
+                        e.preventDefault();
+                      }
+                      // For iOS: share.google link should work
+                    }
+                  }}
                 >
-                  🗺️ Xem bản đồ lớn hơn trên Google Maps
+                  <img
+                    src="https://res.cloudinary.com/duklfdbqf/image/upload/v1769398033/maps_ltwngc.png"
+                    alt="Mở bản đồ Google Maps"
+                    className="map-button-image"
+                  />
                 </a>
-              </p>
-              <p className="map-instruction">
-                <small>
-                  💡 <strong>Lưu ý:</strong> Để hiển thị bản đồ chính xác, vui lòng mở link Google Maps ở trên, 
-                  click "Share" → "Embed a map" → Copy iframe code và thay thế trong code.
-                </small>
-              </p>
+              </div>
             </div>
 
             <div className="contact-links">
