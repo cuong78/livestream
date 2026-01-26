@@ -102,27 +102,23 @@ const MatchScoreboard: React.FC<MatchScoreboardProps> = ({ stompClient }) => {
 
   return (
     <div className={`match-scoreboard ${isHiding ? "hiding" : ""}`}>
-      <div className="match-header">
-        <span className="match-label">Cặp: {matchInfo.matchNumber}</span>
-      </div>
-
       <div className="scoreboard-content">
         <div className="fighter-info fighter-red">
-          <div className="fighter-label">Đỏ</div>
-          <div className="fighter-weight">
+          <span className="fighter-label">Đỏ:</span>
+          <span className="fighter-weight">
             {matchInfo.redWeight.toFixed(2)} kg
-          </div>
+          </span>
         </div>
 
-        <div className="versus-divider">
-          <div className="vs-icon">⚔️</div>
+        <div className="match-info">
+          <span className="match-label">Cặp: {matchInfo.matchNumber}</span>
         </div>
 
         <div className="fighter-info fighter-blue">
-          <div className="fighter-label">Đen</div>
-          <div className="fighter-weight">
+          <span className="fighter-label">Đen:</span>
+          <span className="fighter-weight">
             {matchInfo.blueWeight.toFixed(2)} kg
-          </div>
+          </span>
         </div>
       </div>
     </div>

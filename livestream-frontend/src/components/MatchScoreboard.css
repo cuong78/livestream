@@ -1,6 +1,6 @@
 .match-scoreboard {
   position: absolute;
-  bottom: 20px;
+  bottom: 70px; /* Nằm trên warning banner (khoảng 50-60px chiều cao) */
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
@@ -45,9 +45,25 @@
   display: none;
 }
 
-.match-header {
-  text-align: center;
-  margin-bottom: 4px;
+.scoreboard-content {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(12px, 1.4vw, 18px);
+}
+
+.fighter-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+.match-info {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
 }
 
 .match-label {
@@ -59,21 +75,7 @@
     0 1px 2px rgba(0, 0, 0, 0.8),
     1px 1px 3px rgba(0, 0, 0, 0.9);
   line-height: 1.2;
-}
-
-.scoreboard-content {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: center;
-  font-size: clamp(12px, 1.4vw, 18px);
-}
-
-.fighter-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
+  white-space: nowrap;
 }
 
 .fighter-label {
@@ -86,6 +88,7 @@
   text-transform: uppercase;
   line-height: 1.2;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .fighter-red .fighter-label {
@@ -94,16 +97,21 @@
 
 .fighter-blue .fighter-label {
   color: #000000;
+  font-weight: 700;
   text-shadow: 
-    0 0 4px rgba(255, 255, 255, 1),
-    0 0 6px rgba(255, 255, 255, 0.9),
-    -1px -1px 0 rgba(255, 255, 255, 0.9),
-    1px -1px 0 rgba(255, 255, 255, 0.9),
-    -1px 1px 0 rgba(255, 255, 255, 0.9),
-    1px 1px 0 rgba(255, 255, 255, 0.9),
-    0 1px 2px rgba(0, 0, 0, 0.8),
-    1px 1px 3px rgba(0, 0, 0, 0.9);
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.9);
+    -2px -2px 0 rgba(255, 255, 255, 1),
+    2px -2px 0 rgba(255, 255, 255, 1),
+    -2px 2px 0 rgba(255, 255, 255, 1),
+    2px 2px 0 rgba(255, 255, 255, 1),
+    -1px -1px 0 rgba(255, 255, 255, 1),
+    1px -1px 0 rgba(255, 255, 255, 1),
+    -1px 1px 0 rgba(255, 255, 255, 1),
+    1px 1px 0 rgba(255, 255, 255, 1),
+    0 0 8px rgba(255, 255, 255, 1),
+    0 0 12px rgba(255, 255, 255, 0.9),
+    0 0 16px rgba(255, 255, 255, 0.8);
+  -webkit-text-stroke: 2.5px rgba(255, 255, 255, 1);
+  paint-order: stroke fill;
 }
 
 .fighter-weight {
@@ -115,6 +123,7 @@
     0 1px 2px rgba(0, 0, 0, 0.8),
     1px 1px 3px rgba(0, 0, 0, 0.9);
   line-height: 1.1;
+  white-space: nowrap;
 }
 
 .fighter-red .fighter-weight {
@@ -123,73 +132,62 @@
 
 .fighter-blue .fighter-weight {
   color: #000000;
+  font-weight: 700;
   text-shadow: 
-    0 0 5px rgba(255, 255, 255, 1),
-    0 0 8px rgba(255, 255, 255, 0.9),
-    -1px -1px 0 rgba(255, 255, 255, 0.9),
-    1px -1px 0 rgba(255, 255, 255, 0.9),
-    -1px 1px 0 rgba(255, 255, 255, 0.9),
-    1px 1px 0 rgba(255, 255, 255, 0.9),
-    0 1px 2px rgba(0, 0, 0, 0.8),
-    1px 1px 3px rgba(0, 0, 0, 0.9);
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.9);
+    -2px -2px 0 rgba(255, 255, 255, 1),
+    2px -2px 0 rgba(255, 255, 255, 1),
+    -2px 2px 0 rgba(255, 255, 255, 1),
+    2px 2px 0 rgba(255, 255, 255, 1),
+    -1px -1px 0 rgba(255, 255, 255, 1),
+    1px -1px 0 rgba(255, 255, 255, 1),
+    -1px 1px 0 rgba(255, 255, 255, 1),
+    1px 1px 0 rgba(255, 255, 255, 1),
+    0 0 10px rgba(255, 255, 255, 1),
+    0 0 14px rgba(255, 255, 255, 0.9),
+    0 0 18px rgba(255, 255, 255, 0.8);
+  -webkit-text-stroke: 3px rgba(255, 255, 255, 1);
+  paint-order: stroke fill;
 }
 
-.versus-divider {
-  display: flex;
-  align-items: center;
-  padding: 0 6px;
-}
-
-.vs-text {
-  display: none;
-}
-
-.vs-icon {
-  font-size: clamp(14px, 1.8vw, 22px);
-  filter: 
-    drop-shadow(0 0 3px rgba(255, 255, 255, 0.8))
-    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.9))
-    drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.8));
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-}
 
 /* Responsive design - Scale based on video container */
 @media (max-width: 768px) {
   .match-scoreboard {
-    bottom: 15px;
+    bottom: 65px; /* Nằm trên warning banner trên tablet */
     padding: 6px 12px;
     min-width: 240px;
   }
 
-  .match-header {
-    margin-bottom: 3px;
+  .scoreboard-content {
+    gap: 8px;
   }
 
-  .scoreboard-content {
-    gap: 6px;
+  .fighter-info {
+    gap: 4px;
+  }
+
+  .match-info {
+    padding: 0 6px;
   }
 }
 
 @media (max-width: 480px) {
   .match-scoreboard {
-    bottom: 10px;
+    bottom: 60px; /* Nằm trên warning banner trên mobile */
     padding: 5px 10px;
     min-width: 200px;
     max-width: 95%;
   }
 
-  .versus-divider {
+  .scoreboard-content {
+    gap: 6px;
+  }
+
+  .fighter-info {
+    gap: 3px;
+  }
+
+  .match-info {
     padding: 0 4px;
   }
 }
