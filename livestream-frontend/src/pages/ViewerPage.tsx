@@ -455,10 +455,9 @@ const ViewerPage = () => {
               >
                 <img
                   src="https://res.cloudinary.com/duklfdbqf/image/upload/v1765771851/zalo1_fwawgm.png"
-                  alt="Zalo"
+                  alt="AE KẾT BẠN ZALO"
                   className="social-icon"
                 />
-                
               </a>
 
               <a
@@ -469,10 +468,9 @@ const ViewerPage = () => {
               >
                 <img
                   src="https://res.cloudinary.com/duklfdbqf/image/upload/v1765771858/zalo-vip-1_yx9lgh.png"
-                  alt="Nhóm VIP Zalo"
+                  alt="NHÓM VIP ZALO"
                   className="social-icon"
                 />
-               
               </a>
 
               <a
@@ -483,10 +481,9 @@ const ViewerPage = () => {
               >
                 <img
                   src="https://res.cloudinary.com/duklfdbqf/image/upload/v1765771846/fb-1_xfr0sa.png"
-                  alt="Facebook"
+                  alt="AE KẾT BẠN FACEBOOK"
                   className="social-icon"
                 />
-               
               </a>
             </div>
 
