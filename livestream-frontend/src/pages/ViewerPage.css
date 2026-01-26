@@ -511,15 +511,14 @@ body {
   overflow: hidden;
   position: relative;
   width: 100%;
-  aspect-ratio: 3.5 / 1;
-  min-height: 70px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  background: transparent;
 }
 
 .social-icon {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
   object-position: center;
   display: block;
   transition: transform 0.3s ease;
@@ -565,6 +564,38 @@ body {
   border-radius: 12px;
   font-size: 16px;
   margin-bottom: 20px;
+}
+
+/* Branding Section - Thành Tích & Giải Thưởng */
+.branding-section {
+  margin: 40px 0;
+  padding: 0;
+}
+
+.branding-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.branding-image {
+  width: 100%;
+  max-width: 1000px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  border: 2px solid var(--border-color);
+  transition: transform 0.3s ease;
+}
+
+.branding-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
 }
 
 /* Google Map Section */
@@ -1474,8 +1505,19 @@ body {
 
   .social-btn {
     border-radius: 10px;
-    min-height: 60px;
-    aspect-ratio: 3.2 / 1;
+  }
+
+  /* Branding Section Responsive */
+  .branding-section {
+    margin: 30px 0;
+  }
+
+  .branding-container {
+    padding: 15px;
+  }
+
+  .branding-image {
+    border-radius: 10px;
   }
 }
 
@@ -1497,8 +1539,20 @@ body {
 
   .social-btn {
     border-radius: 8px;
-    min-height: 55px;
-    aspect-ratio: 3 / 1;
+  }
+
+  /* Branding Section Responsive */
+  .branding-section {
+    margin: 20px 0;
+  }
+
+  .branding-container {
+    padding: 10px;
+  }
+
+  .branding-image {
+    border-radius: 8px;
+    border-width: 1px;
   }
 
   .site-title h1 {

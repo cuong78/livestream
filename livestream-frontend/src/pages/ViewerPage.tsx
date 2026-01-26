@@ -535,6 +535,19 @@ const ViewerPage = () => {
           </div>
         </section>
 
+        {/* Branding Section - Thành Tích & Giải Thưởng */}
+        <section className="branding-section">
+          <h2 className="section-title">🏆 Thành Tích & Giải Thưởng</h2>
+          <div className="branding-container">
+            <img 
+              src="/thuonghieu.jpg" 
+              alt="Thành tích và giải thưởng Út Gà Chọi"
+              className="branding-image"
+              loading="lazy"
+            />
+          </div>
+        </section>
+
         {/* Bank Info Section */}
         <section className="bank-section">
           <div className="bank-card">
