@@ -458,10 +458,7 @@ const ViewerPage = () => {
                   alt="Zalo"
                   className="social-icon"
                 />
-                <div className="social-text">
-                  <span>AE KẾT BẠN ZALO</span>
-                  <small>📱 Giao Lưu Mua Bán Chiến Kê Trên Cả Nước</small>
-                </div>
+                
               </a>
 
               <a
@@ -475,10 +472,7 @@ const ViewerPage = () => {
                   alt="Nhóm VIP Zalo"
                   className="social-icon"
                 />
-                <div className="social-text">
-                  <span>NHÓM VIP ZALO</span>
-                  <small>📱 AE Vào Nhóm VIP Tuyển Gà Chiến Nhé!</small>
-                </div>
+               
               </a>
 
               <a
@@ -492,10 +486,7 @@ const ViewerPage = () => {
                   alt="Facebook"
                   className="social-icon"
                 />
-                <div className="social-text">
-                  <span>KÊNH FACEBOOK</span>
-                  <small>📱 Theo Dõi Fanpage ÚT GÀ CHỌI</small>
-                </div>
+               
               </a>
             </div>
 
