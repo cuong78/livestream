@@ -499,13 +499,6 @@ const ViewerPage = () => {
               </a>
             </div>
 
-            <div className="address-info">
-              <p>
-                📍 <strong>Địa chỉ:</strong> Thôn Giai Sơn, An Mỹ, Tuy An, Phú
-                Yên
-              </p>
-            </div>
-
             {/* Google Map Section */}
             <div className="map-section">
               <h3 className="map-title">📍 Vị Trí Út Gà Chọi</h3>

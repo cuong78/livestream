@@ -12,14 +12,14 @@
 }
 
 .chatbox-header {
-  padding: 14px 16px;
+  padding: 8px 10px;
   background: linear-gradient(135deg, #dc143c 0%, #ff4444 100%);
-  border-bottom: 2px solid #ffd700;
+  border-bottom: 1px solid #ffd700;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .chatbox-header .header-left {
@@ -37,18 +37,18 @@
 }
 
 .phone-link {
-  font-size: 18px;
+  font-size: 13px;
   font-weight: bold;
   color: #ffffff;
   text-decoration: none;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
+  gap: 4px;
+  padding: 4px 8px;
   background: rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
-  border: 2px solid rgba(255, 215, 0, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 215, 0, 0.5);
   transition: all 0.3s ease;
   cursor: pointer;
 }
@@ -65,33 +65,33 @@
 }
 
 .viewer-count {
-  padding: 4px 12px;
+  padding: 3px 8px;
   background: rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  font-size: 13px;
+  border-radius: 10px;
+  font-size: 11px;
   font-weight: bold;
   color: #ffffff;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   animation: fadeIn 0.5s ease;
 }
 
 .reload-btn {
-  font-size: 13px;
-  padding: 8px 16px;
+  font-size: 11px;
+  padding: 5px 10px;
   background: #ffffff;
   color: #dc143c;
   border: none;
-  border-radius: 20px;
+  border-radius: 12px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 .reload-btn:hover {
@@ -158,14 +158,14 @@
 
 .chatbox-messages {
   flex: 1;
-  min-height: 300px;
-  max-height: calc(100% - 220px); /* Trừ đi header + form */
+  min-height: 200px;
+  max-height: calc(100% - 160px); /* Trừ đi header + form (giảm từ 220px) */
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 12px;
+  padding: 6px 8px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   background: #1a1a1a;
   scroll-behavior: smooth;
   order: 2; /* Đặt chat ở dưới */
@@ -218,11 +218,11 @@
 
 .chat-message {
   display: flex;
-  gap: 8px;
-  padding: 6px 10px;
+  gap: 6px;
+  padding: 4px 6px;
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 6px;
-  border-left: 3px solid #ffd700;
+  border-radius: 4px;
+  border-left: 2px solid #ffd700;
   transition: all 0.3s ease;
   flex-shrink: 0; /* Không bị co lại */
 }
@@ -233,8 +233,8 @@
 }
 
 .message-avatar {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: linear-gradient(135deg, #dc143c 0%, #ff4444 100%);
   display: flex;
@@ -243,8 +243,8 @@
   font-weight: bold;
   color: white;
   flex-shrink: 0;
-  font-size: 14px;
-  border: 2px solid #ffd700;
+  font-size: 11px;
+  border: 1px solid #ffd700;
   position: relative;
 }
 
@@ -263,8 +263,9 @@
 .message-name {
   font-weight: bold;
   color: #ffd700;
-  font-size: 13px;
+  font-size: 11px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
 }
 
 /* Mention highlight style */
@@ -279,12 +280,12 @@
 
 /* Reply Quote Container - Shows original comment content */
 .reply-quote-container {
-  margin-bottom: 4px;
-  padding: 4px 8px;
+  margin-bottom: 2px;
+  padding: 3px 6px;
   background: rgba(74, 158, 255, 0.15);
-  border-left: 3px solid #4a9eff;
-  border-radius: 4px;
-  font-size: 11px;
+  border-left: 2px solid #4a9eff;
+  border-radius: 3px;
+  font-size: 10px;
 }
 
 .reply-quote-header {
@@ -352,9 +353,9 @@
 
 .chat-message.is-admin .message-avatar {
   background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-  border: 2px solid #ffd700;
-  box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
-  font-size: 18px;
+  border: 1px solid #ffd700;
+  box-shadow: 0 0 4px rgba(255, 215, 0, 0.4);
+  font-size: 14px;
   line-height: 1;
 }
 
@@ -376,19 +377,19 @@
 .message-text {
   color: #ffffff;
   word-wrap: break-word;
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: 11px;
+  line-height: 1.3;
 }
 
 .chatbox-form {
-  padding: 14px 16px;
+  padding: 8px 10px;
   background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-  border-bottom: 2px solid #ffd700;
+  border-bottom: 1px solid #ffd700;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   order: 1; /* Đặt form ở trên */
 }
 
@@ -396,11 +397,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
+  padding: 5px 8px;
   background: rgba(255, 215, 0, 0.1);
-  border-left: 3px solid #ffd700;
-  border-radius: 6px;
-  font-size: 13px;
+  border-left: 2px solid #ffd700;
+  border-radius: 4px;
+  font-size: 11px;
   color: #ffffff;
   animation: slideDown 0.3s ease;
 }
@@ -444,12 +445,12 @@
 
 .chat-input {
   flex: 1;
-  padding: 12px 15px;
+  padding: 7px 10px;
   background: #2a2a2a;
-  border: 2px solid #3a3a3a;
-  border-radius: 8px;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
   color: #ffffff;
-  font-size: 14px;
+  font-size: 12px;
   outline: none;
   transition: all 0.3s ease;
 }
@@ -469,26 +470,26 @@
 }
 
 .input-hint {
-  font-size: 11px;
+  font-size: 9px;
   color: #666;
   text-align: right;
-  padding-right: 4px;
+  padding-right: 2px;
 }
 
 .chat-send-btn {
-  padding: 12px 24px;
+  padding: 7px 14px;
   background: linear-gradient(135deg, #dc143c 0%, #ff4444 100%);
   color: #ffffff;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 12px;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 12px rgba(220, 20, 60, 0.4);
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(220, 20, 60, 0.4);
   white-space: nowrap;
 }
 
@@ -544,21 +545,21 @@
   }
 
   .chatbox-messages {
-    padding: 8px;
-    min-height: 180px;
-    max-height: calc(100% - 180px);
-    gap: 8px;
+    padding: 5px 6px;
+    min-height: 150px;
+    max-height: calc(100% - 140px);
+    gap: 4px;
   }
 
   .chat-message {
-    padding: 5px 8px;
-    gap: 6px;
+    padding: 4px 6px;
+    gap: 5px;
   }
 
   .message-avatar {
-    width: 28px;
-    height: 28px;
-    font-size: 12px;
+    width: 22px;
+    height: 22px;
+    font-size: 10px;
   }
 
   .chat-message.is-admin .message-avatar {
@@ -636,22 +637,22 @@
   }
 
   .chatbox-messages {
-    min-height: 140px;
-    max-height: calc(100% - 150px);
-    padding: 6px;
-    gap: 6px;
+    min-height: 120px;
+    max-height: calc(100% - 130px);
+    padding: 4px 5px;
+    gap: 3px;
   }
 
   .chat-message {
-    padding: 6px;
-    gap: 6px;
-    border-radius: 6px;
+    padding: 3px 5px;
+    gap: 4px;
+    border-radius: 4px;
   }
 
   .message-avatar {
-    width: 24px;
-    height: 24px;
-    font-size: 11px;
+    width: 20px;
+    height: 20px;
+    font-size: 9px;
     border-width: 1px;
   }
 
@@ -660,14 +661,14 @@
   }
 
   .message-text {
-    font-size: 11px;
-    line-height: 1.3;
+    font-size: 10px;
+    line-height: 1.25;
   }
 
   .reply-quote-container {
-    padding: 5px 8px;
-    font-size: 10px;
-    margin-bottom: 5px;
+    padding: 2px 5px;
+    font-size: 9px;
+    margin-bottom: 2px;
   }
 
   .mention-highlight {
@@ -733,8 +734,8 @@
   }
 
   .chat-message.is-admin .message-avatar {
-    border-width: 2px;
-    font-size: 14px;
+    border-width: 1px;
+    font-size: 12px;
   }
 
   .chat-message.is-admin .message-name {
