@@ -1,6 +1,41 @@
+# robots.txt for utgachoi.com
+# Út Gà Chọi Phú Yên - Xổ Gà Trực Tiếp
+
 User-agent: *
 Allow: /
+Allow: /gioi-thieu
+Allow: /lien-he
+Allow: /quy-dinh
+Allow: /live
+
+# Disallow admin or private areas if any
+Disallow: /admin/
+Disallow: /private/
+Disallow: /_next/
+Disallow: /api/
+
+# Crawl-delay for courtesy
+Crawl-delay: 1
 
 # Sitemap location
 Sitemap: https://utgachoi.com/sitemap.xml
 
+# For Google specifically
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# For Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0
+
+# For other search engines
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /

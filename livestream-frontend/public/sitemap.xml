@@ -1,27 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+  
+  <!-- Homepage - Highest Priority -->
   <url>
     <loc>https://utgachoi.com/</loc>
-    <lastmod>2026-01-23</lastmod>
+    <lastmod>2026-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://res.cloudinary.com/duklfdbqf/image/upload/v1769088974/unname22d_cqnryy.jpg</image:loc>
+      <image:title>Út Gà Chọi Phú Yên - Xổ Gà Trực Tiếp</image:title>
+      <image:caption>Út Gà Chọi Phú Yên chuyên xổ gà trực tiếp 18h hàng ngày</image:caption>
+    </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://res.cloudinary.com/duklfdbqf/image/upload/v1769088974/unname22d_cqnryy.jpg</video:thumbnail_loc>
+      <video:title>Út Gà Chọi Phú Yên - Xổ Gà Trực Tiếp 18h Hàng Ngày</video:title>
+      <video:description>Livestream vần xổ gà chọi tại Phú Yên - Út Gà Chọi</video:description>
+      <video:content_loc>https://utgachoi.com/live</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>yes</video:live>
+    </video:video>
   </url>
+  
+  <!-- About Page -->
   <url>
     <loc>https://utgachoi.com/gioi-thieu</loc>
-    <lastmod>2026-01-23</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-01-27</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  
+  <!-- Contact Page -->
+  <url>
+    <loc>https://utgachoi.com/lien-he</loc>
+    <lastmod>2026-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Rules Page -->
   <url>
     <loc>https://utgachoi.com/quy-dinh</loc>
-    <lastmod>2026-01-24</lastmod>
+    <lastmod>2026-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  
+  <!-- Live Stream Page -->
   <url>
-    <loc>https://utgachoi.com/lien-he</loc>
-    <lastmod>2026-01-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://utgachoi.com/live</loc>
+    <lastmod>2026-01-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
   </url>
+  
 </urlset>

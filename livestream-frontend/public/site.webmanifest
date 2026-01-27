@@ -1,21 +1,126 @@
 {
-  "name": "ÚT GÀ CHỌI",
-  "short_name": "Út Phú Yên",
+  "name": "Út Gà Chọi Phú Yên - Xổ Gà Trực Tiếp 18h Hàng Ngày",
+  "short_name": "Út Gà Chọi",
+  "description": "Út Gà Chọi Phú Yên - Chuyên xổ gà trực tiếp 18h hàng ngày tại Thôn Giai Sơn, An Mỹ, Tuy An, Phú Yên. Livestream vần xổ gà chọi chất lượng cao. Giao lưu mua bán gà chọi cao cấp đi các tỉnh. Hotline: 0865232980",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#1a1a1a",
+  "theme_color": "#dc143c",
+  "lang": "vi",
+  "dir": "ltr",
+  "categories": [
+    "entertainment",
+    "sports",
+    "lifestyle",
+    "business"
+  ],
   "icons": [
+    {
+      "src": "https://res.cloudinary.com/duklfdbqf/image/upload/w_72,h_72,c_fill/v1769088960/z7457929850853_bcb74ba3c41a23af4850bdca80ae7632_q6g4dl.jpg",
+      "sizes": "72x72",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/duklfdbqf/image/upload/w_96,h_96,c_fill/v1769088960/z7457929850853_bcb74ba3c41a23af4850bdca80ae7632_q6g4dl.jpg",
+      "sizes": "96x96",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/duklfdbqf/image/upload/w_128,h_128,c_fill/v1769088960/z7457929850853_bcb74ba3c41a23af4850bdca80ae7632_q6g4dl.jpg",
+      "sizes": "128x128",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/duklfdbqf/image/upload/w_144,h_144,c_fill/v1769088960/z7457929850853_bcb74ba3c41a23af4850bdca80ae7632_q6g4dl.jpg",
+      "sizes": "144x144",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/duklfdbqf/image/upload/w_152,h_152,c_fill/v1769088960/z7457929850853_bcb74ba3c41a23af4850bdca80ae7632_q6g4dl.jpg",
+      "sizes": "152x152",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
     {
       "src": "https://res.cloudinary.com/duklfdbqf/image/upload/w_192,h_192,c_fill/v1769088960/z7457929850853_bcb74ba3c41a23af4850bdca80ae7632_q6g4dl.jpg",
       "sizes": "192x192",
-      "type": "image/jpeg"
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://res.cloudinary.com/duklfdbqf/image/upload/w_384,h_384,c_fill/v1769088960/z7457929850853_bcb74ba3c41a23af4850bdca80ae7632_q6g4dl.jpg",
+      "sizes": "384x384",
+      "type": "image/jpeg",
+      "purpose": "any"
     },
     {
       "src": "https://res.cloudinary.com/duklfdbqf/image/upload/w_512,h_512,c_fill/v1769088960/z7457929850853_bcb74ba3c41a23af4850bdca80ae7632_q6g4dl.jpg",
       "sizes": "512x512",
-      "type": "image/jpeg"
+      "type": "image/jpeg",
+      "purpose": "any maskable"
     }
   ],
-  "theme_color": "#dc143c",
-  "background_color": "#1a1a1a",
-  "display": "standalone",
-  "start_url": "/",
-  "scope": "/"
+  "screenshots": [
+    {
+      "src": "https://res.cloudinary.com/duklfdbqf/image/upload/v1769088974/unname22d_cqnryy.jpg",
+      "sizes": "1200x630",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Út Gà Chọi Phú Yên - Trang chủ"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Xem Live Stream",
+      "short_name": "Live",
+      "description": "Xem xổ gà trực tiếp 18h",
+      "url": "/live",
+      "icons": [
+        {
+          "src": "https://res.cloudinary.com/duklfdbqf/image/upload/w_96,h_96,c_fill/v1769088960/z7457929850853_bcb74ba3c41a23af4850bdca80ae7632_q6g4dl.jpg",
+          "sizes": "96x96",
+          "type": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "name": "Liên Hệ",
+      "short_name": "Liên Hệ",
+      "description": "Liên hệ Út Gà Chọi",
+      "url": "/lien-he",
+      "icons": [
+        {
+          "src": "https://res.cloudinary.com/duklfdbqf/image/upload/w_96,h_96,c_fill/v1769088960/z7457929850853_bcb74ba3c41a23af4850bdca80ae7632_q6g4dl.jpg",
+          "sizes": "96x96",
+          "type": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "name": "Giới Thiệu",
+      "short_name": "Giới Thiệu",
+      "description": "Về Út Gà Chọi Phú Yên",
+      "url": "/gioi-thieu",
+      "icons": [
+        {
+          "src": "https://res.cloudinary.com/duklfdbqf/image/upload/w_96,h_96,c_fill/v1769088960/z7457929850853_bcb74ba3c41a23af4850bdca80ae7632_q6g4dl.jpg",
+          "sizes": "96x96",
+          "type": "image/jpeg"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "id": "utgachoi-pwa",
+  "iarc_rating_id": "",
+  "edge_side_panel": {
+    "preferred_width": 400
+  }
 }
