@@ -196,59 +196,60 @@ const ChatBox: React.FC<ChatBoxProps> = ({
         replyTo: replyingTo?.displayName,
       };
 
-      // Try to get user location (non-blocking)
-      if (navigator.geolocation) {
-        try {
-          // Check permission first
-          if (navigator.permissions) {
-            const permissionStatus = await navigator.permissions.query({
-              name: "geolocation",
-            });
-            if (permissionStatus.state === "denied") {
-              console.warn("Geolocation permission denied by user");
-              // Continue without location
-            } else {
-              const position = await new Promise<GeolocationPosition>(
-                (resolve, reject) => {
-                  navigator.geolocation.getCurrentPosition(resolve, reject, {
-                    enableHighAccuracy: false,
-                    timeout: 10000,
-                    maximumAge: 300000, // Cache for 5 minutes
-                  });
-                }
-              );
-              commentToSend.latitude = position.coords.latitude;
-              commentToSend.longitude = position.coords.longitude;
-              console.log(
-                "Location added to comment:",
-                position.coords.latitude,
-                position.coords.longitude
-              );
-            }
-          } else {
-            // Fallback for browsers without Permissions API
-            const position = await new Promise<GeolocationPosition>(
-              (resolve, reject) => {
-                navigator.geolocation.getCurrentPosition(resolve, reject, {
-                  enableHighAccuracy: false,
-                  timeout: 10000,
-                  maximumAge: 300000,
-                });
-              }
-            );
-            commentToSend.latitude = position.coords.latitude;
-            commentToSend.longitude = position.coords.longitude;
-            console.log(
-              "Location added to comment:",
-              position.coords.latitude,
-              position.coords.longitude
-            );
-          }
-        } catch (geoError) {
-          console.warn("Failed to get location for comment:", geoError);
-          // Continue without location
-        }
-      }
+      // Geolocation disabled - không yêu cầu quyền vị trí khi bình luận
+      // Đoạn code này đã được tắt để tránh làm phiền người dùng với popup xin quyền vị trí
+      // if (navigator.geolocation) {
+      //   try {
+      //     // Check permission first
+      //     if (navigator.permissions) {
+      //       const permissionStatus = await navigator.permissions.query({
+      //         name: "geolocation",
+      //       });
+      //       if (permissionStatus.state === "denied") {
+      //         console.warn("Geolocation permission denied by user");
+      //         // Continue without location
+      //       } else {
+      //         const position = await new Promise<GeolocationPosition>(
+      //           (resolve, reject) => {
+      //             navigator.geolocation.getCurrentPosition(resolve, reject, {
+      //               enableHighAccuracy: false,
+      //               timeout: 10000,
+      //               maximumAge: 300000, // Cache for 5 minutes
+      //             });
+      //           }
+      //         );
+      //         commentToSend.latitude = position.coords.latitude;
+      //         commentToSend.longitude = position.coords.longitude;
+      //         console.log(
+      //           "Location added to comment:",
+      //           position.coords.latitude,
+      //           position.coords.longitude
+      //         );
+      //       }
+      //     } else {
+      //       // Fallback for browsers without Permissions API
+      //       const position = await new Promise<GeolocationPosition>(
+      //         (resolve, reject) => {
+      //           navigator.geolocation.getCurrentPosition(resolve, reject, {
+      //             enableHighAccuracy: false,
+      //             timeout: 10000,
+      //             maximumAge: 300000,
+      //           });
+      //         }
+      //       );
+      //       commentToSend.latitude = position.coords.latitude;
+      //       commentToSend.longitude = position.coords.longitude;
+      //       console.log(
+      //         "Location added to comment:",
+      //         position.coords.latitude,
+      //         position.coords.longitude
+      //       );
+      //     }
+      //   } catch (geoError) {
+      //     console.warn("Failed to get location for comment:", geoError);
+      //     // Continue without location
+      //   }
+      // }
 
       // Rule 1: Nếu đang đăng nhập với tư cách admin, gửi kèm adminUsername
       // Backend sẽ verify adminUsername và set isAdmin = true
